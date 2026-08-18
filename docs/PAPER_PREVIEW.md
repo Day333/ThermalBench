@@ -64,11 +64,6 @@ With the same seven-channel schema, the best RMSE jumps from 1.327 K on S4 to 15
 
 Ten labels per OOD case—50 labels total—reduce the best S5 result to 3.19 K. The first labels recover most of the zero-shot gap, followed by diminishing returns. Zero-shot robustness, low-label adaptation, and high-budget target accuracy should therefore be reported as distinct capabilities.
 
-## Central takeaway
-
-> **In-support multi-physics generalization does not imply structural generalization.**
-
-Thermal-learning papers should report whether test cases are within a represented design family, unseen parameter combinations, unseen geometry, or case-disjoint structural OOD. A single undifferentiated “generalization” score obscures the largest capability gap observed in ThermalBench.
 
 ## What is public now
 
