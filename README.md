@@ -4,12 +4,6 @@
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-blue.svg"></a>
   <img alt="Python 3.10" src="https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white">
   <img alt="PyTorch 2.0.1" src="https://img.shields.io/badge/PyTorch-2.0.1%2Bcu118-EE4C2C?logo=pytorch&logoColor=white">
-  <br>
-  <img alt="8 models" src="https://img.shields.io/badge/Models-8-2ea44f">
-  <img alt="4 levels" src="https://img.shields.io/badge/Datasets-4%20levels-2ea44f">
-  <img alt="6 metrics" src="https://img.shields.io/badge/Metrics-6-2ea44f">
-  <a href="https://drive.google.com/file/d/15Do8Raf070VseV9cn44j1hdVpD3Rz-Un/view?usp=sharing"><img alt="Datasets on Google Drive" src="https://img.shields.io/badge/Datasets-Google%20Drive-4285F4?logo=googledrive&logoColor=white"></a>
-  <a href="https://drive.google.com/file/d/1wisvvO19Fx9Znki651j-QWuJHVz2aPHQ/view?usp=sharing"><img alt="Checkpoints on Google Drive" src="https://img.shields.io/badge/Checkpoints-Google%20Drive-4285F4?logo=googledrive&logoColor=white"></a>
   <img alt="Paper coming soon" src="https://img.shields.io/badge/Paper-coming%20soon-lightgrey">
 </p>
 
@@ -25,26 +19,6 @@ extrapolation set, measuring generalization rather than fit.
 **Open** — code, datasets and model checkpoints are all released.
 
 Developed and maintained by a research team from the University of Technology Sydney (UTS).
-
-```mermaid
-flowchart LR
-    L2["<b>level2</b><br/>P=3<br/>power"]
-    L3["<b>level3</b><br/>P=4<br/>+ material"]
-    L4["<b>level4</b><br/>P=7<br/>+ boundary cond."]
-    L5["<b>level5</b><br/>P=7<br/>5 unseen cases"]
-
-    L2 --> L3 --> L4
-    L4 -. "zero-shot / few-shot" .-> L5
-
-    subgraph TR ["trained on (Case1-10)"]
-        L2
-        L3
-        L4
-    end
-    subgraph EV ["never trained on (Case16-20)"]
-        L5
-    end
-```
 
 ---
 
@@ -347,20 +321,6 @@ they are not passed, the benchmark config is used byte for byte.
 
 ---
 
-## Results
-
-Full benchmark results (all 8 models x level2-level5, six metrics each) will be released
-together with the paper.
-
-To reproduce them yourself once the datasets and checkpoints are in place:
-
-```bash
-bash script/test_all.sh          # evaluates everything, then prints the summary table
-python utils/summarize.py        # re-print the table from results/
-```
-
----
-
 ## Adding Your Own Model
 
 Three steps, using a model called `MyNet` as the example.
@@ -421,11 +381,7 @@ bash script/MyNet/test.sh           # evaluate on level2/3/4/5
 bash script/MyNet/finetune.sh 10 50
 ```
 
-**What you get for free**: the case-balanced data split, per-channel normalization, all
-six metrics, checkpoint save/load, level5 zero-shot extrapolation, few-shot fine-tuning
-curves, and the summary table — none of which you have to write.
-
-⚠️ **Both level5 evaluation and level5 fine-tuning need the level4 weights first.**
+**Both level5 evaluation and level5 fine-tuning need the level4 weights first.**
 Training only on level2 and then evaluating level5 raises "no checkpoint". Running
 `script/MyNet/train.sh` without arguments trains level2/3/4 and avoids this.
 
@@ -493,96 +449,6 @@ write a second "equivalent" implementation:
 | MaxAE↓ | `{prefix}/max_absolute_error` | worst single-pixel error in the field |
 | T_max err↓ | `{prefix}/max_temperature_error` | \|predicted peak − true peak\| |
 | Top-MAE↓ | `{prefix}/topk50_temperature_difference` | MAE over the 50 hottest true points |
-
-R² is pooled rather than averaged per sample: fields with near-zero spatial variance drive
-the per-sample R² to −∞ and drag the mean negative.
-
-### Normalization
-
-`--per_channel_norm 1` (default). **Required for the P=7 level4/level5**: under a single
-global scalar, `r_convec` has a std of only 6.7e-6 against 1.93 for `h` — a factor of
-2.9e5 — which crushes the small-magnitude channels into numerical noise, and `r_convec`
-happens to be the input most correlated with temperature level (corr +0.728).
-
-### The call order must not change
-
-`set_seed → load data → build normalizers → build model → build DataLoader`. Model
-initialization consumes RNG, and `shuffle=True` consumes RNG. Move any step and both the
-initial weights and the batch order change, so training stops reproducing.
-
-### Two Therm-FM traps
-
-**`TFM_LAST_EPOCH=1`** (set by default): scOT picks the best checkpoint by validation
-loss, but under this project's split that selects a badly undertrained epoch-2 model
-(measured RMSE 8.83, versus ~0.5 for the final epoch). Setting it to 1 uses the last epoch
-and **also skips** `EarlyStoppingCallback` — HF's callback asserts
-`load_best_model_at_end=True`, so disabling only the former makes every DDP child exit
-within 12 seconds.
-
-**Test segment selected by index**: scOT's `ThermalSteady3D` treats only the trailing 20%
-as test. This project adds two switches to the vendored class, set automatically by the
-`exp/` layer so users never see them:
-
-| Environment variable | Effect |
-|---|---|
-| `TFM_EVAL_ALL=1` | test segment = all samples, original order |
-| `TFM_EVAL_INDICES=<json>` | test segment = the index list in that json |
-
-Upstream worked around the limitation by tiling the data 5×, which cost every user an
-extra 4.7 GB and one more preprocessing step. Selecting by index needs no copies, and the
-two paths have been verified to agree on all six metrics to 7–8 significant figures.
-
-### Two deliberate inconsistencies
-
-This project merged five independent scripts into one pipeline, but two things were left
-as they were, because unifying them would break reproduction:
-
-1. **FNO's training loop stays in `model/FNO.py`.** It uses the bundled
-   `layers/optim.py` (not `torch.optim.Adam`) along with its own validation logic, and
-   evaluation takes a separate path (float64 forward, denormalization on the GPU).
-2. **Therm-FM runs on HuggingFace Trainer + accelerate.** `exp/exp_thermfm.py` only
-   assembles arguments and launches processes; the training loop remains the vendored
-   `model/scOT/`.
-
-<a name="reproducibility"></a>
-### Reproducibility
-
-Loading historical weights with this code and comparing against the original records:
-
-| Scope | Result |
-|---|---|
-| UNet / DeepONet / FNO × level2/3/4 | 9 entries bit-identical |
-| U-FNO / SAU-FNO × level2/3/4 | 6 entries, one metric each differing by ≤8.3e-6 relative |
-| Therm-FM T/B × level2 | identical to 10 decimal places |
-| few-shot baseline (U-FNO level5) | all six metrics within ≤8e-7 |
-
-The non-zero differences come from float32 forward-pass noise caused by cuDNN choosing
-different algorithms on different GPUs, not from logic differences — RMSE, MAE and R² all
-agree to 6 decimal places.
-
-**Retraining from scratch will not reproduce bit-for-bit**, for the same GPU
-non-determinism, at a magnitude below 1e-2. Model comparisons should look for gaps above
-that noise floor.
-
----
-
-## Relationship to Prior Work
-
-This benchmark unifies the implementations below. Model classes are **copied verbatim**,
-with only import paths adjusted:
-
-- **FNO** — Li et al., *Fourier Neural Operator for Parametric Partial Differential
-  Equations*. Includes the Adam implementation bundled with that repository.
-- **U-FNO** — Wen et al.; each Fourier layer runs in parallel with a small U-Net.
-- **SAU-FNO** — axial self-attention inserted after U-FNO's last U-Fourier layer;
-  everything else is inherited unchanged from U-FNO, which is what makes the comparison
-  fair.
-- **DeepONet** — derived from DeepOHeat, switched to MSE supervision (the original uses a
-  PDE residual), with query points fixed to the 64×64 grid.
-- **Therm-FM / scOT / Poseidon** — Therm-FM is fine-tuned from Poseidon's scOT backbone.
-  `model/scOT/` is vendored verbatim from upstream to keep future syncs straightforward.
-
----
 
 ## Citation
 
