@@ -1,6 +1,7 @@
 # ThermalBench: An Open, Progressive Benchmark for Generalizable 2.5D/3D-IC Thermal Learning
 
 <p align="center">
+  <a href="https://doi.org/10.5281/zenodo.21992816"><img alt="DOI" src="https://zenodo.org/badge/1338218652.svg"></a>
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-blue.svg"></a>
   <img alt="Python 3.10" src="https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white">
   <img alt="PyTorch 2.0.1" src="https://img.shields.io/badge/PyTorch-2.0.1%2Bcu118-EE4C2C?logo=pytorch&logoColor=white">
@@ -409,11 +410,15 @@ The paper has not been released yet. This section will be replaced with the form
 (authors, venue and DOI) once it is public. In the meantime:
 
 ```bibtex
-@misc{thermalbench2026,
-  title  = {ThermalBench: An Open, Progressive Benchmark for Generalizable
-            2.5D/3D-IC Thermal Learning},
-  note   = {Preprint in preparation},
-  year   = {2026}
+@software{thermalbench2026,
+  title     = {ThermalBench: An Open, Progressive Benchmark for Generalizable
+               2.5D/3D-IC Thermal Learning},
+  author    = {The ThermalBench Authors},
+  year      = {2026},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.21992816},
+  url       = {https://doi.org/10.5281/zenodo.21992816},
+  note      = {Paper in preparation}
 }
 ```
 

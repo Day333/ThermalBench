@@ -8,10 +8,13 @@ abstract: >-
   extrapolation set built from unseen cases, and supports training, evaluation and
   few-shot fine-tuning from one entry point.
 authors:
-  - family-names: Ding
-    given-names: Kuiye
-    affiliation: University of Technology Sydney
+  - name: "The ThermalBench Authors"
 repository-code: "https://github.com/Day333/ThermalBench"
+doi: 10.5281/zenodo.21992816
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.21992816
+    description: Concept DOI, always resolves to the latest version
 license: MIT
 version: 1.0.0
 date-released: 2026-08-18
