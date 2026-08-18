@@ -349,68 +349,15 @@ they are not passed, the benchmark config is used byte for byte.
 
 ## Results
 
-Test sets: 3000 samples each for level2/3/4 (300 per case), and all 5000 samples for
-level5. Temperatures in K. `*` marks the best value in a column.
+Full benchmark results (all 8 models x level2-level5, six metrics each) will be released
+together with the paper.
 
-### level2 (P=3)
+To reproduce them yourself once the datasets and checkpoints are in place:
 
-| Model | RMSE↓ | MAE↓ | R²↑ | MaxAE↓ | T_max err↓ | Top-MAE↓ |
-|---|---:|---:|---:|---:|---:|---:|
-| FNO | 1.1665 | 0.8732 | 0.9958 | 5.1213 | 0.7586 | 0.8772 |
-| UFNO | 0.7047 | 0.5185 | 0.9984 | 3.9692 | 0.4333 | 0.5526 |
-| **SAUFNO** | **0.6568** | **0.4781** | **0.9986** | **3.6422** | **0.3871** | **0.4580** |
-| UNet | 1.4149 | 0.9968 | 0.9927 | 7.2661 | 0.8498 | 0.7691 |
-| DeepONet | 3.6285 | 2.8839 | 0.9608 | 10.0642 | 2.8812 | 3.6529 |
-| ThermFM-T | 1.4679 | 1.0594 | 0.9900 | 6.2373 | 0.7278 | 1.2140 |
-| ThermFM-B | 1.1807 | 0.8461 | 0.9927 | 5.2003 | 0.5957 | 0.9594 |
-| ThermFM-L | 1.2635 | 0.8890 | 0.9918 | 5.6055 | 0.5358 | 1.0052 |
-
-### level3 (P=4, + material conductivity)
-
-| Model | RMSE↓ | MAE↓ | R²↑ | MaxAE↓ | T_max err↓ | Top-MAE↓ |
-|---|---:|---:|---:|---:|---:|---:|
-| FNO | 1.5234 | 1.1782 | 0.9916 | 6.0097 | 1.1098 | 1.2387 |
-| **UFNO** | **0.8016** | **0.5958** | **0.9977** | **4.0088** | **0.3568** | **0.4059** |
-| SAUFNO | 0.8405 | 0.6277 | 0.9975 | 4.1371 | 0.3965 | 0.4609 |
-| UNet | 1.8258 | 1.2595 | 0.9868 | 9.3655 | 0.7564 | 0.8375 |
-| DeepONet | 4.0042 | 3.2543 | 0.9429 | 10.5979 | 3.6426 | 4.8742 |
-| ThermFM-T | 2.2188 | 1.6658 | 0.9790 | 8.1866 | 0.9205 | 1.6959 |
-| ThermFM-B | 1.6651 | 1.2330 | 0.9879 | 6.7248 | 0.6380 | 1.0824 |
-| ThermFM-L | 1.7001 | 1.2646 | 0.9875 | 6.7687 | 0.6913 | 1.1578 |
-
-### level4 (P=7, + boundary conditions)
-
-| Model | RMSE↓ | MAE↓ | R²↑ | MaxAE↓ | T_max err↓ | Top-MAE↓ |
-|---|---:|---:|---:|---:|---:|---:|
-| FNO | 2.1793 | 1.7177 | 0.9936 | 7.6201 | 1.4885 | 2.0319 |
-| **UFNO** | **1.3265** | **1.0166** | **0.9977** | 6.1125 | **0.6973** | **0.8609** |
-| SAUFNO | 1.4468 | 1.1180 | 0.9973 | **6.0829** | 0.8265 | 0.9496 |
-| UNet | 2.5508 | 1.8291 | 0.9902 | 11.1646 | 1.1850 | 1.4636 |
-| DeepONet | 4.6908 | 3.8536 | 0.9704 | 11.6943 | 4.6527 | 5.8420 |
-| ThermFM-T | 2.4703 | 1.8746 | 0.9906 | 8.9897 | 1.0993 | 2.0273 |
-| ThermFM-B | 2.0580 | 1.5577 | 0.9934 | 8.1942 | 0.8882 | 1.5807 |
-| ThermFM-L | 2.0667 | 1.5580 | 0.9933 | 7.7859 | 0.8801 | 1.6200 |
-
-### level5 (pure extrapolation: five new cases, zero-shot with level4 weights)
-
-| Model | RMSE↓ | MAE↓ | R²↑ | MaxAE↓ | T_max err↓ | Top-MAE↓ |
-|---|---:|---:|---:|---:|---:|---:|
-| FNO | 23.2161 | 22.6481 | 0.2024 | 33.8672 | 29.2796 | 26.3916 |
-| UFNO | 25.7595 | 24.5947 | 0.0619 | 38.5007 | 30.5241 | 25.6409 |
-| SAUFNO | 34.8821 | 33.2142 | −0.9908 | 51.5330 | 45.8934 | 40.6425 |
-| UNet | 19.0992 | 16.8686 | 0.3865 | 41.0030 | 27.9007 | 19.7449 |
-| DeepONet | 22.5186 | 21.7859 | 0.2205 | 31.2207 | 23.7507 | 23.4288 |
-| **ThermFM-T** | **15.9878** | **14.9969** | **0.5716** | **29.3286** | **20.0278** | **16.4372** |
-| ThermFM-B | 21.4339 | 20.6123 | 0.4041 | 35.8006 | 27.9508 | 22.9437 |
-| ThermFM-L | 18.3780 | 17.5994 | 0.5618 | 30.3699 | 22.5160 | 18.1769 |
-
-### An observation worth noting
-
-**In-distribution ranking and extrapolation ranking are essentially unrelated.** SAU-FNO
-wins all six metrics on level2 (RMSE 0.657) yet is the worst model on level5 (34.88, with
-a negative R²); Therm-FM T places only sixth on level2 (1.468) yet wins all six metrics
-on extrapolation. Inferring generalization from in-distribution rankings leads to exactly
-the opposite conclusion — which is why this benchmark keeps level5 as a separate level.
+```bash
+bash script/test_all.sh          # evaluates everything, then prints the summary table
+python utils/summarize.py        # re-print the table from results/
+```
 
 ---
 
