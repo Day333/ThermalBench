@@ -25,11 +25,11 @@ Developed and maintained by the ThermalBench research team at the **University o
 
 ## Why ThermalBench
 
-Thermal learning has progressed well beyond power-only prediction: recent methods study geometry, material, cooling, and unseen systems. The remaining problem is comparability. Results are commonly produced with different private or partially released datasets, reference solvers, representations, splits, and metrics. Consequently, a lower error may reflect an easier test distribution rather than a better model, and “generalization” may refer to anything from a new power map on the same chip to a structurally unseen package.
+Recent methods study geometry, material, cooling, and unseen systems. The remaining problem is comparability. Results are commonly produced with different private or partially released datasets, reference solvers, representations, splits, and metrics. Consequently, a lower error may reflect an easier test distribution rather than a better model, and “generalization” may refer to anything from a new power map on the same chip to a structurally unseen package.
 
 ![Representative AI4thermal work, physical factors, evaluation settings, and public artifact status](assets/prior-work-landscape.png)
 
-`G/P/M/B/t` denote geometry or placement, power, material, boundary or cooling, and time. “Closest Scope” is an approximate capability mapping, not a claim that the datasets or splits are equivalent. Citation indices follow the manuscript bibliography. Useful source links include [ARO](https://github.com/Mia-WMY/ARO), [SAU-FNO](https://doi.org/10.1109/DAC63849.2025.11132988), and [Therm-FM](https://arxiv.org/abs/2605.22663).
+`G/P/M/B/t` denote geometry or placement, power, material, boundary or cooling, and time. “Closest Scope” is an approximate capability mapping, not a claim that the datasets or splits are equivalent. Citation indices follow the manuscript bibliography.
 
 ## What the benchmark reveals
 
