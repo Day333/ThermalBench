@@ -4,7 +4,7 @@ ThermalBench separates the paper's capability vocabulary from the stable command
 
 | Paper scope | CLI token | Role in this release |
 |---|---|---|
-| S1 | — | harmonized public source suite; described in the paper preview |
+| S1 | — | collected source suite; results available, unified package on the way |
 | S2 | `level2` | in-support layout and configuration variation |
 | S3 | `level3` | S2 + material conductivity variation |
 | S4 | `level4` | S3 + ambient and convective-boundary variation |
@@ -14,10 +14,17 @@ The `level*` tokens are retained for backward compatibility with released archiv
 
 ## Download
 
+- [S1 complete recorded results and provenance](S1_RESULTS.md) — data package and unified evaluation code on the way
 - [S2–S5 datasets (~4.6 GB)](https://drive.google.com/file/d/15Do8Raf070VseV9cn44j1hdVpD3Rz-Un/view?usp=sharing)
 - [24 checkpoints: 8 baselines × S2/S3/S4 (~9.6 GB)](https://drive.google.com/file/d/1wisvvO19Fx9Znki651j-QWuJHVz2aPHQ/view?usp=sharing)
 
 Unpack both archives at the repository root. No preprocessing is required for the released `.mat` files.
+
+## Provenance
+
+S1 is an unchanged collection of established source tasks, not a regenerated ThermalBench distribution. It follows the [ARO](https://github.com/Mia-WMY/ARO) and [Therm-FM](https://arxiv.org/abs/2605.22663) research line and retains its source grids, simulators, and task-level evaluation. The unified S1 package is intentionally marked pending rather than being mixed into the current download.
+
+S2 uses Cases 1–10 and the HotSpot thermal lineage from Qipan Wang *et al.*'s [ATPlace2.5D public package](https://github.com/PKU-IDEA/ATPlace_pub). S3–S5 extend the same case conventions with material, boundary, and structurally held-out support.
 
 ## Dataset files
 

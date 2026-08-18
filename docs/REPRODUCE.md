@@ -12,6 +12,7 @@ ThermalBench compares models only after fixing the data, split, labels, physical
 
 | Track | Train support | Test support | Target labels used at test time |
 |---|---|---|---:|
+| S1 | original source-task protocols | same fixed physical designs | source-defined |
 | S2 | Cases 1–10, layout variation | represented cases and support | 0 |
 | S3 | S2 + material variation | represented cases and support | 0 |
 | S4 | S3 + boundary variation | represented cases and support | 0 |
@@ -19,6 +20,8 @@ ThermalBench compares models only after fixing the data, split, labels, physical
 | S5 few-shot | frozen S4 model + adaptation pool | held-out samples from Cases 16–20 | K per case |
 
 S2–S4 are independently generated rather than sample-wise paired perturbations. Their comparison measures a progressive change in distributional difficulty, not a strict causal ablation of one variable.
+
+The commands below currently cover S2–S5. S1's [complete source-suite result record](S1_RESULTS.md) is available, while its canonical data package and one-command evaluator are on the way.
 
 ## One model
 
@@ -41,8 +44,6 @@ Accepted model names are:
 ```text
 FNO  UFNO  SAUFNO  UNet  DeepONet  ThermFM-T  ThermFM-B  ThermFM-L
 ```
-
-`DeepONet` is the historical CLI token for the supervised DeepOHeat implementation. It is kept stable so released checkpoints and scripts continue to resolve.
 
 ## All baselines
 
@@ -78,17 +79,18 @@ python run.py \
 
 ## Selected reference results
 
-These paper-preview values are the best RMSE within each track under the common protocol:
+These paper-preview values record the strongest method in each track:
 
-| Track | Best RMSE ↓ | Interpretation |
-|---|---:|---|
-| S2 | 0.657 K | layout/configuration diversity is learnable in support |
-| S3 | 0.802 K | adding material variation causes moderate degradation |
-| S4 | 1.327 K | multi-physics variation remains tractable in support |
-| S5 zero-shot | 15.99 K | unseen system structure causes a qualitative failure |
-| S5 10-shot | 3.19 K | 50 target labels total recover much of the gap |
+| Track | Best method | Best RMSE ↓ | Interpretation |
+|---|---|---:|---|
+| S1 | Therm-FM L | 0.009–0.076 K | task-specific source results; not pooled |
+| S2 | SAU-FNO | 0.657 K | layout/configuration diversity is learnable in support |
+| S3 | U-FNO | 0.802 K | adding material variation causes moderate degradation |
+| S4 | U-FNO | 1.327 K | multi-physics variation remains tractable in support |
+| S5 zero-shot | Therm-FM T | 15.99 K | unseen system structure causes a qualitative failure |
+| S5 10-shot | Therm-FM B | 3.19 K | 50 target labels total recover much of the gap |
 
-Small last-digit differences can arise from GPU kernels and execution environments. A valid reproduction should preserve the split, model recipe, normalization mode, and metric implementation before attributing differences to a method.
+S1 preserves eight source protocols; see [S1_RESULTS.md](S1_RESULTS.md) for cases, resolutions, RMSE, and MAE. Small last-digit differences in S2–S5 can arise from GPU kernels and execution environments. A valid reproduction should preserve the split, model recipe, normalization mode, and metric implementation before attributing differences to a method.
 
 ## Metrics
 

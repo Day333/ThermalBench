@@ -34,15 +34,19 @@ This progression lets a practitioner choose the smallest sufficient contract ins
 
 ## Dataset design
 
-S1 consolidates established fixed-design thermal-learning tasks: steady-state and transient HS-SC, HS-QC, and HS-OC Alpha EV6 configurations, plus IND-8C and IND-32C industrial cases. It contains 32,000 samples across eight tasks and five physical designs.
+S1 consolidates established fixed-design thermal-learning tasks: steady-state and transient HS-SC, HS-QC, and HS-OC Alpha EV6 configurations, plus IND-8C and IND-32C industrial cases. It contains 32,000 samples across eight tasks and five physical designs. These tasks are collected without modification from the [ARO](https://github.com/Mia-WMY/ARO) and [Therm-FM](https://arxiv.org/abs/2605.22663) lineage; their [complete recorded results](S1_RESULTS.md) remain task-specific.
 
-S2–S4 use the same ten system families and generation lineage. They independently sample layouts while cumulatively exposing material and boundary variables. Each scope contains 15,000 samples. These tracks test generalization within represented structural support.
+S2–S4 use the same ten system families and generation lineage. S2 originates from Qipan Wang *et al.*'s [ATPlace2.5D public cases and thermal setup](https://github.com/PKU-IDEA/ATPlace_pub); S3–S4 extend that foundation consistently. They independently sample layouts while cumulatively exposing material and boundary variables. Each scope contains 15,000 samples. These tracks test generalization within represented structural support.
 
 S5 preserves the S4 physical schema but replaces the represented systems with five case-disjoint systems. Its 5,000 samples stress unseen chiplet count, size heterogeneity, power density, power concentration, and utilization. This distinguishes learning many observed physical variables from transferring to an unseen system structure.
 
 ## Selected findings
 
 ![ThermalBench selected generalization results](../assets/generalization-gap.svg)
+
+### Source-suite anchor — fixed-design prediction is already highly accurate
+
+Across S1's eight steady, transient, and industrial source tasks, Therm-FM L records the strongest result, with task-specific RMSE between 0.009 and 0.076 K. S1 therefore anchors what is attainable when the physical design remains fixed; it is not pooled with the controlled S2–S5 comparison.
 
 ### Finding 1 — added in-support physics is difficult but learnable
 
@@ -68,6 +72,7 @@ Thermal-learning papers should report whether test cases are within a represente
 
 ## What is public now
 
+- the [complete S1 source-suite result record](S1_RESULTS.md), with S1 data/evaluation packaging on the way;
 - S2–S5 data tensors and the S5 case manifest;
 - 24 S2/S3/S4 baseline checkpoints;
 - eight baseline configurations across three model families;
