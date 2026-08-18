@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="390" viewBox="0 0 1280 390" role="img" aria-labelledby="title desc">
+  <title id="title">ThermalBench selected RMSE results</title>
+  <desc id="desc">Best RMSE rises gradually from 0.657 kelvin in Scope 2 to 1.327 kelvin in Scope 4, jumps to 15.99 kelvin for zero-shot structural out-of-distribution evaluation, then falls to 3.19 kelvin after ten labeled samples per unseen case.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fafc"/>
+      <stop offset="1" stop-color="#eef2ff"/>
+    </linearGradient>
+    <linearGradient id="barID" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#0ea5e9"/>
+      <stop offset="1" stop-color="#22d3ee"/>
+    </linearGradient>
+    <linearGradient id="barOOD" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#7c3aed"/>
+      <stop offset="1" stop-color="#c084fc"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#475569" flood-opacity="0.18"/>
+    </filter>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0L10 5L0 10Z" fill="#7c3aed"/>
+    </marker>
+  </defs>
+  <rect width="1280" height="390" rx="24" fill="url(#bg)"/>
+  <text x="48" y="53" fill="#0f172a" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="26" font-weight="700">The generalization gap</text>
+  <text x="48" y="82" fill="#64748b" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="16">Selected best RMSE from the common protocol · lower is better</text>
+
+  <line x1="74" y1="302" x2="1206" y2="302" stroke="#cbd5e1" stroke-width="2"/>
+  <line x1="74" y1="137" x2="1206" y2="137" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="5 6"/>
+  <text x="74" y="128" fill="#94a3b8" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="13">16 K</text>
+
+  <g filter="url(#shadow)">
+    <rect x="142" y="291" width="130" height="11" rx="6" fill="url(#barID)"/>
+    <rect x="347" y="289" width="130" height="13" rx="6" fill="url(#barID)"/>
+    <rect x="552" y="280" width="130" height="22" rx="6" fill="url(#barID)"/>
+    <rect x="795" y="137" width="150" height="165" rx="12" fill="url(#barOOD)"/>
+    <rect x="1037" y="269" width="150" height="33" rx="10" fill="#8b5cf6" opacity="0.83"/>
+  </g>
+
+  <g font-family="Inter,Segoe UI,Arial,sans-serif" text-anchor="middle">
+    <text x="207" y="275" fill="#0369a1" font-size="20" font-weight="700">0.657 K</text>
+    <text x="412" y="272" fill="#0369a1" font-size="20" font-weight="700">0.802 K</text>
+    <text x="617" y="263" fill="#0369a1" font-size="20" font-weight="700">1.327 K</text>
+    <text x="870" y="121" fill="#6d28d9" font-size="25" font-weight="800">15.99 K</text>
+    <text x="1112" y="252" fill="#6d28d9" font-size="22" font-weight="800">3.19 K</text>
+
+    <text x="207" y="333" fill="#0f172a" font-size="17" font-weight="700">S2</text>
+    <text x="207" y="356" fill="#64748b" font-size="14">layout</text>
+    <text x="412" y="333" fill="#0f172a" font-size="17" font-weight="700">S3</text>
+    <text x="412" y="356" fill="#64748b" font-size="14">+ material</text>
+    <text x="617" y="333" fill="#0f172a" font-size="17" font-weight="700">S4</text>
+    <text x="617" y="356" fill="#64748b" font-size="14">+ boundary</text>
+    <text x="870" y="333" fill="#0f172a" font-size="17" font-weight="700">S5 · zero-shot</text>
+    <text x="870" y="356" fill="#64748b" font-size="14">unseen systems</text>
+    <text x="1112" y="333" fill="#0f172a" font-size="17" font-weight="700">S5 · 10-shot</text>
+    <text x="1112" y="356" fill="#64748b" font-size="14">per unseen case</text>
+  </g>
+
+  <path d="M701 252C746 212 758 182 794 165" fill="none" stroke="#7c3aed" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="655" y="189" width="135" height="48" rx="13" fill="#ffffff" stroke="#ddd6fe"/>
+  <text x="722" y="210" text-anchor="middle" fill="#6d28d9" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="15" font-weight="700">≈12× jump</text>
+  <text x="722" y="228" text-anchor="middle" fill="#7c3aed" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12">same input schema</text>
+
+  <path d="M950 168C1001 180 1025 219 1052 253" fill="none" stroke="#7c3aed" stroke-width="3" stroke-dasharray="6 5" marker-end="url(#arrow)"/>
+  <text x="1010" y="153" text-anchor="middle" fill="#6d28d9" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="14" font-weight="700">50 labels total</text>
+</svg>
