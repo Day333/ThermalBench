@@ -1,5 +1,18 @@
 # ThermalBench: An Open, Progressive Benchmark for Generalizable 2.5D/3D-IC Thermal Learning
 
+<p align="center">
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-blue.svg"></a>
+  <img alt="Python 3.10" src="https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white">
+  <img alt="PyTorch 2.0.1" src="https://img.shields.io/badge/PyTorch-2.0.1%2Bcu118-EE4C2C?logo=pytorch&logoColor=white">
+  <br>
+  <img alt="8 models" src="https://img.shields.io/badge/Models-8-2ea44f">
+  <img alt="4 levels" src="https://img.shields.io/badge/Datasets-4%20levels-2ea44f">
+  <img alt="6 metrics" src="https://img.shields.io/badge/Metrics-6-2ea44f">
+  <a href="https://drive.google.com/file/d/15Do8Raf070VseV9cn44j1hdVpD3Rz-Un/view?usp=sharing"><img alt="Datasets on Google Drive" src="https://img.shields.io/badge/Datasets-Google%20Drive-4285F4?logo=googledrive&logoColor=white"></a>
+  <a href="https://drive.google.com/file/d/1wisvvO19Fx9Znki651j-QWuJHVz2aPHQ/view?usp=sharing"><img alt="Checkpoints on Google Drive" src="https://img.shields.io/badge/Checkpoints-Google%20Drive-4285F4?logo=googledrive&logoColor=white"></a>
+  <img alt="Paper coming soon" src="https://img.shields.io/badge/Paper-coming%20soon-lightgrey">
+</p>
+
 An operator-learning benchmark for chip thermal simulation under a single shared data
 split and a single shared metric implementation — 8 models across 4 datasets of
 increasing difficulty, covering training, evaluation and few-shot extrapolation
@@ -12,6 +25,26 @@ extrapolation set, measuring generalization rather than fit.
 **Open** — code, datasets and model checkpoints are all released.
 
 Developed and maintained by a research team from the University of Technology Sydney (UTS).
+
+```mermaid
+flowchart LR
+    L2["<b>level2</b><br/>P=3<br/>power"]
+    L3["<b>level3</b><br/>P=4<br/>+ material"]
+    L4["<b>level4</b><br/>P=7<br/>+ boundary cond."]
+    L5["<b>level5</b><br/>P=7<br/>5 unseen cases"]
+
+    L2 --> L3 --> L4
+    L4 -. "zero-shot / few-shot" .-> L5
+
+    subgraph TR ["trained on (Case1-10)"]
+        L2
+        L3
+        L4
+    end
+    subgraph EV ["never trained on (Case16-20)"]
+        L5
+    end
+```
 
 ---
 
