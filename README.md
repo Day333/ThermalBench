@@ -32,25 +32,6 @@ Developed and maintained by a research team from the University of Technology Sy
 
 ---
 
-## Highlights
-
-- **One shared protocol** — all 8 models use the same data split (`train_ratio=0.8`,
-  then 9:1 for val) and the **same metric function** (`utils/metrics.py`). Numbers are
-  directly comparable across models; nobody computes their own variant.
-- **One entry point** — `python run.py --model X --data levelN --task train|test|finetune`
-  covers every model, including Therm-FM with its HuggingFace Trainer multi-GPU pipeline.
-- **Four difficulty levels** — input channels grow from P=3 to P=7 (power → material →
-  boundary conditions); the last level is a **pure extrapolation set built from five
-  brand-new cases**, designed to measure generalization rather than fit.
-- **Few-shot extrapolation** — fine-tune with only K labelled samples per case and get
-  per-epoch curves for all six metrics.
-- **Reproducible** — loading historical weights with this code reproduces the original
-  records to 6 decimal places (see [Reproducibility](#reproducibility)).
-- **Easy to extend** — adding your own model means editing `MODEL_ZOO` in one place;
-  see [Adding Your Own Model](#adding-your-own-model).
-
----
-
 ## Code, Datasets, Model Checkpoints
 
 | Resource | Status | Download |
@@ -95,34 +76,6 @@ pip install torch==2.0.1+cu118 --index-url https://download.pytorch.org/whl/cu11
 pip install transformers==4.29.2 accelerate==0.31.0 \
             h5py numpy==1.26.4 pandas scikit-learn pyyaml matplotlib psutil wandb
 ```
-
-Verify:
-
-```bash
-python -c "import torch, transformers, accelerate, h5py; \
-print(torch.__version__, torch.cuda.is_available(), transformers.__version__)"
-```
-
-The scripts call `python` from PATH. If your interpreter is elsewhere, override it with
-`PY=/path/to/python bash script/...`.
-
-### GPU
-
-| Model | GPUs | Memory |
-|---|:--:|---|
-| FNO / UFNO / SAUFNO / UNet / DeepONet | 1 | < 12 GB |
-| ThermFM-T / ThermFM-B | 4 | ~20 GB per GPU |
-| ThermFM-L | 4 | ~40 GB per GPU |
-
-⚠️ Therm-FM's `batch_size=40` is defined as the total across **4 GPUs**. Changing the GPU
-count changes the effective batch size, and the results stop being comparable to the
-benchmark. The reference numbers were produced on RTX A6000 (48 GB).
-
-### Offline environments
-
-`WANDB_MODE=offline` is already set by default on the Therm-FM path
-(`exp/exp_thermfm.py`); without it the run stalls retrying network calls. When running
-the other models by hand without internet access, export it yourself.
 
 ---
 
