@@ -1,0 +1,28 @@
+dataset:
+  value: "thermal.steady.ThermalSteady3D"
+num_trajectories:
+  value: -1 # Specify the number of data to use
+model_name: # Keep the same as the loaded model
+  value: "B"
+lr:
+  value: 0.00005
+lr_embedding_recovery:
+  value: 0.0005
+lr_time_embedding:
+  value: 0.0005
+weight_decay:
+  value: 0.000001
+lr_scheduler:
+  value: "cosine"
+warmup_ratio:
+  value: 0.0
+early_stopping_patience:
+  value: 200
+num_epochs:
+  value: 200
+batch_size:
+  value: 40
+max_grad_norm:
+  value: 5.0
+train_ratio:
+  value: 0.8  # level2: 15000 samples, case-interleaved -> 10800 train / 1200 val / 3000 test
