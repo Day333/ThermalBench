@@ -24,9 +24,9 @@ Developed and maintained by a research team from the University of Technology Sy
 
 ## News
 
-- **[2026-08]** Benchmark code and data finalized; all results for 8 models across
+- ✅ **[2026-08]** Benchmark code and data finalized; all results for 8 models across
   level2–level5 have been reproduced and verified.
-- **[Coming soon]** The paper **ThermalBench: An Open, Progressive Benchmark for
+- 📄 **[Coming soon]** The paper **ThermalBench: An Open, Progressive Benchmark for
   Generalizable 2.5D/3D-IC Thermal Learning** has not been released yet. The arXiv link
   and the formal citation will be added here once it is public.
 
