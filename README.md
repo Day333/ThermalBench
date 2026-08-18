@@ -28,13 +28,12 @@ Developed and maintained by the ThermalBench research team at the **University o
 
 Thermal learning has progressed well beyond power-only prediction: recent methods study geometry, material, cooling, and unseen systems. The remaining problem is comparability. Results are commonly produced with different private or partially released datasets, reference solvers, representations, splits, and metrics. Consequently, a lower error may reflect an easier test distribution rather than a better model, and “generalization” may refer to anything from a new power map on the same chip to a structurally unseen package.
 
-ThermalBench does **not** claim to be the first work that varies multiple physical factors. Its role is to make those capabilities measurable under an open, model-agnostic contract.
 
 | Work | Pub. | Method | Factors | Generalization / evaluation | Public artifact status |
 |---|---|---|---|---|---|
-| [ARO](https://github.com/Mia-WMY/ARO) | ICCAD'24 | autoregressive operator | P, t | fixed-design power; cross-case transfer | code + source-data link |
-| [SAU-FNO](https://doi.org/10.1109/DAC63849.2025.11132988) | DAC'25 | attention U-FNO | P | fixed-design power; cross-case transfer | source data |
-| [Therm-FM](https://arxiv.org/abs/2605.22663) | arXiv'26 | PDE foundation model | P, t | fixed-design HS tasks; IND transfer | data, code, checkpoints |
+| ARO | ICCAD'24 | autoregressive operator | P, t | fixed-design power; cross-case transfer | code + source-data link |
+| SAU-FNO | DAC'25 | attention U-FNO | P | fixed-design power; cross-case transfer | source data |
+| Therm-FM | arXiv & DAC'26 | PDE foundation model | P, t | fixed-design HS tasks; IND transfer | data, code, checkpoints |
 | FSA-Heat | DATE'25 | frequency–spatial network | G, P, M, B | in-support mixtures; unseen conductivity/source count | method-specific study |
 | Therm-PCT | ICCAD'25 | point-cloud Transformer | G, P, M | unseen geometry and unstructured points | method-specific study |
 | Adaptive Graph | ICCAD'25 | GNN–FEM hybrid | G, M | unseen process/material and interfaces | method-specific study |
