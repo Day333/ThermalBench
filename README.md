@@ -2,8 +2,6 @@
 
 # ThermalBench
 
-### One protocol. Progressive physics. Honest OOD.
-
 An open benchmark for reproducible, generalizable 2.5D/3D-IC thermal learning.
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21992816.svg)](https://doi.org/10.5281/zenodo.21992816)
