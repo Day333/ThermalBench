@@ -40,8 +40,6 @@ Thermal learning has progressed well beyond power-only prediction: recent method
 
 `G/P/M/B/t` denote geometry or placement, power, material, boundary or cooling, and time. The table is deliberately compact: prior studies use different task definitions, so the settings are descriptive rather than numerically equivalent. Their breadth motivates ThermalBench; their incompatible evaluation contracts motivate a unified benchmark.
 
-> **Key finding:** in-support multi-physics generalization does not imply structural generalization.
-
 ## What the benchmark reveals
 
 ![Selected ThermalBench results: gradual in-support degradation followed by a structural-OOD gap and few-shot recovery](assets/generalization-gap.svg)
