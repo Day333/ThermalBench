@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this benchmark, please cite it as below."
+title: "ThermalBench: An Open, Progressive Benchmark for Generalizable 2.5D/3D-IC Thermal Learning"
+abstract: >-
+  An operator-learning benchmark for 2.5D/3D-IC thermal simulation under a single
+  shared data split and a single shared metric implementation. It covers 8 models
+  across 4 datasets of increasing difficulty, the last of which is a pure
+  extrapolation set built from unseen cases, and supports training, evaluation and
+  few-shot fine-tuning from one entry point.
+authors:
+  - family-names: Ding
+    given-names: Kuiye
+    affiliation: University of Technology Sydney
+repository-code: "https://github.com/Day333/ThermalBench"
+license: MIT
+version: 1.0.0
+date-released: 2026-08-18
+keywords:
+  - benchmark
+  - neural operator
+  - thermal simulation
+  - 3D-IC
+  - scientific machine learning
