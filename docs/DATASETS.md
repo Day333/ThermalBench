@@ -14,7 +14,7 @@ The `level*` tokens are retained for backward compatibility with released archiv
 
 ## Download
 
-- [S1 complete recorded results and provenance](S1_RESULTS.md) — data package and unified evaluation code on the way
+- [S1–S5 benchmark results and provenance](RESULTS.md) — S1 data package and unified evaluation code on the way
 - [S2–S5 datasets (~4.6 GB)](https://drive.google.com/file/d/15Do8Raf070VseV9cn44j1hdVpD3Rz-Un/view?usp=sharing)
 - [24 checkpoints: 8 baselines × S2/S3/S4 (~9.6 GB)](https://drive.google.com/file/d/1wisvvO19Fx9Znki651j-QWuJHVz2aPHQ/view?usp=sharing)
 
@@ -25,6 +25,10 @@ Unpack both archives at the repository root. No preprocessing is required for th
 S1 is an unchanged collection of established source tasks, not a regenerated ThermalBench distribution. It follows the [ARO](https://github.com/Mia-WMY/ARO) and [Therm-FM](https://arxiv.org/abs/2605.22663) research line and retains its source grids, simulators, and task-level evaluation. The unified S1 package is intentionally marked pending rather than being mixed into the current download.
 
 S2 uses Cases 1–10 and the HotSpot thermal lineage from Qipan Wang *et al.*'s [ATPlace2.5D public package](https://github.com/PKU-IDEA/ATPlace_pub). S3–S5 extend the same case conventions with material, boundary, and structurally held-out support.
+
+## Data license
+
+The original ThermalBench S2–S5 tensors, fixed splits/manifests, and released result records are licensed under [CC BY 4.0](../LICENSE-DATA). Reuse, redistribution, and extensions are welcome with attribution and an indication of changes. S1 and all third-party source material retain their upstream licenses; see the complete [license map](../LICENSES.md).
 
 ## Dataset files
 

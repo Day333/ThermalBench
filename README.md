@@ -5,14 +5,15 @@
 An open benchmark for reproducible, generalizable 2.5D/3D-IC thermal learning.
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21992816.svg)](https://doi.org/10.5281/zenodo.21992816)
-[![License: MIT](https://img.shields.io/badge/License-MIT-2563eb.svg)](LICENSE)
+[![Code: MIT](https://img.shields.io/badge/Code-MIT-2563eb.svg)](LICENSE)
+[![Data: CC BY 4.0](https://img.shields.io/badge/Data-CC%20BY%204.0-f97316.svg)](LICENSE-DATA)
 [![Python 3.10](https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white)](environment.yml)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0.1-EE4C2C?logo=pytorch&logoColor=white)](docs/INSTALL.md)
 [![S2–S5 Data](https://img.shields.io/badge/S2--S5%20data-released-16a34a.svg)](https://drive.google.com/file/d/15Do8Raf070VseV9cn44j1hdVpD3Rz-Un/view?usp=sharing)
-[![S1 Pipeline](https://img.shields.io/badge/S1%20pipeline-on%20the%20way-f59e0b.svg)](docs/S1_RESULTS.md)
+[![S1 Pipeline](https://img.shields.io/badge/S1%20pipeline-on%20the%20way-f59e0b.svg)](docs/RESULTS.md)
 [![Checkpoints](https://img.shields.io/badge/Checkpoints-released-16a34a.svg)](https://drive.google.com/file/d/1wisvvO19Fx9Znki651j-QWuJHVz2aPHQ/view?usp=sharing)
 
-[**Quick start**](#quick-start) · [**Datasets**](docs/DATASETS.md) · [**S1 results**](docs/S1_RESULTS.md) · [**Reproduce**](docs/REPRODUCE.md) · [**Add a model**](docs/ADD_A_MODEL.md) · [**Paper preview**](docs/PAPER_PREVIEW.md)
+[**Quick start**](#quick-start) · [**Datasets**](docs/DATASETS.md) · [**Results**](docs/RESULTS.md) · [**Reproduce**](docs/REPRODUCE.md) · [**Add a model**](docs/ADD_A_MODEL.md) · [**Paper preview**](docs/PAPER_PREVIEW.md)
 
 </div>
 
@@ -26,19 +27,9 @@ Developed and maintained by the ThermalBench research team at the **University o
 
 Thermal learning has progressed well beyond power-only prediction: recent methods study geometry, material, cooling, and unseen systems. The remaining problem is comparability. Results are commonly produced with different private or partially released datasets, reference solvers, representations, splits, and metrics. Consequently, a lower error may reflect an easier test distribution rather than a better model, and “generalization” may refer to anything from a new power map on the same chip to a structurally unseen package.
 
+![Representative AI4thermal work, physical factors, evaluation settings, and public artifact status](assets/prior-work-landscape.png)
 
-| Work | Pub. | Method | Factors | Generalization / evaluation | Public artifact status |
-|---|---|---|---|---|---|
-| ARO | ICCAD'24 | autoregressive operator | P, t | fixed-design power; cross-case transfer | code + source-data link |
-| SAU-FNO | DAC'25 | attention U-FNO | P | fixed-design power; cross-case transfer | source data |
-| Therm-FM | arXiv & DAC'26 | PDE foundation model | P, t | fixed-design HS tasks; IND transfer | data, code, checkpoints |
-| FSA-Heat | DATE'25 | frequency–spatial network | G, P, M, B | in-support mixtures; unseen conductivity/source count | method-specific study |
-| Therm-PCT | ICCAD'25 | point-cloud Transformer | G, P, M | unseen geometry and unstructured points | method-specific study |
-| Adaptive Graph | ICCAD'25 | GNN–FEM hybrid | G, M | unseen process/material and interfaces | method-specific study |
-| COOL | DAC'26 | 3D point-cloud predictor | G, P, M, B | design-disjoint multi-factor evaluation | method-specific study |
-| **ThermalBench** | in preparation | 8 baselines / 3 families | G, P, M, B, t | fixed → in-support → case-disjoint structural OOD | shared data, splits, metrics, checkpoints |
-
-`G/P/M/B/t` denote geometry or placement, power, material, boundary or cooling, and time. The table is deliberately compact: prior studies use different task definitions, so the settings are descriptive rather than numerically equivalent. Their breadth motivates ThermalBench; their incompatible evaluation contracts motivate a unified benchmark.
+`G/P/M/B/t` denote geometry or placement, power, material, boundary or cooling, and time. “Closest Scope” is an approximate capability mapping, not a claim that the datasets or splits are equivalent. Citation indices follow the manuscript bibliography. Useful source links include [ARO](https://github.com/Mia-WMY/ARO), [SAU-FNO](https://doi.org/10.1109/DAC63849.2025.11132988), and [Therm-FM](https://arxiv.org/abs/2605.22663).
 
 ## What the benchmark reveals
 
@@ -53,7 +44,7 @@ Thermal learning has progressed well beyond power-only prediction: recent method
 | **S5 · zero-shot** | five case-disjoint chiplet systems | **Therm-FM T** | **15.99 K** |
 | **S5 · 10-shot** | ten labeled samples per unseen case | **Therm-FM B** | **3.19 K** |
 
-¹ S1 is a collection of eight source tasks, so its range is task-specific rather than one pooled score. The [complete S1 table](docs/S1_RESULTS.md) records all cases, resolutions, RMSE, and MAE under their original protocols. S2–S5 use the controlled ThermalBench protocol.
+¹ S1 is a collection of eight source tasks, so its range is task-specific rather than one pooled score. The [recorded benchmark results](docs/RESULTS.md) include the complete S1 table, S2–S4 comparisons, S5 zero-shot results, per-case errors, and few-shot adaptation. S2–S5 use the controlled ThermalBench protocol.
 
 The in-support results degrade gradually as observed physical dimensions are added. The case-disjoint S5 shift is qualitatively different: error grows by roughly an order of magnitude, model rankings change, and a small amount of target supervision recovers much of the gap. See the [paper preview](docs/PAPER_PREVIEW.md) for interpretation and the [reproduction guide](docs/REPRODUCE.md) for the exact protocol.
 
@@ -71,7 +62,7 @@ ThermalBench uses **Scope** rather than “level”: the sequence describes the 
 
 ### Dataset provenance and credit
 
-- **S1 is collected, not regenerated.** ThermalBench preserves the original Alpha EV6 and industrial task definitions, simulators, resolutions, and evaluation conventions used along the [ARO](https://github.com/Mia-WMY/ARO) → [Therm-FM](https://arxiv.org/abs/2605.22663) research line. We do not alter these source tasks or pool their scores with S2–S5. The unified S1 data package and evaluation code are **on the way**; the [recorded source-suite results](docs/S1_RESULTS.md) are available now.
+- **S1 is collected, not regenerated.** ThermalBench preserves the original Alpha EV6 and industrial task definitions, simulators, resolutions, and evaluation conventions used along the [ARO](https://github.com/Mia-WMY/ARO) → [Therm-FM](https://arxiv.org/abs/2605.22663) research line. We do not alter these source tasks or pool their scores with S2–S5. The unified S1 data package and evaluation code are **on the way**; the [recorded benchmark results](docs/RESULTS.md) are available now.
 - **S2 follows the ATPlace2.5D lineage.** Cases 1–10, their chiplet systems, and the HotSpot-based thermal setup originate from Qipan Wang *et al.*'s [ATPlace2.5D public package](https://github.com/PKU-IDEA/ATPlace_pub). ThermalBench uses this tested foundation for its layout scope.
 - **S3–S5 are consistent extensions.** They retain the S2 case/generation conventions while adding material support, boundary support, and held-out structural systems. This preserves continuity with an established placement benchmark while expanding the thermal-learning evaluation space.
 
@@ -178,7 +169,7 @@ The release is designed to be easy to reproduce **and** easy to extend: data con
 |---|---|
 | [Installation](docs/INSTALL.md) | exact environment, GPU notes, Therm-FM dependencies |
 | [Datasets](docs/DATASETS.md) | files, shapes, channels, splits, manifests, checkpoints |
-| [S1 source-suite results](docs/S1_RESULTS.md) | provenance, status, and complete eight-task result table |
+| [Benchmark results](docs/RESULTS.md) | S1 source tasks, S2–S4 in-support results, S5 zero-shot and adaptation |
 | [Reproduce](docs/REPRODUCE.md) | evaluation tracks, commands, metrics, expected key results |
 | [Add a model](docs/ADD_A_MODEL.md) | tensor contract, registry entry, scripts, integration checklist |
 | [Paper preview](docs/PAPER_PREVIEW.md) | benchmark motivation, design, findings, and paper status |
@@ -210,4 +201,10 @@ The benchmark artifacts are citable now; the paper citation will replace this so
 
 ## License and acknowledgements
 
-ThermalBench is released under the [MIT License](LICENSE). The vendored `model/scOT/` code retains its upstream license. We thank the authors of [ARO](https://github.com/Mia-WMY/ARO), [Therm-FM](https://arxiv.org/abs/2605.22663), and [ATPlace2.5D](https://github.com/PKU-IDEA/ATPlace_pub), as well as the HotSpot, Poseidon/scOT, FNO, U-FNO, and DeepOHeat communities. Their public artifacts and source tasks make a shared thermal-learning benchmark possible.
+- Repository code is released under the [MIT License](LICENSE).
+- Original ThermalBench S2–S5 data, fixed splits, and released result records are available under [CC BY 4.0](LICENSE-DATA): reuse and extension are welcome with attribution.
+- S1 source data and third-party components retain their original licenses. The ThermalBench manuscript and paper-derived prose, figures, and tables are not relicensed as dataset content.
+
+See the [license map and attribution guidance](LICENSES.md) for the exact boundaries. Open licensing permits legitimate reuse; it does not permit claiming the benchmark, paper text, or curation work as someone else's contribution.
+
+We thank the authors of [ARO](https://github.com/Mia-WMY/ARO), [Therm-FM](https://arxiv.org/abs/2605.22663), and [ATPlace2.5D](https://github.com/PKU-IDEA/ATPlace_pub), as well as the HotSpot, Poseidon/scOT, FNO, U-FNO, and DeepOHeat communities. Their public artifacts and source tasks make a shared thermal-learning benchmark possible.

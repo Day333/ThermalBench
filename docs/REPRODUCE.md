@@ -21,7 +21,7 @@ ThermalBench compares models only after fixing the data, split, labels, physical
 
 S2–S4 are independently generated rather than sample-wise paired perturbations. Their comparison measures a progressive change in distributional difficulty, not a strict causal ablation of one variable.
 
-The commands below currently cover S2–S5. S1's [complete source-suite result record](S1_RESULTS.md) is available, while its canonical data package and one-command evaluator are on the way.
+The commands below currently cover S2–S5. The [S1–S5 result record](RESULTS.md) is available, while S1's canonical data package and one-command evaluator are on the way.
 
 ## One model
 
@@ -90,7 +90,7 @@ These paper-preview values record the strongest method in each track:
 | S5 zero-shot | Therm-FM T | 15.99 K | unseen system structure causes a qualitative failure |
 | S5 10-shot | Therm-FM B | 3.19 K | 50 target labels total recover much of the gap |
 
-S1 preserves eight source protocols; see [S1_RESULTS.md](S1_RESULTS.md) for cases, resolutions, RMSE, and MAE. Small last-digit differences in S2–S5 can arise from GPU kernels and execution environments. A valid reproduction should preserve the split, model recipe, normalization mode, and metric implementation before attributing differences to a method.
+S1 preserves eight source protocols; see [RESULTS.md](RESULTS.md) for the complete source table and the expanded S2–S5 results. Small last-digit differences in S2–S5 can arise from GPU kernels and execution environments. A valid reproduction should preserve the split, model recipe, normalization mode, and metric implementation before attributing differences to a method.
 
 ## Metrics
 
