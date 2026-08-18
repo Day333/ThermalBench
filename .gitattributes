@@ -1,0 +1,6 @@
+# Normalize to LF in the repository. Without this, a Windows commit can ship CRLF
+# and `bash script/train.sh` fails on Linux with "\r: command not found".
+* text=auto eol=lf
+*.sh text eol=lf
+*.py text eol=lf
+*.yaml text eol=lf
