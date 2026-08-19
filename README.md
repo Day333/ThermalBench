@@ -2,6 +2,8 @@
 
 # IC-ThermBench
 
+[**English**](README.md) · [**简体中文**](README.zh-CN.md)
+
 An open benchmark for reproducible, generalizable 2.5D/3D-IC thermal learning.
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21992816.svg)](https://doi.org/10.5281/zenodo.21992816)
