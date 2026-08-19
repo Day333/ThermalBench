@@ -16,7 +16,7 @@ The `level*` tokens are retained for backward compatibility with released archiv
 
 - [S1–S5 benchmark results and provenance](RESULTS.md) — S1 data package and unified evaluation code on the way
 - [S2–S5 datasets (~4.6 GB)](https://drive.google.com/file/d/15Do8Raf070VseV9cn44j1hdVpD3Rz-Un/view?usp=sharing)
-- [24 checkpoints: 8 baselines × S2/S3/S4 (~9.6 GB)](https://drive.google.com/file/d/1wisvvO19Fx9Znki651j-QWuJHVz2aPHQ/view?usp=sharing)
+- [24 checkpoints: 8 baselines × S2/S3/S4 (~9.6 GB)](https://drive.google.com/file/d/1_BTTPAvvYwueilYbX2CV8IwO0zDZs7UV/view?usp=sharing)
 
 Unpack both archives at the repository root. No preprocessing is required for the released `.mat` files.
 
