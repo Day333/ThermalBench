@@ -1,11 +1,12 @@
 """Model registry -- each model's **training recipe** lives here. Change one and the
 published numbers stop reproducing.
 
-The table below was reconciled entry by entry against each model's original training
-script. The differences are real; do not "tidy them up" into a uniform config:
+The table below was reconciled entry by entry against each model's training script.
+All full-training recipes use 100 epochs. Optimizer and scheduler differences remain
+architecture-specific and should not be "tidied up" into a uniform config:
 
-  UNet   uses Adam with **no weight_decay** and **no lr schedule**, and runs **200**
-         epochs; every other model uses wd=1e-4 + StepLR(step=2, gamma=0.9) + 100 epochs.
+  UNet   uses Adam with **no weight_decay** and **no lr schedule**; the registry-driven
+         operator baselines otherwise use wd=1e-4 + StepLR(step=2, gamma=0.9).
   U-FNO / SAU-FNO pass `foreach=False` to Adam explicitly, DeepONet does not.
          `foreach` changes how multi-tensor updates are fused, which shows up in the
          last digits.
@@ -48,7 +49,7 @@ MODEL_ZOO = {
             modes1=10, modes2=10, modes3=min(10, Z // 2 + 1), width=36, in_channels=P)),
     ),
     "UNet": dict(
-        prefix="unet", ckpt_tag="unet", epochs=200, batch_size=20, finetune_lr=1e-4,
+        prefix="unet", ckpt_tag="unet", epochs=100, batch_size=20, finetune_lr=1e-4,
         lr=1e-3, weight_decay=0.0, sched=None,
         build=lambda P, Z, G: ("model.UNet:UNet", dict(in_channels=P, out_channels=1)),
     ),
