@@ -25,4 +25,4 @@ batch_size:
 max_grad_norm:
   value: 5.0
 train_ratio:
-  value: 0.8  # level4: 2496 samples -> 1796 train / 200 val / 500 test (per-case 80/20)
+  value: 0.8  # level3: 15000 samples -> 10800 train / 1200 val / 3000 test
