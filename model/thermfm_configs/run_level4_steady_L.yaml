@@ -17,12 +17,12 @@ lr_scheduler:
 warmup_ratio:
   value: 0.0
 early_stopping_patience:
-  value: 200
+  value: 100
 num_epochs:
-  value: 200
+  value: 100
 batch_size:
   value: 40
 max_grad_norm:
   value: 5.0
 train_ratio:
-  value: 0.8  # level5: 2496 samples -> 1796 train / 200 val / 500 test (per-case 80/20)
+  value: 0.8  # level4: 15000 samples -> 10800 train / 1200 val / 3000 test

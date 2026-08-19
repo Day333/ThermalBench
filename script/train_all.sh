@@ -7,9 +7,9 @@
 # Layout: the 5 operator models are spread across the GPUs named in OP_GPUS, balanced by
 # runtime and serial within each GPU; the three Therm-FM sizes each occupy 4 GPUs, so
 # they run serially and on different GPUs from the operator models.
-# Reference timings (RTX A6000, 15000 samples): SAU-FNO ~6h, U-FNO ~3.2h, FNO ~2h,
-# UNet/DeepONet <0.5h, Therm-FM T/B/L about a day in total. The full sweep takes
-# roughly a day and a half.
+# Reference timings (RTX A6000, 15000 samples, 100 epochs): SAU-FNO ~6h,
+# U-FNO ~3.2h, FNO ~2h, UNet <0.25h, DeepONet <0.5h, and Therm-FM T/B/L
+# about half a day in total. Wall time also depends on accelerator throughput and I/O.
 
 set -u
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

@@ -1,6 +1,6 @@
 # Reproducing IC-ThermBench
 
-IC-ThermBench compares models only after fixing the data, split, labels, physical channels, and metric code. Architecture-specific optimization recipes remain architecture-specific and are recorded in [`exp/exp_basic.py`](../exp/exp_basic.py) and the Therm-FM YAML files.
+IC-ThermBench compares models only after fixing the data, split, labels, physical channels, and metric code. Full-training runs use 100 epochs for every baseline, while architecture-specific optimization recipes remain architecture-specific and are recorded in [`exp/exp_basic.py`](../exp/exp_basic.py) and the Therm-FM YAML files.
 
 ## Before running
 
