@@ -21,9 +21,10 @@ TRAIN_LEVELS="${TRAIN_LEVELS:-level2 level3 level4}"
 TEST_LEVELS="${TEST_LEVELS:-level2 level3 level4 level5}"
 SHOTS="${SHOTS:-0 10 50 100 250 500}"
 
-# Therm-FM needs 4-GPU DDP: batch_size=40 is defined as the total across 4 GPUs, so
-# changing the GPU count changes the effective batch and the results stop being
-# comparable to the benchmark. Every other model is single-GPU.
+# Therm-FM needs 4-GPU DDP. Hugging Face interprets batch_size=40 as the per-device
+# batch, so the released four-GPU recipe has a global batch of 160 (no gradient
+# accumulation). Changing the GPU count changes the global batch and the results stop
+# being comparable to the benchmark. Every other model is single-GPU.
 is_thermfm() { [[ "$MODEL" == ThermFM-* ]]; }
 if is_thermfm; then
   GPUS="${GPUS:-0,1,2,3}"

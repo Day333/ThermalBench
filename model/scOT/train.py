@@ -677,7 +677,10 @@ if __name__ == "__main__":
         # (logging alone would be lost with the log)
         try:
             import json as _json
-            _n_ep = int(getattr(params, "num_epochs", 0) or 0)
+            # num_epochs is a YAML/W&B configuration value, not a CLI parameter.
+            # Reading it from `params` silently recorded epochs=0 and made the
+            # per-epoch time equal to the whole training time.
+            _n_ep = int(config["num_epochs"])
             _tt = {
                 "train_time_s": round(training_duration, 1),
                 "train_time_per_epoch_s": round(training_duration / max(_n_ep, 1), 2),
