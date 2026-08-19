@@ -12,7 +12,7 @@ def _resolve_eval_indices(n_max):
     """Pick the test-segment samples from the environment; returns None when neither
     variable is set, preserving the original trailing-slice behaviour.
 
-    ThermalBench extension. It exists so that scoring every sample of a pure
+    IC-ThermBench extension. It exists so that scoring every sample of a pure
     extrapolation set no longer requires tiling a copy of the data -- that cost every
     user an extra 4.7 GB and one more preprocessing step.
     """
@@ -213,7 +213,7 @@ class ThermalSteady3D(BaseDataset):
         else:  # test
             self.length = self.N_test
             self.start = self.N_max - self.N_test # Fix the last quarter as the test set
-            # ThermalBench extension: name the test-segment samples explicitly,
+            # IC-ThermBench extension: name the test-segment samples explicitly,
             # which removes the need for a tiled copy
             self._eval_indices = _resolve_eval_indices(self.N_max)
             if self._eval_indices is not None:

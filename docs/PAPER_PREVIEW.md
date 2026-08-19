@@ -1,4 +1,4 @@
-# ThermalBench paper preview
+# IC-ThermBench paper preview
 
 > **Status:** manuscript in preparation. This page exposes the benchmark's central design and selected results without presenting an unpublished draft as the final paper. The formal citation will be added to the repository when the paper is public.
 
@@ -6,7 +6,7 @@
 
 Learning-based thermal solvers are increasingly evaluated under power, geometry, material, and cooling variation. Yet comparisons remain difficult because method papers often use different private or partially released datasets, simulators, splits, preprocessing, and metrics. A result can therefore improve because the task changed—not because the predictor is better.
 
-ThermalBench addresses this evaluation gap rather than proposing another thermal model. Its novelty is the combination of:
+IC-ThermBench addresses this evaluation gap rather than proposing another thermal model. Its novelty is the combination of:
 
 - an open benchmark and common evaluation contract;
 - fixed splits, channel semantics, labels, and metrics;
@@ -16,7 +16,7 @@ ThermalBench addresses this evaluation gap rather than proposing another thermal
 
 The release also bundles the practical path around the benchmark: data formatting, model execution, training, inference, adaptation, aggregation, and result export share one interface.
 
-![Five ThermalBench generalization scopes](../assets/thermalbench-overview.svg)
+![Five IC-ThermBench generalization scopes](../assets/ic-thermbench-overview.svg)
 
 ## Why “Scope”
 
@@ -42,7 +42,7 @@ S5 preserves the S4 physical schema but replaces the represented systems with fi
 
 ## Selected findings
 
-![ThermalBench selected generalization results](../assets/generalization-gap.svg)
+![IC-ThermBench selected generalization results](../assets/generalization-gap.svg)
 
 ### Source-suite anchor — fixed-design prediction is already highly accurate
 

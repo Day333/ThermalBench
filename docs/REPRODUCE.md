@@ -1,6 +1,6 @@
-# Reproducing ThermalBench
+# Reproducing IC-ThermBench
 
-ThermalBench compares models only after fixing the data, split, labels, physical channels, and metric code. Architecture-specific optimization recipes remain architecture-specific and are recorded in [`exp/exp_basic.py`](../exp/exp_basic.py) and the Therm-FM YAML files.
+IC-ThermBench compares models only after fixing the data, split, labels, physical channels, and metric code. Architecture-specific optimization recipes remain architecture-specific and are recorded in [`exp/exp_basic.py`](../exp/exp_basic.py) and the Therm-FM YAML files.
 
 ## Before running
 
@@ -94,7 +94,7 @@ S1 preserves eight source protocols; see [RESULTS.md](RESULTS.md) for the comple
 
 ## Metrics
 
-All baselines call [`utils/metrics.py`](../utils/metrics.py). Do not replace it with an “equivalent” local implementation when reporting ThermalBench numbers.
+All baselines call [`utils/metrics.py`](../utils/metrics.py). Do not replace it with an “equivalent” local implementation when reporting IC-ThermBench numbers.
 
 | Reported metric | Meaning |
 |---|---|

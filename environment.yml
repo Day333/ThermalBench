@@ -1,4 +1,4 @@
-name: thermalbench
+name: ic-thermbench
 channels:
   - conda-forge
 dependencies:

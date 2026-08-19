@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this benchmark, please cite it as below."
-title: "ThermalBench: An Open, Progressive Benchmark for Generalizable 2.5D/3D-IC Thermal Learning"
+title: "IC-ThermBench: An Open, Progressive Benchmark for Generalizable 2.5D/3D-IC Thermal Learning"
 abstract: >-
   An open thermal-learning benchmark with progressive physical support, unified
   splits and metrics, and case-disjoint structural out-of-distribution evaluation.
@@ -8,8 +8,8 @@ abstract: >-
   foundation-model baselines across four generator-backed scopes and supports
   training, evaluation, and few-shot adaptation from one entry point.
 authors:
-  - name: "The ThermalBench Authors"
-repository-code: "https://github.com/Day333/ThermalBench"
+  - name: "The IC-ThermBench Authors"
+repository-code: "https://github.com/Day333/IC-ThermBench"
 doi: 10.5281/zenodo.21992816
 identifiers:
   - type: doi

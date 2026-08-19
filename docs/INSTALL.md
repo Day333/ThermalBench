@@ -1,6 +1,6 @@
 # Installation
 
-The released ThermalBench checkpoints were produced with Python 3.10, PyTorch 2.0.1 + CUDA 11.8, Transformers 4.29.2, and Accelerate 0.31.0. Therm-FM uses the Hugging Face Trainer stack and is sensitive to changes across these versions.
+The released IC-ThermBench checkpoints were produced with Python 3.10, PyTorch 2.0.1 + CUDA 11.8, Transformers 4.29.2, and Accelerate 0.31.0. Therm-FM uses the Hugging Face Trainer stack and is sensitive to changes across these versions.
 
 ## Recommended environment
 
@@ -8,7 +8,7 @@ On a Linux machine with an NVIDIA driver compatible with CUDA 11.8:
 
 ```bash
 conda env create -f environment.yml
-conda activate thermalbench
+conda activate ic-thermbench
 python script/smoke_test.py
 ```
 
@@ -19,8 +19,8 @@ The smoke test does not download data or checkpoints. It verifies imports, const
 Use this only when Conda cannot consume `environment.yml`:
 
 ```bash
-conda create -n thermalbench python=3.10 -y
-conda activate thermalbench
+conda create -n ic-thermbench python=3.10 -y
+conda activate ic-thermbench
 
 pip install torch==2.0.1+cu118 \
   --extra-index-url https://download.pytorch.org/whl/cu118

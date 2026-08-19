@@ -128,7 +128,7 @@ def train(args):
           "--checkpoint_path", ckpt_root,
           "--finetune_from", pre,
           "--replace_embedding_recovery",
-          "--wandb_project_name", "ThermalBench",
+          "--wandb_project_name", "IC-ThermBench",
           "--wandb_run_name", name],
          env, os.path.join(log_dir, f"thermfm_{name}_train.log"))
     train_time = time.time() - t0
@@ -137,7 +137,7 @@ def train(args):
     # scOT always writes to <checkpoint_path>/<project>/<run>; symlink it back to the
     # shared naming so everything under checkpoints/ looks the same
     # (level2_UFNO / level2_ThermFM-T ...).
-    real = os.path.join(ckpt_root, "ThermalBench", name)
+    real = os.path.join(ckpt_root, "IC-ThermBench", name)
     link = os.path.join(args.checkpoints, f"{args.data}_{args.model}")
     if os.path.islink(link):
         os.unlink(link)

@@ -1,8 +1,8 @@
-ThermalBench Data License
+IC-ThermBench Data License
 
-Copyright (c) 2026 The ThermalBench Authors
+Copyright (c) 2026 The IC-ThermBench Authors
 
-Except for the exclusions listed below, the original ThermalBench S2-S5
+Except for the exclusions listed below, the original IC-ThermBench S2-S5
 datasets, fixed split and manifest records, and released benchmark-result
 records are licensed under the Creative Commons Attribution 4.0 International
 License (CC BY 4.0):
@@ -17,9 +17,9 @@ You may share and adapt the licensed material for any purpose, including
 commercial use, provided that you give appropriate credit, link to the
 license, and indicate whether changes were made.
 
-For scholarly use, attribution should identify "ThermalBench: An Open,
+For scholarly use, attribution should identify "IC-ThermBench: An Open,
 Progressive Benchmark for Generalizable 2.5D/3D-IC Thermal Learning", the
-ThermalBench Authors, the version used, and the persistent DOI:
+IC-ThermBench Authors, the version used, and the persistent DOI:
 
 https://doi.org/10.5281/zenodo.21992816
 
@@ -31,9 +31,9 @@ This license does not apply to:
 1. S1 source-suite data or other third-party data, code, checkpoints, or
    assets. Those materials retain their upstream licenses and citation terms.
 2. Repository software, which is licensed separately under LICENSE.
-3. The ThermalBench manuscript or paper-derived prose, figures, and tables,
+3. The IC-ThermBench manuscript or paper-derived prose, figures, and tables,
    unless a specific item is explicitly marked CC BY 4.0.
-4. Names, logos, or trademarks, or any material for which the ThermalBench
+4. Names, logos, or trademarks, or any material for which the IC-ThermBench
    Authors do not hold the necessary rights.
 
 No endorsement is implied. The material is provided as-is and without
