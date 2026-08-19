@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="390" viewBox="0 0 1280 390" role="img" aria-labelledby="title desc">
-  <title id="title">ThermalBench selected RMSE results</title>
+  <title id="title">IC-ThermBench selected RMSE results</title>
   <desc id="desc">Best RMSE rises gradually from 0.657 kelvin in Scope 2 to 1.327 kelvin in Scope 4, jumps to 15.99 kelvin for zero-shot structural out-of-distribution evaluation, then falls to 3.19 kelvin after ten labeled samples per unseen case.</desc>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">

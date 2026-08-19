@@ -1,6 +1,6 @@
-# Selected ThermalBench results
+# Selected IC-ThermBench results
 
-This page presents a compact subset of the S1–S5 results. It is intended to show the benchmark's main behavior, not reproduce every table from the paper. S1 retains its source-task protocols; S2–S5 use the shared ThermalBench splits, preprocessing, labels, and metrics.
+This page presents a compact subset of the S1–S5 results. It is intended to show the benchmark's main behavior, not reproduce every table from the paper. S1 retains its source-task protocols; S2–S5 use the shared IC-ThermBench splits, preprocessing, labels, and metrics.
 
 > **Release status:** S2–S5 data, checkpoints, and evaluation code are released. S1 results are recorded, while its unified data package and one-command evaluator are **on the way**.
 

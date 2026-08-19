@@ -1,6 +1,6 @@
 # Add a model
 
-ThermalBench is intended to make a new thermal predictor easy to compare with published baselines. A conventional PyTorch model requires one implementation file, one registry entry, and three thin scripts.
+IC-ThermBench is intended to make a new thermal predictor easy to compare with published baselines. A conventional PyTorch model requires one implementation file, one registry entry, and three thin scripts.
 
 ## 1. Implement the tensor contract
 
@@ -140,7 +140,7 @@ After the single-model commands pass:
 - [ ] Accepts P=3, P=4, and P=7 without source edits.
 - [ ] Emits one temperature field per sample in kelvin after de-normalization.
 - [ ] Uses the released split and does not fit normalizers on test or S5 samples.
-- [ ] Uses `utils/metrics.py` for reported ThermalBench metrics.
+- [ ] Uses `utils/metrics.py` for reported IC-ThermBench metrics.
 - [ ] Loads an S4 checkpoint for S5 zero-shot evaluation.
 - [ ] Reports architecture-specific optimizer and compute details.
 - [ ] Writes a machine-readable result with `--output`.

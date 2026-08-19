@@ -1,6 +1,6 @@
 <div align="center">
 
-# ThermalBench
+# IC-ThermBench
 
 An open benchmark for reproducible, generalizable 2.5D/3D-IC thermal learning.
 
@@ -17,13 +17,13 @@ An open benchmark for reproducible, generalizable 2.5D/3D-IC thermal learning.
 
 </div>
 
-![ThermalBench: five progressive generalization scopes](assets/thermalbench-overview.svg)
+![IC-ThermBench: five progressive generalization scopes](assets/ic-thermbench-overview.svg)
 
-Thermal prediction papers often differ in data, simulators, splits, preprocessing, and metrics, making model-to-model comparison surprisingly fragile. **ThermalBench fixes that evaluation contract.** It provides progressive physical support, immutable splits, eight baselines from three model families, and one interface for training, inference, adaptation, and reporting.
+Thermal prediction papers often differ in data, simulators, splits, preprocessing, and metrics, making model-to-model comparison surprisingly fragile. **IC-ThermBench fixes that evaluation contract.** It provides progressive physical support, immutable splits, eight baselines from three model families, and one interface for training, inference, adaptation, and reporting.
 
-Developed and maintained by the ThermalBench research team at the **University of Technology Sydney (UTS)**.
+Developed and maintained by the IC-ThermBench research team at the **University of Technology Sydney (UTS)**.
 
-## Why ThermalBench
+## Why IC-ThermBench
 
 Recent methods study geometry, material, cooling, and unseen systems. The remaining problem is comparability. Results are commonly produced with different private or partially released datasets, reference solvers, representations, splits, and metrics. Consequently, a lower error may reflect an easier test distribution rather than a better model, and “generalization” may refer to anything from a new power map on the same chip to a structurally unseen package.
 
@@ -33,7 +33,7 @@ Recent methods study geometry, material, cooling, and unseen systems. The remain
 
 ## What the benchmark reveals
 
-![Selected ThermalBench results: gradual in-support degradation followed by a structural-OOD gap and few-shot recovery](assets/generalization-gap.svg)
+![Selected IC-ThermBench results: gradual in-support degradation followed by a structural-OOD gap and few-shot recovery](assets/generalization-gap.svg)
 
 | Track | Physical support | Best method | Best RMSE ↓ |
 |---|---|---|---:|
@@ -44,13 +44,13 @@ Recent methods study geometry, material, cooling, and unseen systems. The remain
 | **S5 · zero-shot** | five case-disjoint chiplet systems | **Therm-FM T** | **15.99 K** |
 | **S5 · 10-shot** | ten labeled samples per unseen case | **Therm-FM B** | **3.19 K** |
 
-¹ S1 is a collection of eight source tasks, so its range is task-specific rather than one pooled score. The [recorded benchmark results](docs/RESULTS.md) include the complete S1 table, S2–S4 comparisons, S5 zero-shot results, per-case errors, and few-shot adaptation. S2–S5 use the controlled ThermalBench protocol.
+¹ S1 is a collection of eight source tasks, so its range is task-specific rather than one pooled score. The [selected benchmark results](docs/RESULTS.md) include representative S1 cases, compact S2–S4 comparisons, and the main S5 zero-shot and few-shot findings. S2–S5 use the controlled IC-ThermBench protocol.
 
 The in-support results degrade gradually as observed physical dimensions are added. The case-disjoint S5 shift is qualitatively different: error grows by roughly an order of magnitude, model rankings change, and a small amount of target supervision recovers much of the gap. See the [paper preview](docs/PAPER_PREVIEW.md) for interpretation and the [reproduction guide](docs/REPRODUCE.md) for the exact protocol.
 
 ## Benchmark at a glance
 
-ThermalBench uses **Scope** rather than “level”: the sequence describes the capability a deployment needs, not a universal maturity rank.
+IC-ThermBench uses **Scope** rather than “level”: the sequence describes the capability a deployment needs, not a universal maturity rank.
 
 | Scope | Evaluation setting | Newly variable factors | Samples | Typical use |
 |---|---|---|---:|---|
@@ -62,8 +62,8 @@ ThermalBench uses **Scope** rather than “level”: the sequence describes the 
 
 ### Dataset provenance and credit
 
-- **S1 is collected, not regenerated.** ThermalBench preserves the original Alpha EV6 and industrial task definitions, simulators, resolutions, and evaluation conventions used along the [ARO](https://github.com/Mia-WMY/ARO) → [Therm-FM](https://arxiv.org/abs/2605.22663) research line. We do not alter these source tasks or pool their scores with S2–S5. The unified S1 data package and evaluation code are **on the way**; the [recorded benchmark results](docs/RESULTS.md) are available now.
-- **S2 follows the ATPlace2.5D lineage.** Cases 1–10, their chiplet systems, and the HotSpot-based thermal setup originate from Qipan Wang *et al.*'s [ATPlace2.5D public package](https://github.com/PKU-IDEA/ATPlace_pub). ThermalBench uses this tested foundation for its layout scope.
+- **S1 is collected, not regenerated.** IC-ThermBench preserves the original Alpha EV6 and industrial task definitions, simulators, resolutions, and evaluation conventions used along the [ARO](https://github.com/Mia-WMY/ARO) → [Therm-FM](https://arxiv.org/abs/2605.22663) research line. We do not alter these source tasks or pool their scores with S2–S5. The unified S1 data package and evaluation code are **on the way**; the [recorded benchmark results](docs/RESULTS.md) are available now.
+- **S2 follows the ATPlace2.5D lineage.** Cases 1–10, their chiplet systems, and the HotSpot-based thermal setup originate from Qipan Wang *et al.*'s [ATPlace2.5D public package](https://github.com/PKU-IDEA/ATPlace_pub). IC-ThermBench uses this tested foundation for its layout scope.
 - **S3–S5 are consistent extensions.** They retain the S2 case/generation conventions while adding material support, boundary support, and held-out structural systems. This preserves continuity with an established placement benchmark while expanding the thermal-learning evaluation space.
 
 The current executable release contains the generator-backed **S2–S5** data and code path. S1 remains explicitly separated until its unified package is ready.
@@ -83,10 +83,10 @@ Every baseline receives the same labeled samples, split membership, physical cha
 ### 1. Install
 
 ```bash
-git clone https://github.com/Day333/ThermalBench.git
-cd ThermalBench
+git clone https://github.com/Day333/IC-ThermBench.git
+cd IC-ThermBench
 conda env create -f environment.yml
-conda activate thermalbench
+conda activate ic-thermbench
 python script/smoke_test.py
 ```
 
@@ -97,7 +97,7 @@ The frozen environment matches the released checkpoints. Therm-FM is version-sen
 Download the [datasets (~4.6 GB)](https://drive.google.com/file/d/15Do8Raf070VseV9cn44j1hdVpD3Rz-Un/view?usp=sharing) and [released checkpoints (~9.6 GB)](https://drive.google.com/file/d/1wisvvO19Fx9Znki651j-QWuJHVz2aPHQ/view?usp=sharing), then unpack them at the repository root:
 
 ```text
-ThermalBench/
+IC-ThermBench/
 ├── datasets/
 │   ├── level2_steady/
 │   ├── level3_steady/
@@ -141,7 +141,7 @@ python utils/summarize.py level2 level3 level4 level5
 
 `run.py` is the single entry point; every command also accepts `--root_path`, `--checkpoints`, `--load`, and `--output`. Full commands, split semantics, metric definitions, and reproducibility boundaries are in [docs/REPRODUCE.md](docs/REPRODUCE.md).
 
-## Use ThermalBench for your model
+## Use IC-ThermBench for your model
 
 A new predictor only needs to satisfy one tensor contract:
 
@@ -187,10 +187,10 @@ The release is designed to be easy to reproduce **and** easy to extend: data con
 The benchmark artifacts are citable now; the paper citation will replace this software entry after public release.
 
 ```bibtex
-@software{thermalbench2026,
-  title     = {ThermalBench: An Open, Progressive Benchmark for Generalizable
+@software{icthermbench2026,
+  title     = {IC-ThermBench: An Open, Progressive Benchmark for Generalizable
                2.5D/3D-IC Thermal Learning},
-  author    = {The ThermalBench Authors},
+  author    = {The IC-ThermBench Authors},
   year      = {2026},
   publisher = {Zenodo},
   doi       = {10.5281/zenodo.21992816},
@@ -202,8 +202,8 @@ The benchmark artifacts are citable now; the paper citation will replace this so
 ## License and acknowledgements
 
 - Repository code is released under the [MIT License](LICENSE).
-- Original ThermalBench S2–S5 data, fixed splits, and released result records are available under [CC BY 4.0](LICENSE-DATA): reuse and extension are welcome with attribution.
-- S1 source data and third-party components retain their original licenses. The ThermalBench manuscript and paper-derived prose, figures, and tables are not relicensed as dataset content.
+- Original IC-ThermBench S2–S5 data, fixed splits, and released result records are available under [CC BY 4.0](LICENSE-DATA): reuse and extension are welcome with attribution.
+- S1 source data and third-party components retain their original licenses. The IC-ThermBench manuscript and paper-derived prose, figures, and tables are not relicensed as dataset content.
 
 See the [license map and attribution guidance](LICENSES.md) for the exact boundaries. Open licensing permits legitimate reuse; it does not permit claiming the benchmark, paper text, or curation work as someone else's contribution.
 

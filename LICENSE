@@ -1,6 +1,6 @@
-ThermalBench software licensing notice
+IC-ThermBench software licensing notice
 
-This license applies to original ThermalBench software source code.
+This license applies to original IC-ThermBench software source code.
 Datasets, result records, paper-derived material, and third-party components
 are governed by the separate terms described in LICENSES.md.
 
@@ -8,7 +8,7 @@ The standard MIT License applicable to that software follows.
 
 MIT License
 
-Copyright (c) 2026 The ThermalBench Authors
+Copyright (c) 2026 The IC-ThermBench Authors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

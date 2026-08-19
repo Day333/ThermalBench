@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="560" viewBox="0 0 1440 560" role="img" aria-labelledby="title desc">
-  <title id="title">ThermalBench progressive generalization scopes</title>
+  <title id="title">IC-ThermBench progressive generalization scopes</title>
   <desc id="desc">Five scopes progress from fixed-design source suites through layout, material, and boundary variation to case-disjoint structural out-of-distribution systems, all evaluated with one shared protocol.</desc>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
