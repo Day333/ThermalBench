@@ -12,9 +12,10 @@ This project moved those classes under model/ and layers/, so the module paths c
 and a plain torch.load raises ModuleNotFoundError. `install()` registers the old paths
 as aliases of the new modules so pickle can find them.
 
-The class bodies were copied verbatim, so an object deserialized this way is
-numerically identical to the one trained back then -- which is precisely what makes
-"new code reproduces the old numbers" a meaningful check.
+The model classes keep the historical attribute names and forward numerics, so an
+object deserialized this way evaluates identically to the one trained back then --
+which is precisely what makes "new code reproduces the old numbers" a meaningful
+check, and the regression suite verifies it against the released checkpoints.
 
 Checkpoints written by new training runs no longer store whole objects; they store a
 state_dict (see utils/tools.save_checkpoint) and depend on no class path at all.
@@ -81,15 +82,10 @@ def install():
 
 
 def patch_legacy_attrs(model):
-    """Fill in attributes missing from older checkpoints.
+    """Fill in attributes missing from older whole-object checkpoints.
 
-    U-FNO's three variant switches (use_local / use_factorized / use_film) were added
-    later, so SimpleBlock3d instances pickled before that deserialize without them and
-    forward() raises AttributeError on first access. This restores the defaults (all
-    off, i.e. the original U-FNO).
+    Currently a no-op: the model classes only read attributes that every historical
+    checkpoint already carries. Kept as the extension point for future pickled-object
+    incompatibilities.
     """
-    for mod in model.modules():
-        if type(mod).__name__ in ("SimpleBlock3d", "SAUSimpleBlock3d"):
-            for a in ("use_local", "use_factorized", "use_film"):
-                mod.__dict__.setdefault(a, False)
     return model

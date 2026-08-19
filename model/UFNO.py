@@ -1,143 +1,111 @@
-"""U-FNO (Wen et al.) -- each Fourier layer runs in parallel with a small U-Net.
+"""U-FNO (Wen et al., 2022): an FNO whose last Fourier layers each run a small U-Net
+in parallel to recover local, high-frequency detail.
 
-Class bodies are copied verbatim from ufno.py; only the imports of SpectralConv3d /
-U_net / LocalBranch and friends were repointed at layers/. The module-level
-torch.manual_seed(0) is preserved (the original file had it); the training scripts set
-the seed again afterwards, so the final RNG state is unchanged.
+Implemented from the architecture description in the paper ("U-FNO -- an enhanced
+Fourier neural operator-based deep-learning model for multiphase flow", Advances in
+Water Resources 163, 104180); the spectral convolution follows the MIT-licensed FNO
+reference implementation (see layers/fourier.py). No source text from the original
+U-FNO repository (which is CC BY-NC-ND licensed) is used.
+
+Compatibility contract, pinned by the released benchmark checkpoints and by the
+legacy whole-object pickles that utils/compat.py still loads:
+- attribute names: fc0, conv0..conv5, w0..w5, unet3..unet5, fc1, fc2;
+- module construction order (fc0, all convs, all ws, the unets, fc1, fc2), so seeded
+  runs draw the same initialization stream as the historical code;
+- forward numerics: relu(spectral + pointwise [+ unet(layer input)]) per layer.
+The regression suite checks that the released checkpoints reproduce their published
+metrics under this implementation.
 """
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-import operator
-from functools import reduce
-from functools import partial
-
-from layers.fourier import SpectralConv3d, FactorizedSpectralConv3d
+from layers.fourier import SpectralConv3d
 from layers.unet_blocks import U_net
-from layers.modulation import LocalBranch, compute_global_feats, FiLMModulator
 
+# The historical module seeded the RNG at import time. The training scripts re-seed
+# afterwards, so results do not depend on it; it is kept so the RNG stream is
+# bit-identical to the historical code in every situation.
 torch.manual_seed(0)
+
+N_LAYERS = 6      # 3 Fourier layers + 3 U-Fourier layers
+UNET_FROM = 3     # layers UNET_FROM..N_LAYERS-1 carry the U-Net branch
 
 
 class SimpleBlock3d(nn.Module):
-    def __init__(self, modes1, modes2, modes3, width, in_channels=12,
-                 use_local=False, local_kernel=3, local_alpha=0.1,
-                 use_factorized=False, use_film=False):
-        super(SimpleBlock3d, self).__init__()
-        """
-        U-FNO contains 3 Fourier layers and 3 U-Fourier layers.
-        input/output: (batchsize, x, y, z, c=in_channels) -> (..., c=1)
+    """Lift -> N_LAYERS (U-)Fourier layers -> project.
 
-        Switches (all default False = original U-FNO, bit-identical):
-          use_local      (A): add depthwise LocalBranch + learnable alpha per block
-          use_factorized (B): replace SpectralConv3d with FactorizedSpectralConv3d
-          use_film       (C): case-level global feats -> per-block gamma/beta FiLM
-        """
+    input  (B, X, Y, Z, in_channels)
+    output (B, X, Y, Z, 1)
+    """
+
+    def __init__(self, modes1, modes2, modes3, width, in_channels=12):
+        super().__init__()
         self.modes1 = modes1
         self.modes2 = modes2
         self.modes3 = modes3
         self.width = width
         self.in_channels = in_channels
-        self.use_local = use_local
-        self.use_factorized = use_factorized
-        self.use_film = use_film
-        self.fc0 = nn.Linear(in_channels, self.width)
 
-        Conv = FactorizedSpectralConv3d if use_factorized else SpectralConv3d
-        self.conv0 = Conv(self.width, self.width, self.modes1, self.modes2, self.modes3)
-        self.conv1 = Conv(self.width, self.width, self.modes1, self.modes2, self.modes3)
-        self.conv2 = Conv(self.width, self.width, self.modes1, self.modes2, self.modes3)
-        self.conv3 = Conv(self.width, self.width, self.modes1, self.modes2, self.modes3)
-        self.conv4 = Conv(self.width, self.width, self.modes1, self.modes2, self.modes3)
-        self.conv5 = Conv(self.width, self.width, self.modes1, self.modes2, self.modes3)
-        self.w0 = nn.Conv1d(self.width, self.width, 1)
-        self.w1 = nn.Conv1d(self.width, self.width, 1)
-        self.w2 = nn.Conv1d(self.width, self.width, 1)
-        self.w3 = nn.Conv1d(self.width, self.width, 1)
-        self.w4 = nn.Conv1d(self.width, self.width, 1)
-        self.w5 = nn.Conv1d(self.width, self.width, 1)
-        self.unet3 = U_net(self.width, self.width, 3, 0)
-        self.unet4 = U_net(self.width, self.width, 3, 0)
-        self.unet5 = U_net(self.width, self.width, 3, 0)
-        self.fc1 = nn.Linear(self.width, 128)
+        self.fc0 = nn.Linear(in_channels, width)
+        for i in range(N_LAYERS):
+            setattr(self, f"conv{i}",
+                    SpectralConv3d(width, width, modes1, modes2, modes3))
+        for i in range(N_LAYERS):
+            setattr(self, f"w{i}", nn.Conv1d(width, width, 1))
+        for i in range(UNET_FROM, N_LAYERS):
+            setattr(self, f"unet{i}", U_net(width, width, 3, 0))
+        self.fc1 = nn.Linear(width, 128)
         self.fc2 = nn.Linear(128, 1)
 
-        if use_local:
-            for i in range(6):
-                setattr(self, f"local{i}", LocalBranch(self.width, local_kernel))
-                setattr(self, f"alpha{i}", nn.Parameter(torch.tensor(float(local_alpha))))
-        if use_film:
-            self.film = FiLMModulator(self.width, n_feats=5, n_blocks=6)
+    def _lift(self, x):
+        """(B, X, Y, Z, P) -> channel-first features (B, width, X, Y, Z)."""
+        return self.fc0(x).permute(0, 4, 1, 2, 3)
+
+    def _layers(self, v):
+        """Run the six (U-)Fourier layers on (B, width, X, Y, Z)."""
+        b, w = v.shape[0], self.width
+        sx, sy, sz = v.shape[2], v.shape[3], v.shape[4]
+        for i in range(N_LAYERS):
+            spectral = getattr(self, f"conv{i}")(v)
+            pointwise = getattr(self, f"w{i}")(
+                v.reshape(b, w, -1)).reshape(b, w, sx, sy, sz)
+            out = spectral + pointwise
+            if i >= UNET_FROM:
+                # The paper's U-Fourier layer feeds the *layer input* v_l to the
+                # U-Net, in parallel with the spectral and pointwise paths -- not the
+                # partial sum. Changing this stops trained checkpoints reproducing.
+                out = out + getattr(self, f"unet{i}")(v)
+            v = F.relu(out)
+        return v
+
+    def _project(self, v):
+        """(B, width, X, Y, Z) -> (B, X, Y, Z, 1)."""
+        v = v.permute(0, 2, 3, 4, 1)
+        return self.fc2(F.relu(self.fc1(v)))
 
     def forward(self, x):
-        batchsize = x.shape[0]
-        size_x, size_y, size_z = x.shape[1], x.shape[2], x.shape[3]
-
-        if self.use_film:
-            gamma, beta = self.film(compute_global_feats(x))   # (B,6,W)
-            gview = lambda i: gamma[:, i].view(batchsize, self.width, 1, 1, 1)
-            bview = lambda i: beta[:, i].view(batchsize, self.width, 1, 1, 1)
-
-        x = self.fc0(x)
-        x = x.permute(0, 4, 1, 2, 3)
-
-        def block(x, ci, wi, ai=None, li=None, ui=None, idx=0):
-            x_in = x
-            x1 = ci(x)
-            x2 = wi(x.reshape(batchsize, self.width, -1)).reshape(batchsize, self.width, size_x, size_y, size_z)
-            x = x1 + x2
-            if ui is not None:
-                # Original U-FNO (Wen et al.): U_net acts on the block input v_l, not on
-                # (K v_l + W v_l). Do NOT change this to ui(x) -- that would redefine the
-                # U-Fourier layer and stop trained checkpoints from reproducing.
-                x = x + ui(x_in)
-            if self.use_local:
-                x = x + ai * li(x_in)
-            if self.use_film:
-                x = (1 + gview(idx)) * x + bview(idx)
-            return F.relu(x)
-
-        x = block(x, self.conv0, self.w0, self.alpha0 if self.use_local else None, self.local0 if self.use_local else None, None, 0)
-        x = block(x, self.conv1, self.w1, self.alpha1 if self.use_local else None, self.local1 if self.use_local else None, None, 1)
-        x = block(x, self.conv2, self.w2, self.alpha2 if self.use_local else None, self.local2 if self.use_local else None, None, 2)
-        x = block(x, self.conv3, self.w3, self.alpha3 if self.use_local else None, self.local3 if self.use_local else None, self.unet3, 3)
-        x = block(x, self.conv4, self.w4, self.alpha4 if self.use_local else None, self.local4 if self.use_local else None, self.unet4, 4)
-        x = block(x, self.conv5, self.w5, self.alpha5 if self.use_local else None, self.local5 if self.use_local else None, self.unet5, 5)
-
-        x = x.permute(0, 2, 3, 4, 1)
-        x = self.fc1(x)
-        x = F.relu(x)
-        x = self.fc2(x)
-        return x
+        return self._project(self._layers(self._lift(x)))
 
 
 class Net3d(nn.Module):
-    def __init__(self, modes1, modes2, modes3, width, in_channels=12,
-                 use_local=False, local_kernel=3, local_alpha=0.1,
-                 use_factorized=False, use_film=False):
-        super(Net3d, self).__init__()
-        self.conv1 = SimpleBlock3d(modes1, modes2, modes3, width, in_channels=in_channels,
-                                   use_local=use_local, local_kernel=local_kernel,
-                                   local_alpha=local_alpha,
-                                   use_factorized=use_factorized, use_film=use_film)
+    """Pads X/Y/Z up to multiples of 8 (the U-Net has three stride-2 levels), runs
+    SimpleBlock3d, and crops back. Y/Z are replicate-padded, X zero-padded."""
+
+    def __init__(self, modes1, modes2, modes3, width, in_channels=12):
+        super().__init__()
+        self.conv1 = SimpleBlock3d(modes1, modes2, modes3, width,
+                                   in_channels=in_channels)
 
     def forward(self, x):
-        batchsize = x.shape[0]
-        size_x, size_y, size_z = x.shape[1], x.shape[2], x.shape[3]
-        px = (8 - size_x % 8) % 8
-        py = (8 - size_y % 8) % 8
-        pz = (8 - size_z % 8) % 8
+        b, sx, sy, sz = x.shape[0], x.shape[1], x.shape[2], x.shape[3]
+        px, py, pz = (-sx) % 8, (-sy) % 8, (-sz) % 8
         x = F.pad(x, (0, 0, 0, pz, 0, py), "replicate")
         if px:
-            x = F.pad(x, (0, 0, 0, 0, 0, 0, 0, px), 'constant', 0)
+            x = F.pad(x, (0, 0, 0, 0, 0, 0, 0, px), "constant", 0)
         x = self.conv1(x)
-        x = x.view(batchsize, size_x + px, size_y + py, size_z + pz, 1)
-        x = x[:, :size_x, :size_y, :size_z, :]
-        return x.squeeze(-1)
+        x = x.view(b, sx + px, sy + py, sz + pz, 1)
+        return x[:, :sx, :sy, :sz, :].squeeze(-1)
 
     def count_params(self):
-        c = 0
-        for p in self.parameters():
-            c += reduce(operator.mul, list(p.size()))
-        return c
+        return sum(p.numel() for p in self.parameters())

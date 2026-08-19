@@ -1,118 +1,61 @@
-"""Three 3D spectral convolution layers.
+"""3D spectral convolution layers.
 
-`SpectralConv3d` / `FactorizedSpectralConv3d` come from U-FNO (ufno.py);
-`FNOSpectralConv3d` comes from FNO (fno/models/fourier_3d.py). The two implementations
-are NOT the same, so both are kept rather than merged. The FNO one was renamed only to
-resolve the name clash -- its body is untouched, and state_dict keys derive from
-attribute names (weights1/weights2/...) rather than class names, so the rename does not
-affect weight loading.
+Both classes implement the standard FNO spectral convolution and both follow the
+MIT-licensed reference implementation of the FNO line of work (Zongyi Li,
+https://github.com/zongyi-li/fourier_neural_operator): rFFT, a learned per-mode
+complex linear map on the retained low-frequency corner modes, irFFT.
+
+They are kept separate because they arrived through two checkpoint lineages that must
+keep loading independently: `SpectralConv3d` is the one inside U-FNO / SAU-FNO
+checkpoints, `FNOSpectralConv3d` (vendored verbatim from fno/models/fourier_3d.py) is
+the one inside FNO checkpoints. state_dict keys derive from attribute names
+(weights1..weights4), which the two share.
 """
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
-
-import operator
-from functools import reduce
-from functools import partial
 
 
-# =========================================================================
-#  SpectralConv3d (original U-FNO 3D Fourier layer)
-# =========================================================================
 class SpectralConv3d(nn.Module):
+    """Fourier layer for (B, C, X, Y, Z) feature maps.
+
+    Keeps modes1 x modes2 x modes3 modes in each of the four (+-kx, +-ky) corners at
+    non-negative kz (the z axis is rFFT-halved), applies one complex channel-mixing
+    weight tensor per corner, and returns to physical space.
+    """
+
     def __init__(self, in_channels, out_channels, modes1, modes2, modes3):
-        super(SpectralConv3d, self).__init__()
+        super().__init__()
         self.in_channels = in_channels
         self.out_channels = out_channels
         self.modes1 = modes1
         self.modes2 = modes2
         self.modes3 = modes3
-        self.scale = (1 / (in_channels * out_channels))
-        self.weights1 = nn.Parameter(self.scale * torch.rand(in_channels, out_channels, self.modes1, self.modes2, self.modes3, dtype=torch.cfloat))
-        self.weights2 = nn.Parameter(self.scale * torch.rand(in_channels, out_channels, self.modes1, self.modes2, self.modes3, dtype=torch.cfloat))
-        self.weights3 = nn.Parameter(self.scale * torch.rand(in_channels, out_channels, self.modes1, self.modes2, self.modes3, dtype=torch.cfloat))
-        self.weights4 = nn.Parameter(self.scale * torch.rand(in_channels, out_channels, self.modes1, self.modes2, self.modes3, dtype=torch.cfloat))
+        self.scale = 1 / (in_channels * out_channels)
+        # One weight tensor per (+-kx, +-ky) corner, created in index order so seeded
+        # initialization draws the same random stream as the released checkpoints.
+        for i in (1, 2, 3, 4):
+            setattr(self, f"weights{i}", nn.Parameter(
+                self.scale * torch.rand(in_channels, out_channels,
+                                        modes1, modes2, modes3,
+                                        dtype=torch.cfloat)))
 
-    def compl_mul3d(self, input, weights):
-        return torch.einsum("bixyz,ioxyz->boxyz", input, weights)
-
-    def forward(self, x):
-        batchsize = x.shape[0]
-        x_ft = torch.fft.rfftn(x, dim=[-3,-2,-1])
-        out_ft = torch.zeros(batchsize, self.out_channels, x.size(-3), x.size(-2), x.size(-1)//2 + 1, dtype=torch.cfloat, device=x.device)
-        out_ft[:, :, :self.modes1, :self.modes2, :self.modes3] = \
-            self.compl_mul3d(x_ft[:, :, :self.modes1, :self.modes2, :self.modes3], self.weights1)
-        out_ft[:, :, -self.modes1:, :self.modes2, :self.modes3] = \
-            self.compl_mul3d(x_ft[:, :, -self.modes1:, :self.modes2, :self.modes3], self.weights2)
-        out_ft[:, :, :self.modes1, -self.modes2:, :self.modes3] = \
-            self.compl_mul3d(x_ft[:, :, :self.modes1, -self.modes2:, :self.modes3], self.weights3)
-        out_ft[:, :, -self.modes1:, -self.modes2:, :self.modes3] = \
-            self.compl_mul3d(x_ft[:, :, -self.modes1:, -self.modes2:, :self.modes3], self.weights4)
-        x = torch.fft.irfftn(out_ft, s=(x.size(-3), x.size(-2), x.size(-1)))
-        return x
-
-
-# =========================================================================
-#  FactorizedSpectralConv3d (variant B): per-axis 1D Fourier, sum fusion.
-#  Replaces the 3D Fourier kernel with three 1D kernels along X/Y/Z, reducing
-#  params from O(Ci*Co*m1*m2*m3*4) to O(Ci*Co*(m1+m2+m3)*2) so we can afford
-#  more modes. Low + high (negative-freq) modes per axis.
-# =========================================================================
-
-
-# =========================================================================
-#  FactorizedSpectralConv3d (variant B): per-axis 1D Fourier, sum fusion.
-#  Replaces the 3D Fourier kernel with three 1D kernels along X/Y/Z, reducing
-#  params from O(Ci*Co*m1*m2*m3*4) to O(Ci*Co*(m1+m2+m3)*2) so we can afford
-#  more modes. Low + high (negative-freq) modes per axis.
-# =========================================================================
-class FactorizedSpectralConv3d(nn.Module):
-    def __init__(self, in_channels, out_channels, modes1, modes2, modes3):
-        super(FactorizedSpectralConv3d, self).__init__()
-        self.in_channels, self.out_channels = in_channels, out_channels
-        self.m1, self.m2, self.m3 = modes1, modes2, modes3
-        s = 1.0 / (in_channels * out_channels)
-        self.wx_lo = nn.Parameter(s * torch.rand(in_channels, out_channels, modes1, dtype=torch.cfloat))
-        self.wx_hi = nn.Parameter(s * torch.rand(in_channels, out_channels, modes1, dtype=torch.cfloat))
-        self.wy_lo = nn.Parameter(s * torch.rand(in_channels, out_channels, modes2, dtype=torch.cfloat))
-        self.wy_hi = nn.Parameter(s * torch.rand(in_channels, out_channels, modes2, dtype=torch.cfloat))
-        self.wz_lo = nn.Parameter(s * torch.rand(in_channels, out_channels, modes3, dtype=torch.cfloat))
-        self.wz_hi = nn.Parameter(s * torch.rand(in_channels, out_channels, modes3, dtype=torch.cfloat))
-
-    def _axis(self, x, w_lo, w_hi, dim, modes):
-        # x: (B, C, X, Y, Z). 1D rFFT along `dim`, multiply low+high modes, irFFT.
-        xf = torch.fft.rfft(x, dim=dim)
-        nd = xf.ndim
-        perm = [0, 1, dim] + [d for d in range(2, nd) if d != dim]   # B, C, dim, rest
-        xf_p = xf.permute(*perm)
-        Nf = xf_p.shape[2]
-        rest = xf_p.shape[3:]
-        B, C = x.shape[0], x.shape[1]
-        R = 1
-        for r in rest:
-            R *= r
-        xf_flat = xf_p.reshape(B, C, Nf, R)
-        out_flat = torch.zeros(B, self.out_channels, Nf, R, dtype=torch.cfloat, device=x.device)
-        out_flat[:, :, :modes] = torch.einsum("bcmr,com->bomr", xf_flat[:, :, :modes], w_lo)
-        if modes > 1:
-            out_flat[:, :, -modes:] = torch.einsum("bcmr,com->bomr", xf_flat[:, :, -modes:], w_hi)
-        out_p = out_flat.reshape(B, self.out_channels, Nf, *rest)
-        inv = [0] * nd
-        for i, ax in enumerate(perm):
-            inv[ax] = i
-        out = out_p.permute(*inv)
-        return torch.fft.irfft(out, n=x.shape[dim], dim=dim)
+    def _corners(self):
+        m1, m2 = self.modes1, self.modes2
+        lo1, hi1 = slice(None, m1), slice(-m1, None)
+        lo2, hi2 = slice(None, m2), slice(-m2, None)
+        return ((self.weights1, lo1, lo2), (self.weights2, hi1, lo2),
+                (self.weights3, lo1, hi2), (self.weights4, hi1, hi2))
 
     def forward(self, x):
-        # x: (B, C, X, Y, Z) -> dim 2=X, 3=Y, 4=Z
-        return (self._axis(x, self.wx_lo, self.wx_hi, 2, self.m1) +
-                self._axis(x, self.wy_lo, self.wy_hi, 3, self.m2) +
-                self._axis(x, self.wz_lo, self.wz_hi, 4, self.m3))
-
-
-# =========================================================================
-#  LocalBranch (variant A): depthwise 3D conv + pointwise, per-block local feat.
-# =========================================================================
+        m3 = self.modes3
+        x_ft = torch.fft.rfftn(x, dim=(-3, -2, -1))
+        out_ft = torch.zeros(x.shape[0], self.out_channels,
+                             x.size(-3), x.size(-2), x.size(-1) // 2 + 1,
+                             dtype=torch.cfloat, device=x.device)
+        for w, sx, sy in self._corners():
+            out_ft[:, :, sx, sy, :m3] = torch.einsum(
+                "bixyz,ioxyz->boxyz", x_ft[:, :, sx, sy, :m3], w)
+        return torch.fft.irfftn(out_ft, s=(x.size(-3), x.size(-2), x.size(-1)))
 
 
 class FNOSpectralConv3d(nn.Module):

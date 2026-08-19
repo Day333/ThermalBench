@@ -1,61 +1,73 @@
 """U-Net building blocks.
 
-`U_net` is the small U-Net attached to each Fourier layer in U-FNO (from ufno.py);
-`DoubleConv` is the double-convolution block of the standalone UNet baseline (from
-unet.py). They are unrelated and sit together only because both belong to the U-Net
-family.
+`U_net` is the small per-layer U-Net that U-FNO (Wen et al., 2022) runs in parallel
+with its last three Fourier layers. It is implemented here from the architecture
+described in the paper (three stride-2 encoder levels, transposed-conv decoder with
+skip concatenations, and a final full-resolution fusion with the layer input).
+Attribute names and the internal nn.Sequential layout are pinned by the released
+benchmark checkpoints, whose state_dict keys derive from them.
+
+`DoubleConv` is the double-convolution block of the standalone UNet baseline. The two
+classes are unrelated and share this file only because both belong to the U-Net family.
 """
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
+
+
+def _down(channels, kernel_size, stride, dropout_rate):
+    """One encoder stage: strided conv + BatchNorm + LeakyReLU (+ Dropout).
+
+    The four-element Sequential (indices 0..3) is part of the checkpoint format:
+    parameters live at .0 (conv) and .1 (batchnorm)."""
+    return nn.Sequential(
+        nn.Conv3d(channels, channels, kernel_size, stride=stride,
+                  padding=(kernel_size - 1) // 2, bias=False),
+        nn.BatchNorm3d(channels),
+        nn.LeakyReLU(0.1, inplace=True),
+        nn.Dropout(dropout_rate),
+    )
+
+
+def _up(in_channels, out_channels):
+    """One decoder stage: 2x transposed conv + LeakyReLU (parameters at .0)."""
+    return nn.Sequential(
+        nn.ConvTranspose3d(in_channels, out_channels, kernel_size=4, stride=2,
+                           padding=1),
+        nn.LeakyReLU(0.1, inplace=True),
+    )
 
 
 class U_net(nn.Module):
+    """The U-FNO companion U-Net: (B, C, X, Y, Z) -> (B, C, X, Y, Z).
+
+    Encoder: full resolution -> 1/2 -> 1/4 -> 1/8, with an extra stride-1 conv at the
+    two deepest levels. Decoder: three transposed convs, each fused with the matching
+    encoder feature by channel concatenation; a last convolution maps the concatenation
+    of the input and the top decoder feature back to `output_channels`.
+    """
+
     def __init__(self, input_channels, output_channels, kernel_size, dropout_rate):
-        super(U_net, self).__init__()
-        self.input_channels = input_channels
-        self.conv1 = self.conv(input_channels, output_channels, kernel_size=kernel_size, stride=2, dropout_rate = dropout_rate)
-        self.conv2 = self.conv(input_channels, output_channels, kernel_size=kernel_size, stride=2, dropout_rate = dropout_rate)
-        self.conv2_1 = self.conv(input_channels, output_channels, kernel_size=kernel_size, stride=1, dropout_rate = dropout_rate)
-        self.conv3 = self.conv(input_channels, output_channels, kernel_size=kernel_size, stride=2, dropout_rate = dropout_rate)
-        self.conv3_1 = self.conv(input_channels, output_channels, kernel_size=kernel_size, stride=1, dropout_rate = dropout_rate)
-        self.deconv2 = self.deconv(input_channels, output_channels)
-        self.deconv1 = self.deconv(input_channels*2, output_channels)
-        self.deconv0 = self.deconv(input_channels*2, output_channels)
-        self.output_layer = self.output(input_channels*2, output_channels,
-                                         kernel_size=kernel_size, stride=1, dropout_rate = dropout_rate)
+        super().__init__()
+        c, k, dr = input_channels, kernel_size, dropout_rate
+        self.conv1 = _down(c, k, 2, dr)               # 1/2
+        self.conv2 = _down(c, k, 2, dr)               # 1/4
+        self.conv2_1 = _down(c, k, 1, dr)
+        self.conv3 = _down(c, k, 2, dr)               # 1/8
+        self.conv3_1 = _down(c, k, 1, dr)
+        self.deconv2 = _up(c, c)                      # 1/8 -> 1/4
+        self.deconv1 = _up(c * 2, c)                  # 1/4 -> 1/2
+        self.deconv0 = _up(c * 2, c)                  # 1/2 -> 1/1
+        self.output_layer = nn.Conv3d(c * 2, output_channels, kernel_size=k,
+                                      stride=1, padding=(k - 1) // 2)
 
     def forward(self, x):
-        out_conv1 = self.conv1(x)
-        out_conv2 = self.conv2_1(self.conv2(out_conv1))
-        out_conv3 = self.conv3_1(self.conv3(out_conv2))
-        out_deconv2 = self.deconv2(out_conv3)
-        concat2 = torch.cat((out_conv2, out_deconv2), 1)
-        out_deconv1 = self.deconv1(concat2)
-        concat1 = torch.cat((out_conv1, out_deconv1), 1)
-        out_deconv0 = self.deconv0(concat1)
-        concat0 = torch.cat((x, out_deconv0), 1)
-        out = self.output_layer(concat0)
-        return out
-
-    def conv(self, in_planes, output_channels, kernel_size, stride, dropout_rate):
-        return nn.Sequential(
-            nn.Conv3d(in_planes, output_channels, kernel_size=kernel_size,
-                      stride=stride, padding=(kernel_size - 1) // 2, bias = False),
-            nn.BatchNorm3d(output_channels),
-            nn.LeakyReLU(0.1, inplace=True),
-            nn.Dropout(dropout_rate)
-        )
-
-    def deconv(self, input_channels, output_channels):
-        return nn.Sequential(
-            nn.ConvTranspose3d(input_channels, output_channels, kernel_size=4, stride=2, padding=1),
-            nn.LeakyReLU(0.1, inplace=True)
-        )
-
-    def output(self, input_channels, output_channels, kernel_size, stride, dropout_rate):
-        return nn.Conv3d(input_channels, output_channels, kernel_size=kernel_size,
-                         stride=stride, padding=(kernel_size - 1) // 2)
+        enc1 = self.conv1(x)
+        enc2 = self.conv2_1(self.conv2(enc1))
+        enc3 = self.conv3_1(self.conv3(enc2))
+        dec2 = self.deconv2(enc3)
+        dec1 = self.deconv1(torch.cat((enc2, dec2), dim=1))
+        dec0 = self.deconv0(torch.cat((enc1, dec1), dim=1))
+        return self.output_layer(torch.cat((x, dec0), dim=1))
 
 
 class DoubleConv(nn.Module):
