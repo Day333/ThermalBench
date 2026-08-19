@@ -19,7 +19,7 @@ An open benchmark for reproducible, generalizable 2.5D/3D-IC thermal learning.
 
 ![IC-ThermBench: five progressive generalization scopes](assets/ic-thermbench-overview.svg)
 
-Thermal prediction papers often differ in data, simulators, splits, preprocessing, and metrics, making model-to-model comparison surprisingly fragile. **IC-ThermBench fixes that evaluation contract.** It provides progressive physical support, immutable splits, eight baselines from three model families, and one interface for training, inference, adaptation, and reporting.
+Thermal prediction papers often differ in data, simulators, splits, preprocessing, and metrics, making model-to-model comparison surprisingly fragile. Moreover, most existing datasets and implementations are not publicly available, and the community still lacks a unified evaluation standard. IC-ThermBench fixes that evaluation contract. It provides progressive physical support, immutable splits, eight baselines from three model families, and one interface for training, inference, adaptation, and reporting.
 
 Developed and maintained by the IC-ThermBench research team at the **University of Technology Sydney (UTS)**.
 
