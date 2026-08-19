@@ -78,6 +78,8 @@ The current executable release contains the generator-backed **S2–S5** data an
 
 Every baseline receives the same labeled samples, split membership, physical channels, and metric implementation. The release does not force one optimizer onto every architecture: model-specific training recipes are preserved in [`MODEL_ZOO`](exp/exp_basic.py).
 
+For DeepOHeat, we report fully supervised training rather than its label-free physics-residual scheme so that it is compared fairly with the other supervised baselines. In our tests, the supervised variant was also substantially more accurate and more stable to train.
+
 ## Quick start
 
 ### 1. Install

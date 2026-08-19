@@ -105,6 +105,12 @@ def _run(cmd, env, log):
 
 
 def train(args):
+    if args.data in PURE_EVAL:
+        raise ValueError(
+            f"{args.data} is evaluation-only; Therm-FM must be trained on "
+            f"{PURE_EVAL[args.data]} and evaluated or adapted on {args.data}."
+        )
+
     size = args.model.split("-")[1]
     name = f"{args.data}_steady_{size}"
     env = _env(args)
@@ -139,10 +145,18 @@ def train(args):
     # (level2_UFNO / level2_ThermFM-T ...).
     real = os.path.join(ckpt_root, "IC-ThermBench", name)
     link = os.path.join(args.checkpoints, f"{args.data}_{args.model}")
+    if not os.path.isdir(real):
+        raise FileNotFoundError(f"Therm-FM training did not create checkpoint: {real}")
     if os.path.islink(link):
         os.unlink(link)
     if not os.path.exists(link):
-        os.symlink(real, link)
+        # A relative target is resolved from the link's parent, not from the current
+        # working directory.  Storing `checkpoints/thermfm/...` in a link already
+        # inside checkpoints/ would therefore resolve to checkpoints/checkpoints/....
+        link_parent = os.path.dirname(os.path.abspath(link))
+        os.makedirs(link_parent, exist_ok=True)
+        target = os.path.relpath(os.path.abspath(real), start=link_parent)
+        os.symlink(target, link)
 
     m = _evaluate(args, real, name, env)
     m["train_time_s"] = round(train_time, 1)

@@ -26,7 +26,8 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from exp.exp_basic import MODEL_ZOO, OPERATOR_MODELS, SCOT_MODELS  # noqa: E402
+from exp.exp_basic import (MODEL_ZOO, OPERATOR_MODELS, PURE_EVAL,
+                           SCOT_MODELS)  # noqa: E402
 
 
 def parse_args():
@@ -79,6 +80,17 @@ def parse_args():
 
 def main():
     args = parse_args()
+
+    # Pure-evaluation scopes must never enter a standard training path.  This check is
+    # especially important for Therm-FM: unlike the shared operator loader, scOT owns
+    # its split internally and would otherwise train on the leading part of level5.
+    if args.task == "train" and args.data in PURE_EVAL:
+        raise SystemExit(
+            f"{args.data} is a pure-evaluation dataset and cannot be used with "
+            "--task train; train on "
+            f"{PURE_EVAL[args.data]} and use --task test or --task finetune instead."
+        )
+
     # The normalization switch is read from the environment (layers/normalize.make_norm),
     # so it has to be set before any model or data module actually uses it.
     os.environ["PER_CHANNEL_NORM"] = str(args.per_channel_norm)

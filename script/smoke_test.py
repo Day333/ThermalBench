@@ -5,6 +5,14 @@ from __future__ import annotations
 
 import platform
 import sys
+from pathlib import Path
+
+
+# `python script/smoke_test.py` puts script/ rather than the repository root on
+# sys.path.  Add the root explicitly so the documented command works from any cwd.
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 
 def fail(message: str) -> None:
@@ -19,7 +27,8 @@ def main() -> None:
     except ImportError as exc:
         fail(f"missing dependency: {exc.name}; create the environment from environment.yml")
 
-    from exp.exp_basic import MODEL_ZOO, build_model
+    from exp.exp_basic import MODEL_ZOO, OPERATOR_MODELS, build_model
+    from exp.exp_operator import forward_norm
     from utils.metrics import _compute_additional_test_metrics
 
     expected_models = {
@@ -35,13 +44,22 @@ def main() -> None:
     if set(MODEL_ZOO) != expected_models:
         fail(f"unexpected model registry: {sorted(MODEL_ZOO)}")
 
-    torch.manual_seed(0)
-    model = build_model("UNet", P=3, Z=1, G=64).cpu().eval()
-    x = torch.randn(1, 3, 64, 64)
-    with torch.no_grad():
-        prediction = model(x)
-    if tuple(prediction.shape) != (1, 1, 64, 64):
-        fail(f"U-Net returned {tuple(prediction.shape)}, expected (1, 1, 64, 64)")
+    # Exercise the shared model adapter at every released input-channel count.  This
+    # catches hard-coded P values and layout drift without downloading a dataset.
+    for channels in (3, 4, 7):
+        x = torch.randn(1, 64, 64, 1, channels)
+        for name in OPERATOR_MODELS:
+            torch.manual_seed(0)
+            model = build_model(name, P=channels, Z=1, G=64).cpu().eval()
+            with torch.no_grad():
+                prediction = forward_norm(model, name, x)
+            expected = (1, 64, 64, 1)
+            if tuple(prediction.shape) != expected:
+                fail(
+                    f"{name} with P={channels} returned {tuple(prediction.shape)}, "
+                    f"expected {expected}"
+                )
+            del model, prediction
 
     labels = np.full((2, 1, 8, 8), 300.0, dtype=np.float32)
     predictions = labels + 1.0
@@ -63,7 +81,7 @@ def main() -> None:
     print(f"  Python   {platform.python_version()}")
     print(f"  PyTorch  {torch.__version__}")
     print(f"  CUDA     {'available' if torch.cuda.is_available() else 'not available (CPU smoke only)'}")
-    print(f"  Models   {len(MODEL_ZOO)} registered")
+    print(f"  Models   {len(MODEL_ZOO)} registered; operator P=3/4/7 forwards passed")
     print("  Metrics  shared six-metric contract available")
 
 
