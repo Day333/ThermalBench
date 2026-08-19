@@ -2,7 +2,8 @@
 
 # IC-ThermBench
 
-[**English**](README.md) · **简体中文**
+[![English](https://img.shields.io/badge/Language-English-2563eb?style=for-the-badge)](README.md)
+[![简体中文](https://img.shields.io/badge/%E8%AF%AD%E8%A8%80-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-dc2626?style=for-the-badge)](README.zh-CN.md)
 
 面向可复现、可泛化 2.5D/3D-IC 热学习的开放基准。
 
