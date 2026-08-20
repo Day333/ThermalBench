@@ -50,15 +50,15 @@ Across S1's eight steady, transient, and industrial source tasks, Therm-FM L rec
 
 ### Finding 1 — added in-support physics is difficult but learnable
 
-The best RMSE rises from 0.657 K on S2 to 0.802 K on S3 and 1.327 K on S4. Explicit material and boundary channels increase the learning burden, but the degradation remains gradual when the relevant case families and parameter support appear in training.
+The best RMSE rises from 0.703 K on S2 to 0.802 K on S3 and 1.216 K on S4. Explicit material and boundary channels increase the learning burden, but the degradation remains gradual when the relevant case families and parameter support appear in training.
 
 ### Finding 2 — model ranking depends on physical support
 
-SAU-FNO is strongest on S2, while U-FNO is strongest on S3 and S4 in the preliminary comparison. Therm-FM size also does not translate monotonically into in-support accuracy. A result on a fixed or simpler benchmark is therefore not a reliable proxy for performance after new physical dimensions are introduced.
+SAU-FNO is strongest on S2 and S4, while U-FNO is strongest on S3 in the preliminary comparison. Therm-FM size also does not translate monotonically into in-support accuracy. A result on a fixed or simpler benchmark is therefore not a reliable proxy for performance after new physical dimensions are introduced.
 
 ### Finding 3 — structural OOD is a different failure mode
 
-With the same seven-channel schema, the best RMSE jumps from 1.327 K on S4 to 15.99 K on S5. Several of the strongest in-support models degrade more sharply than models that ranked lower on S4. Diverse observed layouts, materials, and cooling conditions do not establish transfer to an unseen chiplet system.
+With the same seven-channel schema, the best RMSE jumps from 1.216 K on S4 to 15.99 K on S5. Several of the strongest in-support models degrade more sharply than models that ranked lower on S4. Diverse observed layouts, materials, and cooling conditions do not establish transfer to an unseen chiplet system.
 
 ### Finding 4 — limited target labels are a practical recovery path
 

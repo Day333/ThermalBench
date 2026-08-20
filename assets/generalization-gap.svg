@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="390" viewBox="0 0 1280 390" role="img" aria-labelledby="title desc">
   <title id="title">IC-ThermBench selected RMSE results</title>
-  <desc id="desc">Best RMSE rises gradually from 0.657 kelvin in Scope 2 to 1.327 kelvin in Scope 4, jumps to 15.99 kelvin for zero-shot structural out-of-distribution evaluation, then falls to 3.19 kelvin after ten labeled samples per unseen case.</desc>
+  <desc id="desc">Best RMSE rises gradually from 0.703 kelvin in Scope 2 to 1.216 kelvin in Scope 4, jumps to 15.99 kelvin for zero-shot structural out-of-distribution evaluation, then falls to 3.19 kelvin after ten labeled samples per unseen case.</desc>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#f8fafc"/>
@@ -32,15 +32,15 @@
   <g filter="url(#shadow)">
     <rect x="142" y="291" width="130" height="11" rx="6" fill="url(#barID)"/>
     <rect x="347" y="289" width="130" height="13" rx="6" fill="url(#barID)"/>
-    <rect x="552" y="280" width="130" height="22" rx="6" fill="url(#barID)"/>
+    <rect x="552" y="282" width="130" height="20" rx="6" fill="url(#barID)"/>
     <rect x="795" y="137" width="150" height="165" rx="12" fill="url(#barOOD)"/>
     <rect x="1037" y="269" width="150" height="33" rx="10" fill="#8b5cf6" opacity="0.83"/>
   </g>
 
   <g font-family="Inter,Segoe UI,Arial,sans-serif" text-anchor="middle">
-    <text x="207" y="275" fill="#0369a1" font-size="20" font-weight="700">0.657 K</text>
+    <text x="207" y="275" fill="#0369a1" font-size="20" font-weight="700">0.703 K</text>
     <text x="412" y="272" fill="#0369a1" font-size="20" font-weight="700">0.802 K</text>
-    <text x="617" y="263" fill="#0369a1" font-size="20" font-weight="700">1.327 K</text>
+    <text x="617" y="263" fill="#0369a1" font-size="20" font-weight="700">1.216 K</text>
     <text x="870" y="121" fill="#6d28d9" font-size="25" font-weight="800">15.99 K</text>
     <text x="1112" y="252" fill="#6d28d9" font-size="22" font-weight="800">3.19 K</text>
 

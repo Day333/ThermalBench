@@ -9,9 +9,9 @@ This page presents a compact subset of the S1–S5 results. It is intended to sh
 | Track | Evaluation support | Best method | Best RMSE ↓ |
 |---|---|---|---:|
 | S1 | fixed-design source tasks | Therm-FM L | 0.009–0.076 K¹ |
-| S2 | represented layouts/configurations | SAU-FNO | 0.657 K |
+| S2 | represented layouts/configurations | SAU-FNO | 0.703 K |
 | S3 | S2 + material conductivity | U-FNO | 0.802 K |
-| S4 | S3 + ambient/cooling conditions | U-FNO | 1.327 K |
+| S4 | S3 + ambient/cooling conditions | SAU-FNO | 1.216 K |
 | S5 zero-shot | five case-disjoint systems | Therm-FM T | 15.99 K |
 | S5 10-shot | ten labels per unseen case | Therm-FM B | 3.19 K |
 
@@ -40,11 +40,11 @@ Only the best and runner-up results are shown here. S2–S4 are independently ge
 
 | Track | Best method | RMSE | Runner-up | RMSE | Best peak ΔT |
 |---|---|---:|---|---:|---:|
-| S2 · Layout | SAU-FNO | **0.6568** | U-FNO | 0.7047 | **0.3871** |
-| S3 · + Material | U-FNO | **0.8016** | SAU-FNO | 0.8405 | **0.3568** |
-| S4 · + Boundary | U-FNO | **1.3265** | SAU-FNO | 1.4468 | **0.6973** |
+| S2 · Layout | SAU-FNO | **0.7028** | U-FNO | 0.7047 | **0.4167** |
+| S3 · + Material | U-FNO | **0.8016** | SAU-FNO | 0.8732 | **0.3568** |
+| S4 · + Boundary | SAU-FNO | **1.2158** | U-FNO | 1.3265 | **0.6700** |
 
-Adding observed material and boundary variation causes moderate degradation, not collapse. The ranking nevertheless changes: SAU-FNO leads S2, while U-FNO becomes strongest on S3 and S4. Performance on a simpler scope is therefore not a reliable proxy for performance after new physical dimensions are introduced.
+Adding observed material and boundary variation causes moderate degradation, not collapse. The ranking nevertheless changes: SAU-FNO leads S2 and S4, while U-FNO is strongest on S3. Performance on a simpler scope is therefore not a reliable proxy for performance after new physical dimensions are introduced.
 
 ## S5: structural OOD and adaptation
 

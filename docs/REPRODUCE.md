@@ -84,9 +84,9 @@ These paper-preview values record the strongest method in each track:
 | Track | Best method | Best RMSE ↓ | Interpretation |
 |---|---|---:|---|
 | S1 | Therm-FM L | 0.009–0.076 K | task-specific source results; not pooled |
-| S2 | SAU-FNO | 0.657 K | layout/configuration diversity is learnable in support |
+| S2 | SAU-FNO | 0.703 K | layout/configuration diversity is learnable in support |
 | S3 | U-FNO | 0.802 K | adding material variation causes moderate degradation |
-| S4 | U-FNO | 1.327 K | multi-physics variation remains tractable in support |
+| S4 | SAU-FNO | 1.216 K | multi-physics variation remains tractable in support |
 | S5 zero-shot | Therm-FM T | 15.99 K | unseen system structure causes a qualitative failure |
 | S5 10-shot | Therm-FM B | 3.19 K | 50 target labels total recover much of the gap |
 

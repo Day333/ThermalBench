@@ -41,9 +41,9 @@ Recent methods study geometry, material, cooling, and unseen systems. The remain
 | Track | Physical support | Best method | Best RMSE ↓ |
 |---|---|---|---:|
 | **S1** | fixed-design source tasks | **Therm-FM L** | **0.009–0.076 K**¹ |
-| **S2** | represented layouts and configurations | **SAU-FNO** | **0.657 K** |
+| **S2** | represented layouts and configurations | **SAU-FNO** | **0.703 K** |
 | **S3** | S2 + material conductivity | **U-FNO** | **0.802 K** |
-| **S4** | S3 + ambient and cooling conditions | **U-FNO** | **1.327 K** |
+| **S4** | S3 + ambient and cooling conditions | **SAU-FNO** | **1.216 K** |
 | **S5 · zero-shot** | five case-disjoint chiplet systems | **Therm-FM T** | **15.99 K** |
 | **S5 · 10-shot** | ten labeled samples per unseen case | **Therm-FM B** | **3.19 K** |
 
