@@ -52,13 +52,13 @@ Frozen S4 checkpoints are evaluated on unseen Cases 16–20 without target label
 
 | Setting | Representative best method | RMSE ↓ | Interpretation |
 |---|---|---:|---|
-| S4 matched-support reference | U-FNO | 1.3265 | observed layout/material/boundary support |
+| S4 matched-support reference | SAU-FNO | 1.2158 | observed layout/material/boundary support |
 | S5 zero-shot | Therm-FM T | 15.9878 | case-disjoint structural extrapolation |
 | S5, K=10 | Therm-FM B | 3.19 | 50 target labels in total |
-| S5, K=100 | Therm-FM L | 1.63 | most of the gap has been recovered |
-| S5, K=500 | Therm-FM B | 1.12 | higher-budget target calibration |
+| S5, K=100 | U-FNO | 1.53 | most of the gap has been recovered |
+| S5, K=500 | SAU-FNO | 1.00 | higher-budget target calibration |
 
-Ten labels per case reduce RMSE by 63–88% across the evaluated models, making few-shot calibration a practical recovery path. It is still reported separately: a model that adapts well after seeing target labels has not solved zero-shot structural generalization.
+Ten labels per case reduce RMSE by 63–86% across the evaluated models, making few-shot calibration a practical recovery path. It is still reported separately: a model that adapts well after seeing target labels has not solved zero-shot structural generalization.
 
 ### Different OOD cases favor different models
 
