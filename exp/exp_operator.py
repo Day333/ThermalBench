@@ -184,8 +184,38 @@ def train(args):
                 _to_model(x_norm.forward(xtr), name),
                 _to_model_y(y_norm.forward(ytr), name)),
             batch_size=bs, shuffle=True)
-        t0 = time.time()
-        for ep in range(1, epochs + 1):
+
+        # Periodic resume state. On a shared machine the OOM killer can take a
+        # multi-day run down at any epoch, so every RESUME_EVERY epochs the full
+        # training state (weights, optimizer, scheduler, RNG streams, elapsed
+        # time) is written atomically to resume.pt. A restart continues from that
+        # epoch and, because the RNG state is restored at the epoch boundary,
+        # replays the same shuffles and updates an uninterrupted run would have
+        # made. The file is removed once training completes.
+        RESUME_EVERY = 10
+        resume_path = os.path.join(out_dir, "resume.pt")
+        start_ep, elapsed = 1, 0.0
+        if os.path.exists(resume_path):
+            st = torch.load(resume_path, map_location="cpu")
+            if st.get("epochs") != epochs:
+                raise RuntimeError(
+                    f"{resume_path} was written for epochs={st.get('epochs')}, "
+                    f"not {epochs}; delete it to start over")
+            model.load_state_dict(st["model"])
+            opt.load_state_dict(st["opt"])
+            if sched is not None and st.get("sched") is not None:
+                sched.load_state_dict(st["sched"])
+            torch.set_rng_state(st["rng_cpu"])
+            if st.get("rng_cuda") is not None and torch.cuda.is_available():
+                torch.cuda.set_rng_state(st["rng_cuda"])
+            if st.get("rng_np") is not None:
+                np.random.set_state(st["rng_np"])
+            start_ep, elapsed = st["epoch"] + 1, float(st["elapsed"])
+            print(f"[{name}] resumed from epoch {st['epoch']} "
+                  f"({elapsed:.0f}s already trained)", flush=True)
+
+        t0 = time.time() - elapsed
+        for ep in range(start_ep, epochs + 1):
             model.train()
             tot, nb = 0.0, 0
             for xb, yb in loader:
@@ -200,7 +230,21 @@ def train(args):
                 sched.step()
             if ep == 1 or ep % 10 == 0:
                 print(f"  [{name}] ep {ep}/{epochs} loss={tot / nb:.6f}", flush=True)
+            if ep % RESUME_EVERY == 0 and ep < epochs:
+                os.makedirs(out_dir, exist_ok=True)
+                tmp = resume_path + ".tmp"
+                torch.save({
+                    "epoch": ep, "epochs": epochs, "elapsed": time.time() - t0,
+                    "model": model.state_dict(), "opt": opt.state_dict(),
+                    "sched": sched.state_dict() if sched is not None else None,
+                    "rng_cpu": torch.get_rng_state(),
+                    "rng_cuda": torch.cuda.get_rng_state() if torch.cuda.is_available() else None,
+                    "rng_np": np.random.get_state(),
+                }, tmp)
+                os.replace(tmp, resume_path)
         train_time = time.time() - t0
+        if os.path.exists(resume_path):
+            os.remove(resume_path)
 
     print(f"[{name}] training took {train_time:.1f}s", flush=True)
 
