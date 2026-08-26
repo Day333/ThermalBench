@@ -190,7 +190,7 @@ The release is designed to be easy to reproduce **and** easy to extend: data con
 
 ## Citation
 
-Please cite the paper. The software entry below is for the benchmark artifacts (code, splits, released records) when you need to reference a specific archived version.
+If you use IC-ThermBench, please cite the paper.
 
 ```bibtex
 @article{icthermbench2026,
@@ -200,18 +200,6 @@ Please cite the paper. The software entry below is for the benchmark artifacts (
   journal = {arXiv preprint arXiv:2608.23977},
   year    = {2026},
   url     = {https://arxiv.org/abs/2608.23977}
-}
-```
-
-```bibtex
-@software{icthermbench_artifacts2026,
-  title     = {IC-ThermBench: An Open, Progressive Benchmark for Generalizable
-               2.5D/3D-IC Thermal Learning},
-  author    = {The IC-ThermBench Authors},
-  year      = {2026},
-  publisher = {Zenodo},
-  doi       = {10.5281/zenodo.21992816},
-  url       = {https://doi.org/10.5281/zenodo.21992816}
 }
 ```
 

@@ -190,7 +190,7 @@ output  (B, X, Y, Z)       其中 X = Y = 64，Z = 1
 
 ## 引用
 
-请引用论文。下面的软件条目用于引用 benchmark 产物（代码、数据划分、已发布结果）的特定归档版本。
+如果 IC-ThermBench 对你的工作有帮助，请引用论文。
 
 ```bibtex
 @article{icthermbench2026,
@@ -200,18 +200,6 @@ output  (B, X, Y, Z)       其中 X = Y = 64，Z = 1
   journal = {arXiv preprint arXiv:2608.23977},
   year    = {2026},
   url     = {https://arxiv.org/abs/2608.23977}
-}
-```
-
-```bibtex
-@software{icthermbench_artifacts2026,
-  title     = {IC-ThermBench: An Open, Progressive Benchmark for Generalizable
-               2.5D/3D-IC Thermal Learning},
-  author    = {The IC-ThermBench Authors},
-  year      = {2026},
-  publisher = {Zenodo},
-  doi       = {10.5281/zenodo.21992816},
-  url       = {https://doi.org/10.5281/zenodo.21992816}
 }
 ```
 
