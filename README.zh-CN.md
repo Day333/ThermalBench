@@ -7,6 +7,7 @@
 
 面向可复现、可泛化 2.5D/3D-IC 热学习的开放基准。
 
+[![arXiv](https://img.shields.io/badge/arXiv-2608.23977-b31b1b.svg?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2608.23977)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21992816.svg)](https://doi.org/10.5281/zenodo.21992816)
 [![Code: MIT](https://img.shields.io/badge/Code-MIT-2563eb.svg)](LICENSE)
 [![Data: CC BY 4.0](https://img.shields.io/badge/Data-CC%20BY%204.0-f97316.svg)](LICENSE-DATA)
@@ -14,9 +15,9 @@
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0.1-EE4C2C?logo=pytorch&logoColor=white)](docs/INSTALL.md)
 [![S2–S5 Data](https://img.shields.io/badge/S2--S5%20data-released-16a34a.svg)](https://drive.google.com/file/d/15Do8Raf070VseV9cn44j1hdVpD3Rz-Un/view?usp=sharing)
 [![S1 Pipeline](https://img.shields.io/badge/S1%20pipeline-on%20the%20way-f59e0b.svg)](docs/RESULTS.md)
-[![Checkpoints](https://img.shields.io/badge/Checkpoints-released-16a34a.svg)](https://drive.google.com/file/d/1wisvvO19Fx9Znki651j-QWuJHVz2aPHQ/view?usp=sharing)
+[![Checkpoints](https://img.shields.io/badge/Checkpoints-released-16a34a.svg)](https://drive.google.com/file/d/1iP6dH3N_s1KzaOugxwe9aK_apO6DkXTD/view?usp=sharing)
 
-[**快速开始**](#快速开始) · [**数据集**](docs/DATASETS.md) · [**实验结果**](docs/RESULTS.md) · [**复现实验**](docs/REPRODUCE.md) · [**接入新模型**](docs/ADD_A_MODEL.md) · [**论文预览**](docs/PAPER_PREVIEW.md)
+[**论文**](https://arxiv.org/abs/2608.23977) · [**快速开始**](#快速开始) · [**数据集**](docs/DATASETS.md) · [**实验结果**](docs/RESULTS.md) · [**复现实验**](docs/REPRODUCE.md) · [**接入新模型**](docs/ADD_A_MODEL.md) · [**论文预览**](docs/PAPER_PREVIEW.md)
 
 </div>
 
@@ -99,7 +100,7 @@ python script/smoke_test.py
 
 ### 2. 放置数据和模型权重
 
-下载[数据集（约 4.6 GB）](https://drive.google.com/file/d/15Do8Raf070VseV9cn44j1hdVpD3Rz-Un/view?usp=sharing)和[模型权重（约 9.6 GB）](https://drive.google.com/file/d/1wisvvO19Fx9Znki651j-QWuJHVz2aPHQ/view?usp=sharing)，解压至仓库根目录：
+下载[数据集（约 4.6 GB）](https://drive.google.com/file/d/15Do8Raf070VseV9cn44j1hdVpD3Rz-Un/view?usp=sharing)和[模型权重（约 9.6 GB）](https://drive.google.com/file/d/1iP6dH3N_s1KzaOugxwe9aK_apO6DkXTD/view?usp=sharing)，解压至仓库根目录：
 
 ```text
 IC-ThermBench/
@@ -189,18 +190,28 @@ output  (B, X, Y, Z)       其中 X = Y = 64，Z = 1
 
 ## 引用
 
-Benchmark 产物目前可以引用；论文公开后将使用正式论文引用替换下面的软件条目。
+请引用论文。下面的软件条目用于引用 benchmark 产物（代码、数据划分、已发布结果）的特定归档版本。
 
 ```bibtex
-@software{icthermbench2026,
+@article{icthermbench2026,
+  title   = {IC-ThermBench: An Open, Progressive Benchmark for Generalizable
+             2.5D/3D-IC Thermal Learning},
+  author  = {David Huang and Wenkai Yang and Kuiye Ding and Haiyang Xin},
+  journal = {arXiv preprint arXiv:2608.23977},
+  year    = {2026},
+  url     = {https://arxiv.org/abs/2608.23977}
+}
+```
+
+```bibtex
+@software{icthermbench_artifacts2026,
   title     = {IC-ThermBench: An Open, Progressive Benchmark for Generalizable
                2.5D/3D-IC Thermal Learning},
   author    = {The IC-ThermBench Authors},
   year      = {2026},
   publisher = {Zenodo},
   doi       = {10.5281/zenodo.21992816},
-  url       = {https://doi.org/10.5281/zenodo.21992816},
-  note      = {Paper in preparation}
+  url       = {https://doi.org/10.5281/zenodo.21992816}
 }
 ```
 

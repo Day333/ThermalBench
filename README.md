@@ -7,6 +7,7 @@
 
 An open benchmark for reproducible, generalizable 2.5D/3D-IC thermal learning.
 
+[![arXiv](https://img.shields.io/badge/arXiv-2608.23977-b31b1b.svg?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2608.23977)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21992816.svg)](https://doi.org/10.5281/zenodo.21992816)
 [![Code: MIT](https://img.shields.io/badge/Code-MIT-2563eb.svg)](LICENSE)
 [![Data: CC BY 4.0](https://img.shields.io/badge/Data-CC%20BY%204.0-f97316.svg)](LICENSE-DATA)
@@ -16,7 +17,7 @@ An open benchmark for reproducible, generalizable 2.5D/3D-IC thermal learning.
 [![S1 Pipeline](https://img.shields.io/badge/S1%20pipeline-on%20the%20way-f59e0b.svg)](docs/RESULTS.md)
 [![Checkpoints](https://img.shields.io/badge/Checkpoints-released-16a34a.svg)](https://drive.google.com/file/d/1iP6dH3N_s1KzaOugxwe9aK_apO6DkXTD/view?usp=sharing)
 
-[**Quick start**](#quick-start) · [**Datasets**](docs/DATASETS.md) · [**Results**](docs/RESULTS.md) · [**Reproduce**](docs/REPRODUCE.md) · [**Add a model**](docs/ADD_A_MODEL.md) · [**Paper preview**](docs/PAPER_PREVIEW.md)
+[**Paper**](https://arxiv.org/abs/2608.23977) · [**Quick start**](#quick-start) · [**Datasets**](docs/DATASETS.md) · [**Results**](docs/RESULTS.md) · [**Reproduce**](docs/REPRODUCE.md) · [**Add a model**](docs/ADD_A_MODEL.md) · [**Paper preview**](docs/PAPER_PREVIEW.md)
 
 </div>
 
@@ -189,18 +190,28 @@ The release is designed to be easy to reproduce **and** easy to extend: data con
 
 ## Citation
 
-The benchmark artifacts are citable now; the paper citation will replace this software entry after public release.
+Please cite the paper. The software entry below is for the benchmark artifacts (code, splits, released records) when you need to reference a specific archived version.
 
 ```bibtex
-@software{icthermbench2026,
+@article{icthermbench2026,
+  title   = {IC-ThermBench: An Open, Progressive Benchmark for Generalizable
+             2.5D/3D-IC Thermal Learning},
+  author  = {David Huang and Wenkai Yang and Kuiye Ding and Haiyang Xin},
+  journal = {arXiv preprint arXiv:2608.23977},
+  year    = {2026},
+  url     = {https://arxiv.org/abs/2608.23977}
+}
+```
+
+```bibtex
+@software{icthermbench_artifacts2026,
   title     = {IC-ThermBench: An Open, Progressive Benchmark for Generalizable
                2.5D/3D-IC Thermal Learning},
   author    = {The IC-ThermBench Authors},
   year      = {2026},
   publisher = {Zenodo},
   doi       = {10.5281/zenodo.21992816},
-  url       = {https://doi.org/10.5281/zenodo.21992816},
-  note      = {Paper in preparation}
+  url       = {https://doi.org/10.5281/zenodo.21992816}
 }
 ```
 

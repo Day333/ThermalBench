@@ -1,6 +1,6 @@
 # IC-ThermBench paper preview
 
-> **Status:** manuscript in preparation. This page exposes the benchmark's central design and selected results without presenting an unpublished draft as the final paper. The formal citation will be added to the repository when the paper is public.
+> **Status:** the paper is available on arXiv: [arXiv:2608.23977](https://arxiv.org/abs/2608.23977). This page summarizes the benchmark's central design and selected results; the paper itself is the reference for the full protocol, tables, and discussion.
 
 ## Motivation
 
