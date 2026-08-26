@@ -23,6 +23,7 @@ models/Adam.py (not torch.optim.Adam) and its own validation logic; rewriting it
 generic loop would necessarily change the numbers. The benchmark is judged on
 reproducing existing results, so fidelity wins.
 """
+import math
 import os
 import time
 
@@ -166,7 +167,7 @@ def train(args):
 
     n_param = sum(p.numel() for p in model.parameters())
     print(f"[{name}] P={P} Z={Z} grid={G} params={n_param} "
-          f"epochs={epochs} bs={bs} pcnorm={os.environ.get('PER_CHANNEL_NORM','0')}",
+          f"epochs={epochs} bs={bs} seed={args.seed} pcnorm={os.environ.get('PER_CHANNEL_NORM','0')}",
           flush=True)
 
     out_dir = os.path.join(args.checkpoints, f"{args.data}_{name}")
@@ -230,6 +231,9 @@ def train(args):
                 sched.step()
             if ep == 1 or ep % 10 == 0:
                 print(f"  [{name}] ep {ep}/{epochs} loss={tot / nb:.6f}", flush=True)
+            if not math.isfinite(tot):
+                # fail fast instead of burning the remaining epochs on NaN weights
+                raise RuntimeError(f"[{name}] non-finite training loss at epoch {ep}")
             if ep % RESUME_EVERY == 0 and ep < epochs:
                 os.makedirs(out_dir, exist_ok=True)
                 tmp = resume_path + ".tmp"
