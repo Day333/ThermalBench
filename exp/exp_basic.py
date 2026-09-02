@@ -59,14 +59,14 @@ MODEL_ZOO = {
         build=lambda P, Z, G: ("model.DeepONet:DeepONetSup", dict(in_channels=P, grid=G)),
     ),
     # The three Therm-FM sizes run a completely different pipeline (HuggingFace Trainer
-    # + accelerate, multi-GPU). Their config lives in model/thermfm_configs/*.yaml;
+    # + accelerate). Their config lives in model/thermfm_configs/*.yaml;
     # see exp/exp_thermfm.py.
     "ThermFM-T": dict(prefix="thermfm", ckpt_tag="T", scot=True, size="T",
-                     finetune_lr=5e-6),
+                     finetune_lr=1.5e-5),
     "ThermFM-B": dict(prefix="thermfm", ckpt_tag="B", scot=True, size="B",
-                     finetune_lr=5e-6),
+                     finetune_lr=1.5e-5),
     "ThermFM-L": dict(prefix="thermfm", ckpt_tag="L", scot=True, size="L",
-                     finetune_lr=5e-6),
+                     finetune_lr=1.5e-5),
 }
 
 

@@ -4,7 +4,7 @@ learning benchmark.
 
     python run.py --model UFNO      --data level2 --task train
     python run.py --model UFNO      --data level2 --task test  --load <ckpt>
-    python run.py --model ThermFM-T --data level4 --task train --gpus 0,1,2,3
+    python run.py --model ThermFM-T --data level4 --task train --gpus 0
     python run.py --model UFNO      --data level5 --task finetune --shots 10
     python run.py --model UFNO      --data level5 --task test
 
@@ -56,7 +56,7 @@ def parse_args():
                    help="cap the train+val size, -1 = all; does not affect the test split")
     p.add_argument("--device", default="cuda")
     p.add_argument("--gpus", default="0",
-                   help="CUDA_VISIBLE_DEVICES for Therm-FM, e.g. 0,1,2,3")
+                   help="CUDA_VISIBLE_DEVICES for Therm-FM; single-GPU default: 0")
     p.add_argument("--port", type=int, default=29815,
                    help="accelerate main-process port; stagger it when running several "
                         "Therm-FM jobs at once")

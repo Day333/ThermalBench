@@ -1,8 +1,8 @@
 """Training and evaluation for Therm-FM (scOT / Poseidon backbone).
 
 This model does not use exp_operator's loop -- not out of laziness, but because
-**unifying it would break reproduction**: scOT runs HuggingFace Trainer + accelerate
-DDP across four GPUs, with its own cosine schedule, gradient clipping, early stopping
+**unifying it would break reproduction**: scOT runs HuggingFace Trainer + accelerate,
+with its own cosine schedule, gradient clipping, early stopping
 and checkpoint-selection logic. Rewriting that as a plain single-GPU loop would move
 the numbers. So the original pipeline is kept and this exp layer only assembles the
 arguments and launches the processes.
@@ -12,14 +12,10 @@ imported under its original name via PYTHONPATH pointing at model/ -- upstream s
 is unmodified, which keeps future syncs easy.
 
 +-- TWO TRAPS WORTH KNOWING ---------------------------------------------------+
-| 1. TFM_LAST_EPOCH=1                                                           |
-|    scOT defaults to load_best_model_at_end=True, picking the best checkpoint   |
-|    by **validation** loss. Under this project's validation split that selects  |
-|    a badly undertrained epoch-2 model (measured RMSE 8.83, versus ~0.5 for the |
-|    final epoch). Setting this to 1 uses the last epoch instead and **also      |
-|    skips** EarlyStoppingCallback -- HF's callback asserts                      |
-|    load_best_model_at_end=True, so disabling only the former makes every DDP   |
-|    child exit within 12 seconds.                                              |
+| 1. Model selection uses the lowest validation loss                             |
+|    scOT's default load_best_model_at_end=True is intentionally retained, and   |
+|    EarlyStoppingCallback stays enabled. The exported model is therefore the    |
+|    validation-best epoch rather than the final epoch.                          |
 | 2. scOT's Dataset applies its own train_ratio split on top                     |
 |    When evaluating a pure extrapolation set (level5) it would otherwise only   |
 |    score the last 20% -- all of it from a single case. This project adds       |
@@ -30,6 +26,7 @@ is unmodified, which keeps future syncs easy.
 +-------------------------------------------------------------------------------+
 """
 import json
+import glob
 import os
 import subprocess
 import sys
@@ -45,7 +42,6 @@ def _env(args):
     env = dict(os.environ)
     env["PYTHONPATH"] = SCOT_DIR + os.pathsep + env.get("PYTHONPATH", "")
     env["WANDB_MODE"] = "offline"               # no outbound net; otherwise it retries forever
-    env["TFM_LAST_EPOCH"] = "1"                 # see the module docstring
     env["CUDA_VISIBLE_DEVICES"] = args.gpus
     if args.data in PURE_EVAL:
         # A pure extrapolation set must be scored in full. scOT's Dataset treats only
@@ -126,8 +122,13 @@ def train(args):
                  f"pretrained/.")
 
     t0 = time.time()
-    _run(["accelerate", "launch", "--multi_gpu", f"--num_processes={n_gpu}",
-          "--main_process_port", str(args.port),
+    launch = ["accelerate", "launch"]
+    if n_gpu > 1:
+        launch += ["--multi_gpu", f"--num_processes={n_gpu}",
+                   "--main_process_port", str(args.port)]
+    else:
+        launch += ["--num_processes=1"]
+    train_cmd = launch + [
           os.path.join("model", "scOT", "train.py"),
           "--config", _config_path(args),
           "--data_path", os.path.join(args.root_path, f"{args.data}_steady"),
@@ -135,15 +136,18 @@ def train(args):
           "--finetune_from", pre,
           "--replace_embedding_recovery",
           "--wandb_project_name", "IC-ThermBench",
-          "--wandb_run_name", name],
-         env, os.path.join(log_dir, f"thermfm_{name}_train.log"))
+          "--wandb_run_name", name]
+    real = os.path.join(ckpt_root, "IC-ThermBench", name)
+    if glob.glob(os.path.join(real, "checkpoint-*")):
+        train_cmd.append("--resume_training")
+        print(f"[thermfm] resuming latest checkpoint under {real}", flush=True)
+    _run(train_cmd, env, os.path.join(log_dir, f"thermfm_{name}_train.log"))
     train_time = time.time() - t0
     print(f"[thermfm] {name} training took {train_time:.1f}s ({n_gpu} GPUs)", flush=True)
 
     # scOT always writes to <checkpoint_path>/<project>/<run>; symlink it back to the
     # shared naming so everything under checkpoints/ looks the same
     # (level2_UFNO / level2_ThermFM-T ...).
-    real = os.path.join(ckpt_root, "IC-ThermBench", name)
     link = os.path.join(args.checkpoints, f"{args.data}_{args.model}")
     if not os.path.isdir(real):
         raise FileNotFoundError(f"Therm-FM training did not create checkpoint: {real}")

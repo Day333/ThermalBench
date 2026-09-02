@@ -66,15 +66,14 @@ bash script/UFNO/test.sh level4 level5
 bash script/UFNO/finetune.sh 10 50 100 250 500
 ```
 
-For concurrent Therm-FM jobs, pass distinct Accelerate ports. For example:
+Run Therm-FM on one GPU. For example:
 
 ```bash
 python run.py \
   --model ThermFM-T \
   --data level4 \
   --task train \
-  --gpus 0,1,2,3 \
-  --port 29815
+  --gpus 0
 ```
 
 ## Selected reference results

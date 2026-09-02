@@ -5,7 +5,7 @@
 #   SHOTS="0 10" bash script/finetune_all.sh
 #
 # Each model fine-tunes at one tenth of its own training lr (1e-4 for the operator
-# family, 5e-6 for Therm-FM), not at one shared value -- Therm-FM diverges outright at
+# family, 1.5e-5 for the new Therm-FM recipe), not at one shared value -- Therm-FM diverges outright at
 # 1e-4. See finetune_lr in MODEL_ZOO.
 # Results land in checkpoints/fewshot/level5_<model>_k<K>.json with all six metrics per
 # recorded epoch.

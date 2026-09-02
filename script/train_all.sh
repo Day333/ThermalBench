@@ -2,11 +2,10 @@
 # Train all 8 models on level2/3/4 in one go.
 #
 #   bash script/train_all.sh              # default GPU assignment
-#   OP_GPUS="4 5" TFM_GPUS=0,1,2,3 bash script/train_all.sh
+#   OP_GPUS="4 5" TFM_GPUS=0 bash script/train_all.sh
 #
 # Layout: the 5 operator models are spread across the GPUs named in OP_GPUS, balanced by
-# runtime and serial within each GPU; the three Therm-FM sizes each occupy 4 GPUs, so
-# they run serially and on different GPUs from the operator models.
+# runtime and serial within each GPU; the three Therm-FM sizes run serially on one GPU.
 # Reference timings (RTX A6000, 15000 samples, 100 epochs): SAU-FNO ~6h,
 # U-FNO ~3.2h, FNO ~2h, UNet <0.25h, DeepONet <0.5h, and Therm-FM T/B/L
 # about half a day in total. Wall time also depends on accelerator throughput and I/O.
@@ -15,7 +14,7 @@ set -u
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 LOG="$ROOT/logs"; mkdir -p "$LOG"
 OP_GPUS="${OP_GPUS:-4 5}"          # GPUs for the operator models (space separated)
-TFM_GPUS="${TFM_GPUS:-0,1,2,3}"    # GPUs for Therm-FM (comma separated, must be 4)
+TFM_GPUS="${TFM_GPUS:-0}"          # one GPU for Therm-FM
 
 # slow first, fast last, so the two queues finish at roughly the same time
 QUEUE_A=(SAUFNO UNet DeepONet)

@@ -5,7 +5,7 @@ num_trajectories:
 model_name: # Keep the same as the loaded model
   value: "L"
 lr:
-  value: 0.00005
+  value: 0.00015
 lr_embedding_recovery:
   value: 0.0005
 lr_time_embedding:
