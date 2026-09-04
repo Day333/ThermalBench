@@ -100,7 +100,7 @@ python script/smoke_test.py
 
 ### 2. 放置数据和模型权重
 
-下载[数据集（约 4.6 GB）](https://drive.google.com/file/d/15Do8Raf070VseV9cn44j1hdVpD3Rz-Un/view?usp=sharing)和[模型权重（约 9.6 GB）](https://drive.google.com/file/d/1UE4bOYff7flo1IDXXL8tmyW6WL0jcLVa/view?usp=sharing)，解压至仓库根目录：
+下载[数据集（约 4.6 GB）](https://drive.google.com/file/d/15Do8Raf070VseV9cn44j1hdVpD3Rz-Un/view?usp=sharing)和[模型权重（约 44 GB）](https://drive.google.com/file/d/1UE4bOYff7flo1IDXXL8tmyW6WL0jcLVa/view?usp=sharing)，解压至仓库根目录：
 
 ```text
 IC-ThermBench/

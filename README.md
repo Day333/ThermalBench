@@ -100,7 +100,7 @@ The frozen environment matches the released checkpoints. Therm-FM is version-sen
 
 ### 2. Place data and checkpoints
 
-Download the [datasets (~4.6 GB)](https://drive.google.com/file/d/15Do8Raf070VseV9cn44j1hdVpD3Rz-Un/view?usp=sharing) and [released checkpoints (~9.6 GB)](https://drive.google.com/file/d/1UE4bOYff7flo1IDXXL8tmyW6WL0jcLVa/view?usp=sharing), then unpack them at the repository root:
+Download the [datasets (~4.6 GB)](https://drive.google.com/file/d/15Do8Raf070VseV9cn44j1hdVpD3Rz-Un/view?usp=sharing) and [released checkpoints (~44 GB)](https://drive.google.com/file/d/1UE4bOYff7flo1IDXXL8tmyW6WL0jcLVa/view?usp=sharing), then unpack them at the repository root:
 
 ```text
 IC-ThermBench/
