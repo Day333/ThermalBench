@@ -15,7 +15,7 @@
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0.1-EE4C2C?logo=pytorch&logoColor=white)](docs/INSTALL.md)
 [![S2–S5 Data](https://img.shields.io/badge/S2--S5%20data-released-16a34a.svg)](https://drive.google.com/file/d/15Do8Raf070VseV9cn44j1hdVpD3Rz-Un/view?usp=sharing)
 [![S1 Pipeline](https://img.shields.io/badge/S1%20pipeline-on%20the%20way-f59e0b.svg)](docs/RESULTS.md)
-[![Checkpoints](https://img.shields.io/badge/Checkpoints-released-16a34a.svg)](https://drive.google.com/file/d/1iP6dH3N_s1KzaOugxwe9aK_apO6DkXTD/view?usp=sharing)
+[![Checkpoints](https://img.shields.io/badge/Checkpoints-released-16a34a.svg)](https://drive.google.com/file/d/1UE4bOYff7flo1IDXXL8tmyW6WL0jcLVa/view?usp=sharing)
 
 [**论文**](https://arxiv.org/abs/2608.23977) · [**快速开始**](#快速开始) · [**数据集**](docs/DATASETS.md) · [**实验结果**](docs/RESULTS.md) · [**复现实验**](docs/REPRODUCE.md) · [**接入新模型**](docs/ADD_A_MODEL.md) · [**论文预览**](docs/PAPER_PREVIEW.md)
 
@@ -100,7 +100,7 @@ python script/smoke_test.py
 
 ### 2. 放置数据和模型权重
 
-下载[数据集（约 4.6 GB）](https://drive.google.com/file/d/15Do8Raf070VseV9cn44j1hdVpD3Rz-Un/view?usp=sharing)和[模型权重（约 9.6 GB）](https://drive.google.com/file/d/1iP6dH3N_s1KzaOugxwe9aK_apO6DkXTD/view?usp=sharing)，解压至仓库根目录：
+下载[数据集（约 4.6 GB）](https://drive.google.com/file/d/15Do8Raf070VseV9cn44j1hdVpD3Rz-Un/view?usp=sharing)和[模型权重（约 9.6 GB）](https://drive.google.com/file/d/1UE4bOYff7flo1IDXXL8tmyW6WL0jcLVa/view?usp=sharing)，解压至仓库根目录：
 
 ```text
 IC-ThermBench/
