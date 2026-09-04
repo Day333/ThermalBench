@@ -21,7 +21,7 @@ IC-ThermBench compares models only after fixing the data, split, labels, physica
 
 S2–S4 are independently generated rather than sample-wise paired perturbations. Their comparison measures a progressive change in distributional difficulty, not a strict causal ablation of one variable.
 
-The commands below currently cover S2–S5. The [S1–S5 result record](RESULTS.md) is available, while S1's canonical data package and one-command evaluator are on the way.
+The commands below currently cover S2–S5. The [S1–S5 result record](RESULTS.md) is available and the S1 datasets are released, while S1's one-command evaluator is on the way.
 
 ## One model
 

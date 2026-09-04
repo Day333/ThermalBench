@@ -14,6 +14,7 @@ An open benchmark for reproducible, generalizable 2.5D/3D-IC thermal learning.
 [![Python 3.10](https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white)](environment.yml)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0.1-EE4C2C?logo=pytorch&logoColor=white)](docs/INSTALL.md)
 [![S2–S5 Data](https://img.shields.io/badge/S2--S5%20data-released-16a34a.svg)](https://drive.google.com/file/d/15Do8Raf070VseV9cn44j1hdVpD3Rz-Un/view?usp=sharing)
+[![S1 Data](https://img.shields.io/badge/S1%20data-released-16a34a.svg)](https://drive.google.com/drive/folders/1WzjpOAgeua03F3iLodHlVbTsRhXn1lMA)
 [![S1 Pipeline](https://img.shields.io/badge/S1%20pipeline-on%20the%20way-f59e0b.svg)](docs/RESULTS.md)
 [![Checkpoints](https://img.shields.io/badge/Checkpoints-released-16a34a.svg)](https://drive.google.com/file/d/1UE4bOYff7flo1IDXXL8tmyW6WL0jcLVa/view?usp=sharing)
 
@@ -66,11 +67,11 @@ IC-ThermBench uses **Scope** rather than “level”: the sequence describes the
 
 ### Dataset provenance and credit
 
-- **S1 is collected, not regenerated.** IC-ThermBench preserves the original Alpha EV6 and industrial task definitions, simulators, resolutions, and evaluation conventions used along the [ARO](https://github.com/Mia-WMY/ARO) → [Therm-FM](https://arxiv.org/abs/2605.22663) research line. We do not alter these source tasks or pool their scores with S2–S5. The unified S1 data package and evaluation code are **on the way**; the [recorded benchmark results](docs/RESULTS.md) are available now.
+- **S1 is collected, not regenerated.** IC-ThermBench preserves the original Alpha EV6 and industrial task definitions, simulators, resolutions, and evaluation conventions used along the [ARO](https://github.com/Mia-WMY/ARO) → [Therm-FM](https://arxiv.org/abs/2605.22663) research line. We do not alter these source tasks or pool their scores with S2–S5. The [S1 source-task datasets](https://drive.google.com/drive/folders/1WzjpOAgeua03F3iLodHlVbTsRhXn1lMA) are now released; the unified one-command evaluator is **on the way**, and the [recorded benchmark results](docs/RESULTS.md) are available now.
 - **S2 follows the ATPlace2.5D lineage.** Cases 1–10, their chiplet systems, and the HotSpot-based thermal setup originate from Qipan Wang *et al.*'s [ATPlace2.5D public package](https://github.com/PKU-IDEA/ATPlace_pub). IC-ThermBench uses this tested foundation for its layout scope.
 - **S3–S5 are consistent extensions.** They retain the S2 case/generation conventions while adding material support, boundary support, and held-out structural systems. This preserves continuity with an established placement benchmark while expanding the thermal-learning evaluation space.
 
-The current executable release contains the generator-backed **S2–S5** data and code path. S1 remains explicitly separated until its unified package is ready.
+The current executable release contains the generator-backed **S2–S5** data and code path. The S1 datasets are released separately and kept distinct from S2–S5; a unified S1 evaluator is on the way.
 
 ### Eight baselines, one protocol
 
@@ -182,7 +183,7 @@ The release is designed to be easy to reproduce **and** easy to extend: data con
 
 ## Current limitations
 
-- S1 data packaging and unified evaluation scripts are still in progress; its stored values currently preserve source-reported protocols.
+- S1 datasets are released; a unified one-command evaluation script is still in progress, and its stored values currently preserve source-reported protocols.
 - S2–S5 currently cover 64×64 steady-state fields with `Z=1`; progressive transient evaluation beyond S1 remains future work.
 - S2–S4 are independently generated, not sample-wise paired, so their differences measure distributional difficulty rather than a strict causal ablation.
 - S5 contains five held-out systems. It reveals a substantial structural-OOD gap, but cannot represent every industrial package, process, or cooling technology.

@@ -67,7 +67,7 @@ Ten labels per OOD case—50 labels total—reduce the best S5 result to 3.19 K.
 
 ## What is public now
 
-- the [complete S1–S5 benchmark result record](RESULTS.md), with S1 data/evaluation packaging on the way;
+- the [complete S1–S5 benchmark result record](RESULTS.md), with the S1 datasets released and the unified S1 evaluator on the way;
 - S2–S5 data tensors and the S5 case manifest;
 - 112 baseline checkpoints spanning the 11 S1 source tasks and S2/S3/S4;
 - eight baseline configurations across three model families;

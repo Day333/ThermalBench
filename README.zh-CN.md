@@ -14,6 +14,7 @@
 [![Python 3.10](https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white)](environment.yml)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0.1-EE4C2C?logo=pytorch&logoColor=white)](docs/INSTALL.md)
 [![S2–S5 Data](https://img.shields.io/badge/S2--S5%20data-released-16a34a.svg)](https://drive.google.com/file/d/15Do8Raf070VseV9cn44j1hdVpD3Rz-Un/view?usp=sharing)
+[![S1 Data](https://img.shields.io/badge/S1%20data-released-16a34a.svg)](https://drive.google.com/drive/folders/1WzjpOAgeua03F3iLodHlVbTsRhXn1lMA)
 [![S1 Pipeline](https://img.shields.io/badge/S1%20pipeline-on%20the%20way-f59e0b.svg)](docs/RESULTS.md)
 [![Checkpoints](https://img.shields.io/badge/Checkpoints-released-16a34a.svg)](https://drive.google.com/file/d/1UE4bOYff7flo1IDXXL8tmyW6WL0jcLVa/view?usp=sharing)
 
@@ -66,11 +67,11 @@ IC-ThermBench 使用 **Scope** 而不是 “level”：这组 Scope 描述部署
 
 ### 数据来源与致谢
 
-- **S1 是对已有公开任务的整理，而非重新生成。** 我们保留 [ARO](https://github.com/Mia-WMY/ARO) → [Therm-FM](https://arxiv.org/abs/2605.22663) 路线中 Alpha EV6 与工业案例原有的任务定义、仿真器、分辨率和评测方式。统一的 S1 数据包与评测代码仍在准备中，现有结果已记录在[实验结果](docs/RESULTS.md)中。
+- **S1 是对已有公开任务的整理，而非重新生成。** 我们保留 [ARO](https://github.com/Mia-WMY/ARO) → [Therm-FM](https://arxiv.org/abs/2605.22663) 路线中 Alpha EV6 与工业案例原有的任务定义、仿真器、分辨率和评测方式。S1 数据集现已[发布](https://drive.google.com/drive/folders/1WzjpOAgeua03F3iLodHlVbTsRhXn1lMA)；统一的一键评测代码仍在准备中，现有结果已记录在[实验结果](docs/RESULTS.md)中。
 - **S2 延续 ATPlace2.5D 数据路线。** Cases 1–10、芯粒系统及基于 HotSpot 的热设置来源于 Qipan Wang 等人的 [ATPlace2.5D 开源项目](https://github.com/PKU-IDEA/ATPlace_pub)。
 - **S3–S5 是保持生成规范一致的扩展。** 它们在 S2 基础上依次加入材料、边界条件和结构未见系统，从而兼顾数据连续性、广度与新颖性。
 
-当前可执行版本包含由生成器支持的 **S2–S5** 数据及完整代码路径。S1 在统一数据包完成前保持独立。
+当前可执行版本包含由生成器支持的 **S2–S5** 数据及完整代码路径。S1 数据集已单独发布并与 S2–S5 保持独立，统一的 S1 评测入口仍在准备中。
 
 ### 八个 baseline，一套协议
 
@@ -182,7 +183,7 @@ output  (B, X, Y, Z)       其中 X = Y = 64，Z = 1
 
 ## 当前局限
 
-- S1 数据打包与统一评测脚本仍在准备中；当前保存值沿用来源论文的评测协议。
+- S1 数据集已发布；统一的一键评测脚本仍在准备中，当前保存值沿用来源论文的评测协议。
 - S2–S5 目前覆盖 `Z=1` 的 64×64 稳态温度场；S1 以外的渐进式瞬态评测仍属于未来工作。
 - S2–S4 独立生成，并非逐样本配对，因此 Scope 间差异表示分布难度，而非严格的因果消融。
 - S5 包含五个未见系统，能够揭示结构 OOD 差距，但无法覆盖所有工业封装、工艺或散热技术。

@@ -4,7 +4,7 @@ IC-ThermBench separates the paper's capability vocabulary from the stable comman
 
 | Paper scope | CLI token | Role in this release |
 |---|---|---|
-| S1 | — | collected source suite; results available, unified package on the way |
+| S1 | — | collected source suite; datasets released, unified evaluator on the way |
 | S2 | `level2` | in-support layout and configuration variation |
 | S3 | `level3` | S2 + material conductivity variation |
 | S4 | `level4` | S3 + ambient and convective-boundary variation |
@@ -14,7 +14,8 @@ The `level*` tokens are retained for backward compatibility with released archiv
 
 ## Download
 
-- [S1–S5 benchmark results and provenance](RESULTS.md) — S1 data package and unified evaluation code on the way
+- [S1–S5 benchmark results and provenance](RESULTS.md) — unified S1 evaluation code on the way
+- [S1 datasets: 11 source tasks (Google Drive folder)](https://drive.google.com/drive/folders/1WzjpOAgeua03F3iLodHlVbTsRhXn1lMA)
 - [S2–S5 datasets (~4.6 GB)](https://drive.google.com/file/d/15Do8Raf070VseV9cn44j1hdVpD3Rz-Un/view?usp=sharing)
 - [112 checkpoints: 8 baselines × (11 S1 source tasks + S2/S3/S4) (~44 GB)](https://drive.google.com/file/d/1UE4bOYff7flo1IDXXL8tmyW6WL0jcLVa/view?usp=sharing)
 
@@ -22,7 +23,7 @@ Unpack both archives at the repository root. No preprocessing is required for th
 
 ## Provenance
 
-S1 is an unchanged collection of established source tasks, not a regenerated IC-ThermBench distribution. It follows the [ARO](https://github.com/Mia-WMY/ARO) and [Therm-FM](https://arxiv.org/abs/2605.22663) research line and retains its source grids, simulators, and task-level evaluation. The unified S1 package is intentionally marked pending rather than being mixed into the current download.
+S1 is an unchanged collection of established source tasks, not a regenerated IC-ThermBench distribution. It follows the [ARO](https://github.com/Mia-WMY/ARO) and [Therm-FM](https://arxiv.org/abs/2605.22663) research line and retains its source grids, simulators, and task-level evaluation. The S1 datasets are released as a separate [Google Drive folder](https://drive.google.com/drive/folders/1WzjpOAgeua03F3iLodHlVbTsRhXn1lMA) rather than being mixed into the S2–S5 archive; a unified S1 evaluator is on the way.
 
 S2 uses Cases 1–10 and the HotSpot thermal lineage from Qipan Wang *et al.*'s [ATPlace2.5D public package](https://github.com/PKU-IDEA/ATPlace_pub). S3–S5 extend the same case conventions with material, boundary, and structurally held-out support.
 
