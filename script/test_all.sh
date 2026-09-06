@@ -1,5 +1,5 @@
 #!/bin/bash
-# Evaluate all 8 models on level2/3/4/5 and print a summary table.
+# Evaluate all 8 configurations on level2/3/4/5 and print a summary table.
 #
 #   bash script/test_all.sh           # evaluate using existing weights
 #   GPUS=6 TFM_GPUS=7 bash script/test_all.sh

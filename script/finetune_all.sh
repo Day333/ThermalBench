@@ -1,5 +1,5 @@
 #!/bin/bash
-# Produce the level5 few-shot fine-tuning curves for all 8 models.
+# Produce the level5 few-shot fine-tuning curves for all 8 configurations.
 #
 #   bash script/finetune_all.sh            # K = 0 10 50 100 250 500
 #   SHOTS="0 10" bash script/finetune_all.sh
