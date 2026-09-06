@@ -16,8 +16,8 @@ IC-ThermBench compares models only after fixing the data, split, labels, physica
 | S2 | Cases 1–10, layout variation | represented cases and support | 0 |
 | S3 | S2 + material variation | represented cases and support | 0 |
 | S4 | S3 + boundary variation | represented cases and support | 0 |
-| S5 zero-shot | frozen S4 model | unseen Cases 16–20 | 0 |
-| S5 few-shot | frozen S4 model + adaptation pool | held-out samples from Cases 16–20 | K per case |
+| S5 zero-shot | frozen S4 model | unseen Cases 11–15 | 0 |
+| S5 few-shot | frozen S4 model + adaptation pool | held-out samples from Cases 11–15 | K per case |
 
 S2–S4 are independently generated rather than sample-wise paired perturbations. Their comparison measures a progressive change in distributional difficulty, not a strict causal ablation of one variable.
 
@@ -76,20 +76,22 @@ python run.py \
   --gpus 0
 ```
 
+The released Therm-FM recipe is deliberately single-GPU: training uses learning rate `1.5e-4`, embedding/recovery and time-embedding learning rates `1.5e-3`, batch size 40, cosine scheduling with zero warmup, and validation-best checkpoint selection. Data-parallel training on four GPUs multiplies the effective global batch size and does not reproduce the published results. S5 adaptation uses `1.5e-5`, one tenth of the Therm-FM training rate.
+
 ## Selected reference results
 
 These paper-preview values record the strongest method in each track:
 
-| Track | Best method | Best RMSE ↓ | Interpretation |
+| Track | Best method | Representative result ↓ | Interpretation |
 |---|---|---:|---|
-| S1 | Therm-FM L | 0.009–0.076 K | task-specific source results; not pooled |
-| S2 | SAU-FNO | 0.703 K | layout/configuration diversity is learnable in support |
-| S3 | U-FNO | 0.802 K | adding material variation causes moderate degradation |
-| S4 | SAU-FNO | 1.216 K | multi-physics variation remains tractable in support |
-| S5 zero-shot | Therm-FM T | 15.99 K | unseen system structure causes a qualitative failure |
-| S5 10-shot | Therm-FM B | 3.19 K | 50 target labels total recover much of the gap |
+| S1 | Therm-FM L | 0.004–0.049 K MAE | task-group source results; not pooled |
+| S2 | Therm-FM L | 0.443 K RMSE | layout/configuration diversity is learnable in support |
+| S3 | Therm-FM B | 0.716 K RMSE | adding material variation causes moderate degradation |
+| S4 | Therm-FM B | 0.933 K RMSE | multi-physics variation remains tractable in support |
+| S5 zero-shot | Therm-FM T | 15.51 K RMSE | unseen system structure causes a qualitative failure |
+| S5 10-shot | Therm-FM L | 2.73 K RMSE | 50 target labels total recover much of the gap |
 
-S1 preserves eight source protocols; see [RESULTS.md](RESULTS.md) for the complete source table and the expanded S2–S5 results. Small last-digit differences in S2–S5 can arise from GPU kernels and execution environments. A valid reproduction should preserve the split, model recipe, normalization mode, and metric implementation before attributing differences to a method.
+S1 preserves eleven source protocols; see [RESULTS.md](RESULTS.md) for the source-suite summary, expanded S2–S5 results, and the Therm-FM optimization-setting comparison. Small last-digit differences in S2–S5 can arise from GPU kernels and execution environments. A valid reproduction should preserve the split, model recipe, normalization mode, and metric implementation before attributing differences to a method.
 
 ## Metrics
 
@@ -120,7 +122,7 @@ Pass `--output path/to/result.json` to `run.py` when integrating with another ex
 - Every released baseline uses temperature-field labels; this is a supervised benchmark, not a PINN-training comparison.
 - S5 zero-shot evaluation does not update model weights or normalization statistics.
 - Therm-FM starts from Poseidon for training; evaluating a released checkpoint does not require Poseidon.
-- `--epochs`, `--batch_size`, `--lr`, or `--per_channel_norm 0` create a new experimental recipe and should not be presented as the released reproduction.
+- `--epochs`, `--batch_size`, `--lr`, `--per_channel_norm 0`, or multi-GPU Therm-FM training create a new experimental recipe and should not be presented as the released reproduction.
 - Report dataset generation, conversion, and reference-solver time separately from model training/inference time.
 
 ## Output locations

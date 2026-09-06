@@ -34,7 +34,7 @@ This progression lets a practitioner choose the smallest sufficient contract ins
 
 ## Dataset design
 
-S1 consolidates established fixed-design thermal-learning tasks: steady-state and transient HS-SC, HS-QC, and HS-OC Alpha EV6 configurations, plus IND-8C and IND-32C industrial cases. It contains 32,000 samples across eight tasks and five physical designs. These tasks are collected without modification from the [ARO](https://github.com/Mia-WMY/ARO) and [Therm-FM](https://arxiv.org/abs/2605.22663) lineage; their [complete recorded results](RESULTS.md) remain task-specific.
+S1 consolidates eleven established fixed-design thermal-learning tasks spanning steady-state and transient Alpha EV6 configurations and two industrial packages. It contains 32,000 samples and preserves the source task definitions and fidelity settings from the [ARO](https://github.com/Mia-WMY/ARO) and [Therm-FM](https://arxiv.org/abs/2605.22663) lineage; its [recorded results](RESULTS.md) remain task-specific.
 
 S2–S4 use the same ten system families and generation lineage. S2 originates from Qipan Wang *et al.*'s [ATPlace2.5D public cases and thermal setup](https://github.com/PKU-IDEA/ATPlace_pub); S3–S4 extend that foundation consistently. They independently sample layouts while cumulatively exposing material and boundary variables. Each scope contains 15,000 samples. These tracks test generalization within represented structural support.
 
@@ -44,25 +44,27 @@ S5 preserves the S4 physical schema but replaces the represented systems with fi
 
 ![IC-ThermBench selected generalization results](../assets/generalization-gap.svg)
 
+All reported Therm-FM results use the released configuration B: one GPU, training learning rate `1.5e-4`, embedding/recovery learning rate `1.5e-3`, batch size 40, and validation-best checkpoint selection. The earlier four-GPU configuration is retained only as an optimization-sensitivity comparison in the paper and [result record](RESULTS.md).
+
 ### Source-suite anchor — fixed-design prediction is already highly accurate
 
-Across S1's eight steady, transient, and industrial source tasks, Therm-FM L records the strongest result, with task-specific RMSE between 0.009 and 0.076 K. S1 therefore anchors what is attainable when the physical design remains fixed; it is not pooled with the controlled S2–S5 comparison.
+Across S1's eleven steady, transient, and industrial source tasks, Therm-FM L records the strongest grouped results, with MAE ranging from 0.012–0.049 K on HS steady tasks, 0.004–0.030 K on HS transient tasks, and 0.008 K on the industrial group. S1 therefore anchors what is attainable when the physical design remains fixed; it is not pooled with the controlled S2–S5 comparison.
 
 ### Finding 1 — added in-support physics is difficult but learnable
 
-The best RMSE rises from 0.703 K on S2 to 0.802 K on S3 and 1.216 K on S4. Explicit material and boundary channels increase the learning burden, but the degradation remains gradual when the relevant case families and parameter support appear in training.
+The best RMSE rises from 0.443 K on S2 to 0.716 K on S3 and 0.933 K on S4. Explicit material and boundary channels increase the learning burden, but the degradation remains gradual when the relevant case families and parameter support appear in training.
 
 ### Finding 2 — model ranking depends on physical support
 
-SAU-FNO is strongest on S2 and S4, while U-FNO is strongest on S3 in the preliminary comparison. Therm-FM size also does not translate monotonically into in-support accuracy. A result on a fixed or simpler benchmark is therefore not a reliable proxy for performance after new physical dimensions are introduced.
+Therm-FM L leads all six S2 metrics, while Therm-FM B leads all six S3 metrics and the S4 global-field errors. Therm-FM L retains the best S4 hotspot-oriented errors. Among operator baselines, SAU-FNO is strongest on S2 and S4 while U-FNO is strongest on S3. Model size therefore does not translate monotonically into accuracy once material and boundary inputs are introduced.
 
 ### Finding 3 — structural OOD is a different failure mode
 
-With the same seven-channel schema, the best RMSE jumps from 1.216 K on S4 to 15.99 K on S5. Several of the strongest in-support models degrade more sharply than models that ranked lower on S4. Diverse observed layouts, materials, and cooling conditions do not establish transfer to an unseen chiplet system.
+With the same seven-channel schema, the best RMSE jumps from 0.933 K on S4 to 15.51 K on S5, an approximately 16.6× increase. Therm-FM T becomes the strongest frozen S5 model even though B and L lead within-family evaluation. Diverse observed layouts, materials, and cooling conditions do not establish transfer to an unseen chiplet system.
 
 ### Finding 4 — limited target labels are a practical recovery path
 
-Ten labels per OOD case—50 labels total—reduce the best S5 result to 3.19 K. The first labels recover most of the zero-shot gap, followed by diminishing returns. Zero-shot robustness, low-label adaptation, and high-budget target accuracy should therefore be reported as distinct capabilities.
+Ten labels per OOD case—50 labels total—reduce the best S5 RMSE to 2.73 K and the best MAE to 2.25 K. The first labels recover most of the zero-shot gap, followed by diminishing returns. Zero-shot robustness, low-label adaptation, and high-budget target accuracy should therefore be reported as distinct capabilities.
 
 
 ## What is public now
@@ -75,4 +77,4 @@ Ten labels per OOD case—50 labels total—reduce the best S5 result to 3.19 K.
 - one shared metric implementation and summary command; and
 - a citable Zenodo software release.
 
-The complete paper, full related-work comparison, complete baseline tables, per-case S5 analysis, and formal author/venue citation will be linked after public release.
+The arXiv manuscript contains the full related-work comparison, complete baseline tables, per-case S5 analysis, optimization-sensitivity study, and formal citation.

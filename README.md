@@ -40,18 +40,18 @@ Recent methods study geometry, material, cooling, and unseen systems. The remain
 
 ![Selected IC-ThermBench results: gradual in-support degradation followed by a structural-OOD gap and few-shot recovery](assets/generalization-gap.svg)
 
-| Track | Physical support | Best method | Best RMSE ↓ |
+| Track | Physical support | Best method | Representative result ↓ |
 |---|---|---|---:|
-| **S1** | fixed-design source tasks | **Therm-FM L** | **0.009–0.076 K**¹ |
-| **S2** | represented layouts and configurations | **SAU-FNO** | **0.703 K** |
-| **S3** | S2 + material conductivity | **U-FNO** | **0.802 K** |
-| **S4** | S3 + ambient and cooling conditions | **SAU-FNO** | **1.216 K** |
-| **S5 · zero-shot** | five case-disjoint chiplet systems | **Therm-FM T** | **15.99 K** |
-| **S5 · 10-shot** | ten labeled samples per unseen case | **Therm-FM B** | **3.19 K** |
+| **S1** | fixed-design source tasks | **Therm-FM L** | **0.004–0.049 K MAE**¹ |
+| **S2** | represented layouts and configurations | **Therm-FM L** | **0.443 K RMSE** |
+| **S3** | S2 + material conductivity | **Therm-FM B** | **0.716 K RMSE** |
+| **S4** | S3 + ambient and cooling conditions | **Therm-FM B** | **0.933 K RMSE** |
+| **S5 · zero-shot** | five case-disjoint chiplet systems | **Therm-FM T** | **15.51 K RMSE** |
+| **S5 · 10-shot** | ten labeled samples per unseen case | **Therm-FM L** | **2.73 K RMSE** |
 
-¹ S1 is a collection of eight source tasks, so its range is task-specific rather than one pooled score. The [selected benchmark results](docs/RESULTS.md) include representative S1 cases, compact S2–S4 comparisons, and the main S5 zero-shot and few-shot findings. S2–S5 use the controlled IC-ThermBench protocol.
+¹ S1 contains eleven source tasks, so the paper reports task-group MAE ranges rather than one pooled score. The [selected benchmark results](docs/RESULTS.md) include the S1 source-suite summary, compact S2–S4 comparisons, and the main S5 zero-shot and few-shot findings. S2–S5 use the controlled IC-ThermBench protocol.
 
-The in-support results degrade gradually as observed physical dimensions are added. The case-disjoint S5 shift is qualitatively different: error grows by roughly an order of magnitude, model rankings change, and a small amount of target supervision recovers much of the gap. See the [paper preview](docs/PAPER_PREVIEW.md) for interpretation and the [reproduction guide](docs/REPRODUCE.md) for the exact protocol.
+The best in-support RMSE rises from 0.443 K on S2 to 0.716 K on S3 and 0.933 K on S4 as observed physical dimensions are added. The case-disjoint S5 shift is qualitatively different: the best RMSE grows by about 16.6×, model rankings change, and a small amount of target supervision recovers much of the gap. See the [paper preview](docs/PAPER_PREVIEW.md) for interpretation and the [reproduction guide](docs/REPRODUCE.md) for the exact protocol.
 
 ## Benchmark at a glance
 
@@ -90,8 +90,8 @@ For DeepOHeat, we report fully supervised training rather than its label-free ph
 ### 1. Install
 
 ```bash
-git clone https://github.com/Day333/IC-ThermBench.git
-cd IC-ThermBench
+git clone https://github.com/Day333/ThermalBench.git
+cd ThermalBench
 conda env create -f environment.yml
 conda activate ic-thermbench
 python script/smoke_test.py
@@ -197,7 +197,7 @@ If you use IC-ThermBench, please cite the paper.
 @article{icthermbench2026,
   title   = {IC-ThermBench: An Open, Progressive Benchmark for Generalizable
              2.5D/3D-IC Thermal Learning},
-  author  = {David Huang and Wenkai Yang and Kuiye Ding and Haiyang Xin},
+  author  = {David Hang and Wenkai Yang and Kuiye Ding and Haiyang Xin and Jacky Wei},
   journal = {arXiv preprint arXiv:2608.23977},
   year    = {2026},
   url     = {https://arxiv.org/abs/2608.23977}

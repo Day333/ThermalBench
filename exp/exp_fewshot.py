@@ -14,9 +14,8 @@ case, how much of that gap can fine-tuning recover?
 +-------------------------------------------------------------------------------+
 
 **The learning rate is one tenth of each model's own training lr**, not one shared
-value. This is not an aesthetic preference: Therm-FM diverges outright on the FNO
-family's 1e-4 (measured RMSE 16.01 -> 31.34, collapsing within a single epoch) because
-it trains at only 5e-5. The defaults live in exp_basic.MODEL_ZOO as `finetune_lr`.
+value. Therm-FM trains at 1.5e-4, so its registered adaptation rate is 1.5e-5 rather
+than the FNO family's 1e-4. The defaults live in exp_basic.MODEL_ZOO as `finetune_lr`.
 
 Therm-FM differs from the rest in two known, deliberate ways:
   1. the loss is the model's own `out.loss` (scOT picks L1 or MSE from config.p), i.e.

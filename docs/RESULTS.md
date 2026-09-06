@@ -6,31 +6,30 @@ This page presents a compact subset of the S1–S5 results. It is intended to sh
 
 ## At a glance
 
-| Track | Evaluation support | Best method | Best RMSE ↓ |
+| Track | Evaluation support | Best method | Representative result ↓ |
 |---|---|---|---:|
-| S1 | fixed-design source tasks | Therm-FM L | 0.009–0.076 K¹ |
-| S2 | represented layouts/configurations | SAU-FNO | 0.703 K |
-| S3 | S2 + material conductivity | U-FNO | 0.802 K |
-| S4 | S3 + ambient/cooling conditions | SAU-FNO | 1.216 K |
-| S5 zero-shot | five case-disjoint systems | Therm-FM T | 15.99 K |
-| S5 10-shot | ten labels per unseen case | Therm-FM B | 3.19 K |
+| S1 | fixed-design source tasks | Therm-FM L | 0.004–0.049 K MAE¹ |
+| S2 | represented layouts/configurations | Therm-FM L | 0.443 K RMSE |
+| S3 | S2 + material conductivity | Therm-FM B | 0.716 K RMSE |
+| S4 | S3 + ambient/cooling conditions | Therm-FM B | 0.933 K RMSE |
+| S5 zero-shot | five case-disjoint systems | Therm-FM T | 15.51 K RMSE |
+| S5 10-shot | ten labels per unseen case | Therm-FM L | 2.73 K RMSE |
 
-¹ S1 contains task-specific protocols and therefore has no single pooled score.
+¹ S1 contains eleven task-specific source protocols and therefore has no single pooled score; the paper reports MAE ranges by task group.
 
-The matched-support results worsen gradually from S2 to S4. S5 is qualitatively different: changing the underlying chiplet system increases the best RMSE by roughly 12× relative to S4. This is the benchmark's main distinction between learning broader observed physics and extrapolating to unseen structure.
+The best matched-support RMSE worsens gradually from 0.443 K on S2 to 0.933 K on S4. S5 is qualitatively different: changing the underlying chiplet system increases the best RMSE by about 16.6× relative to S4. This is the benchmark's main distinction between learning broader observed physics and extrapolating to unseen structure.
 
 ## S1: source-suite snapshot
 
-S1 collects established Alpha EV6 and industrial tasks without relabeling, resizing, or merging them into a new distribution. The lineage follows [ARO](https://github.com/Mia-WMY/ARO), [SAU-FNO](https://doi.org/10.1109/DAC63849.2025.11132988), and [Therm-FM](https://arxiv.org/abs/2605.22663). The entries below are representative Therm-FM L results at the finest reported resolution; errors are in kelvin.
+S1 collects eleven established Alpha EV6 and industrial tasks without relabeling, resizing, or merging them into a new distribution. The lineage follows [ARO](https://github.com/Mia-WMY/ARO), [SAU-FNO](https://doi.org/10.1109/DAC63849.2025.11132988), and [Therm-FM](https://arxiv.org/abs/2605.22663). The compact paper table reports MAE ranges at the finest reported resolution; errors are in kelvin and are not pooled across systems or resolutions.
 
-| Task | Case | Grid | RMSE | MAE |
-|---|---|---:|---:|---:|
-| Steady | HS-SC | 88×88 | 0.021 | 0.012 |
-| Steady | HS-QC | 64×64 | 0.076 | 0.023 |
-| Transient | HS-SC | 88×88×9 | 0.009 | 0.004 |
-| Transient | HS-OC | 151×151×9 | 0.060 | 0.030 |
-| Industrial steady | IND-8C | 101×101 | 0.011 | 0.008 |
-| Industrial steady | IND-32C | 101×101 | 0.010 | 0.008 |
+| Method | HS steady MAE | HS transient MAE | Industrial MAE |
+|---|---:|---:|---:|
+| FNO | 0.063–0.164 | 0.034–0.163 | 0.017–0.018 |
+| U-FNO | 0.046–0.126 | 0.011–0.144 | 0.013 |
+| SAU-FNO | 0.041–0.162 | 0.013–0.149 | 0.020–0.026 |
+| DeepOHeat | 0.745–2.585 | 0.315–1.820 | 0.039–0.044 |
+| **Therm-FM L (629M)** | **0.012–0.049** | **0.004–0.030** | **0.008** |
 
 These low errors show that fixed-design power/time prediction is already a strong and relatively mature setting. S2–S5 therefore focus on what happens when the physical support expands beyond a fixed task definition. S1 data remain subject to their upstream licenses and citation requirements.
 
@@ -40,35 +39,50 @@ Only the best and runner-up results are shown here. S2–S4 are independently ge
 
 | Track | Best method | RMSE | Runner-up | RMSE | Best peak ΔT |
 |---|---|---:|---|---:|---:|
-| S2 · Layout | SAU-FNO | **0.7028** | U-FNO | 0.7047 | **0.4167** |
-| S3 · + Material | U-FNO | **0.8016** | SAU-FNO | 0.8732 | **0.3568** |
-| S4 · + Boundary | SAU-FNO | **1.2158** | U-FNO | 1.3265 | **0.6700** |
+| S2 · Layout | Therm-FM L | **0.4427** | Therm-FM B | 0.5874 | **0.2610** (Therm-FM L) |
+| S3 · + Material | Therm-FM B | **0.7161** | Therm-FM L | 0.7957 | **0.3111** (Therm-FM B) |
+| S4 · + Boundary | Therm-FM B | **0.9334** | Therm-FM L | 0.9585 | **0.4076** (Therm-FM L) |
 
-Adding observed material and boundary variation causes moderate degradation, not collapse. The ranking nevertheless changes: SAU-FNO leads S2 and S4, while U-FNO is strongest on S3. Performance on a simpler scope is therefore not a reliable proxy for performance after new physical dimensions are introduced.
+Adding observed material and boundary variation causes moderate degradation, not collapse. The ranking nevertheless changes: Therm-FM L leads all six S2 metrics; Therm-FM B leads all six S3 metrics and the S4 global-field errors; Therm-FM L retains the best S4 hotspot-oriented errors. Among operator baselines, SAU-FNO leads S2 and S4 while U-FNO leads S3. Performance on a simpler scope is therefore not a reliable proxy for performance after new physical dimensions are introduced.
+
+### Therm-FM optimization-setting sensitivity
+
+The official S2–S5 tables use configuration B: one GPU, training learning rate `1.5e-4`, embedding/recovery learning rate `1.5e-3`, batch size 40, and validation-best checkpoint selection. Configuration A is the earlier four-GPU run with training learning rate `5e-5` and final-epoch selection. The comparison below is retained because optimization changes both absolute scores and rankings.
+
+| Variant | Config | S2 RMSE | S3 RMSE | S4 RMSE | S5 zero-shot | K=10 | K=500 | GPU·s |
+|---|:---:|---:|---:|---:|---:|---:|---:|---:|
+| Therm-FM T | A | 1.4679 | 2.2188 | 2.4703 | 15.9878 | 3.21 | 1.27 | 8,824 |
+| Therm-FM T | **B** | **1.0269** | **1.1524** | **1.3402** | **15.5102** | **2.86** | **1.00** | **2,232** |
+| Therm-FM B | A | 1.1807 | 1.6651 | 2.0580 | 21.4339 | 3.19 | 1.12 | 19,132 |
+| Therm-FM B | **B** | **0.5874** | **0.7161** | **0.9334** | **17.2324** | **2.76** | **0.92** | **5,220** |
+| Therm-FM L | A | 1.2635 | 1.7001 | 2.0667 | **18.3780** | 3.29 | 1.19 | 43,630 |
+| Therm-FM L | **B** | **0.4427** | **0.7957** | **0.9585** | 24.0349 | **2.73** | **0.95** | **9,129** |
+
+Configuration B reduces every Therm-FM variant's in-support RMSE by roughly 30–65% and uses about 4–5× less aggregate GPU time. The change is not a uniform OOD improvement: Therm-FM L's sharper S2–S4 fit under B coincides with worse frozen S5 transfer, reinforcing the need to report the cross-package track separately.
 
 ## S5: structural OOD and adaptation
 
-Frozen S4 checkpoints are evaluated on unseen Cases 16–20 without target labels or updated normalization. Few-shot results use `K` labeled samples per OOD case and a separate fixed holdout.
+Frozen S4 checkpoints are evaluated on unseen Cases 11–15 without target labels or updated normalization. Few-shot results use `K` labeled samples per OOD case and a separate fixed holdout.
 
 | Setting | Representative best method | RMSE ↓ | Interpretation |
 |---|---|---:|---|
-| S4 matched-support reference | SAU-FNO | 1.2158 | observed layout/material/boundary support |
-| S5 zero-shot | Therm-FM T | 15.9878 | case-disjoint structural extrapolation |
-| S5, K=10 | Therm-FM B | 3.19 | 50 target labels in total |
-| S5, K=100 | U-FNO | 1.53 | most of the gap has been recovered |
-| S5, K=500 | SAU-FNO | 1.00 | higher-budget target calibration |
+| S4 matched-support reference | Therm-FM B | 0.9334 | observed layout/material/boundary support |
+| S5 zero-shot | Therm-FM T | 15.5102 | case-disjoint structural extrapolation |
+| S5, K=10 | Therm-FM L | 2.73 | 50 target labels in total |
+| S5, K=100 | Therm-FM B | 1.10 | most of the gap has been recovered |
+| S5, K=500 | Therm-FM B | 0.92 | higher-budget target calibration |
 
-Ten labels per case reduce RMSE by 63–86% across the evaluated models, making few-shot calibration a practical recovery path. It is still reported separately: a model that adapts well after seeing target labels has not solved zero-shot structural generalization.
+Ten labels per case reduce RMSE by approximately 63–89% across the evaluated models, making few-shot calibration a practical recovery path. It is still reported separately: a model that adapts well after seeing target labels has not solved zero-shot structural generalization.
 
 ### Different OOD cases favor different models
 
 | OOD shift | Best method | Best per-case RMSE |
 |---|---|---:|
-| C16 · chiplet count | DeepOHeat | 4.84 |
-| C17 · power density | U-FNO | 6.76 |
-| C18 · size mixture | Therm-FM T | 8.48 |
-| C19 · power concentration | U-Net | 10.05 |
-| C20 · utilization | Therm-FM T | 7.46 |
+| C11 · chiplet count | DeepOHeat | 4.84 |
+| C12 · power density | SAU-FNO | 5.61 |
+| C13 · size heterogeneity | DeepOHeat | 8.86 |
+| C14 · power concentration | U-Net | 10.05 |
+| C15 · package utilization | U-Net | 7.72 |
 
 No model wins every structural shift. Therm-FM T has the best aggregate zero-shot result because it is comparatively balanced, while other methods show narrow strengths and severe case-specific failures. Reporting the OOD axis is therefore more informative than publishing only one pooled score.
 

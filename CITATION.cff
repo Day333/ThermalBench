@@ -8,8 +8,18 @@ abstract: >-
   foundation-model baselines across four generator-backed scopes and supports
   training, evaluation, and few-shot adaptation from one entry point.
 authors:
-  - name: "The IC-ThermBench Authors"
-repository-code: "https://github.com/Day333/IC-ThermBench"
+  - given-names: David
+    family-names: Hang
+  - given-names: Wenkai
+    family-names: Yang
+  - given-names: Kuiye
+    family-names: Ding
+  - given-names: Haiyang
+    family-names: Xin
+  - given-names: Jacky
+    family-names: Wei
+repository-code: "https://github.com/Day333/ThermalBench"
+url: "https://arxiv.org/abs/2608.23977"
 doi: 10.5281/zenodo.21992816
 identifiers:
   - type: doi

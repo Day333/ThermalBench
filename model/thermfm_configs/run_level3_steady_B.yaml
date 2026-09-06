@@ -7,9 +7,9 @@ model_name: # Keep the same as the loaded model
 lr:
   value: 0.00015
 lr_embedding_recovery:
-  value: 0.0005
+  value: 0.0015
 lr_time_embedding:
-  value: 0.0005
+  value: 0.0015
 weight_decay:
   value: 0.000001
 lr_scheduler:

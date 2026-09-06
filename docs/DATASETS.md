@@ -55,7 +55,7 @@ datasets/
 | `level2` / S2 | 15,000 | `chiplet_power`, `grid_x`, `grid_y` | Cases 1–10 |
 | `level3` / S3 | 15,000 | S2 + `local_thermal_k` | Cases 1–10 |
 | `level4` / S4 | 15,000 | S3 + `ambient_K`, `h_w_m2k`, `r_convec_k_per_w` | Cases 1–10 |
-| `level5` / S5 | 5,000 | same schema as S4 | unseen Cases 16–20 |
+| `level5` / S5 | 5,000 | same schema as S4 | unseen Cases 11–15 |
 
 S2–S4 contain 1,500 samples per represented case. S5 contains 1,000 samples per unseen case and is excluded from standard training.
 

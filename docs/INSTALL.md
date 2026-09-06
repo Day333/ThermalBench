@@ -41,7 +41,7 @@ pip install \
 ## Hardware
 
 - FNO, U-FNO, SAU-FNO, U-Net, and DeepOHeat use one GPU in the released scripts.
-- Therm-FM training uses Hugging Face Trainer + Accelerate on one GPU.
+- Therm-FM training uses Hugging Face Trainer + Accelerate on exactly one GPU. The released batch size is 40; data-parallel training would multiply the effective global batch size and does not reproduce the published checkpoints.
 - Evaluation can use a different visible GPU by setting `CUDA_VISIBLE_DEVICES` or passing `--gpus` for Therm-FM.
 - The public checkpoints can be evaluated without downloading Poseidon. Poseidon-T/B/L is required only to reproduce Therm-FM training.
 
