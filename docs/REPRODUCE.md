@@ -84,14 +84,14 @@ These paper-preview values record the strongest method in each track:
 
 | Track | Best method | Result ↓ | Second-best method | Result ↓ | Interpretation |
 |---|---|---:|---|---:|---|
-| S1 | **Therm-FM L** | **0.004–0.049 K MAE** | — | —¹ | task-group source results; not pooled |
-| S2 | **Therm-FM L** | **0.443 K RMSE** | Therm-FM B | <u>0.587 K RMSE</u> | layout/configuration diversity is learnable in support |
-| S3 | **Therm-FM B** | **0.716 K RMSE** | Therm-FM L | <u>0.796 K RMSE</u> | adding material variation causes moderate degradation |
-| S4 | **Therm-FM B** | **0.933 K RMSE** | Therm-FM L | <u>0.959 K RMSE</u> | multi-physics variation remains tractable in support |
-| S5 zero-shot | **Therm-FM T** | **15.51 K RMSE** | Therm-FM B | <u>17.23 K RMSE</u> | unseen system structure causes a qualitative failure |
-| S5 10-shot | **Therm-FM L** | **2.73 K RMSE** | Therm-FM B | <u>2.76 K RMSE</u> | 50 target labels total recover much of the gap |
+| S1 | **Therm-FM** | **0.004–0.049 K MAE** | — | —¹ | task-group source results; not pooled |
+| S2 | **Therm-FM** | **0.443 K RMSE** | SAU-FNO | <u>0.703 K RMSE</u> | layout/configuration diversity is learnable in support |
+| S3 | **Therm-FM** | **0.716 K RMSE** | U-FNO | <u>0.802 K RMSE</u> | adding material variation causes moderate degradation |
+| S4 | **Therm-FM** | **0.933 K RMSE** | SAU-FNO | <u>1.216 K RMSE</u> | multi-physics variation remains tractable in support |
+| S5 zero-shot | **Therm-FM** | **15.51 K RMSE** | U-Net | <u>19.10 K RMSE</u> | unseen system structure causes a qualitative failure |
+| S5 10-shot | **Therm-FM** | **2.73 K RMSE** | U-FNO | <u>3.59 K RMSE</u> | 50 target labels total recover much of the gap |
 
-¹ S1's second-best method varies by task and resolution, so no single runner-up is reported. Best results are bold; second-best results are underlined.
+¹ S1's second-best method varies by task and resolution, so no single runner-up is reported. Therm-FM T/B/L count as one method family, represented by their best score on each track. Best results are bold; second-best results are underlined.
 
 S1 preserves eleven source protocols; see [RESULTS.md](RESULTS.md) for the source-suite summary, expanded S2–S5 results, and the Therm-FM optimization-setting comparison. Small last-digit differences in S2–S5 can arise from GPU kernels and execution environments. A valid reproduction should preserve the split, model recipe, normalization mode, and metric implementation before attributing differences to a method.
 

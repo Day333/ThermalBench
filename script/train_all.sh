@@ -1,5 +1,5 @@
 #!/bin/bash
-# Train all 8 models on level2/3/4 in one go.
+# Train all 8 evaluated configurations on level2/3/4 in one go.
 #
 #   bash script/train_all.sh              # default GPU assignment
 #   OP_GPUS="4 5" TFM_GPUS=0 bash script/train_all.sh

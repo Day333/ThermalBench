@@ -24,7 +24,7 @@
 
 ![IC-ThermBench：五个渐进式泛化 Scope](assets/ic-thermbench-overview.svg)
 
-热预测论文往往采用不同的数据、仿真器、划分方式、预处理与指标，导致模型之间难以公平比较。**IC-ThermBench 固定了这套评测契约**：提供渐进式物理变量覆盖、不可变数据划分、来自三类模型家族的八个 baseline，以及统一的训练、推理、适配和结果汇总接口。
+热预测论文往往采用不同的数据、仿真器、划分方式、预处理与指标，导致模型之间难以公平比较。**IC-ThermBench 固定了这套评测契约**：提供渐进式物理变量覆盖、不可变数据划分、来自三类架构家族的六种方法（共八套评测配置），以及统一的训练、推理、适配和结果汇总接口。
 
 本项目由 **悉尼科技大学（University of Technology Sydney, UTS）** IC-ThermBench 研究团队开发和维护。
 
@@ -42,14 +42,14 @@
 
 | 评测轨道 | 物理变量覆盖 | 最佳方法 | 结果 ↓ | 次佳方法 | 结果 ↓ |
 |---|---|---|---:|---|---:|
-| **S1** | 固定设计的来源任务 | **Therm-FM L** | **0.004–0.049 K MAE**¹ | — | —² |
-| **S2** | 训练分布支持的布局与配置 | **Therm-FM L** | **0.443 K RMSE** | Therm-FM B | <u>0.587 K RMSE</u> |
-| **S3** | S2 + 材料热导率 | **Therm-FM B** | **0.716 K RMSE** | Therm-FM L | <u>0.796 K RMSE</u> |
-| **S4** | S3 + 环境温度与散热条件 | **Therm-FM B** | **0.933 K RMSE** | Therm-FM L | <u>0.959 K RMSE</u> |
-| **S5 · zero-shot** | 五个 case-disjoint 芯粒系统 | **Therm-FM T** | **15.51 K RMSE** | Therm-FM B | <u>17.23 K RMSE</u> |
-| **S5 · 10-shot** | 每个未见案例使用十个标签 | **Therm-FM L** | **2.73 K RMSE** | Therm-FM B | <u>2.76 K RMSE</u> |
+| **S1** | 固定设计的来源任务 | **Therm-FM** | **0.004–0.049 K MAE**¹ | — | —² |
+| **S2** | 训练分布支持的布局与配置 | **Therm-FM** | **0.443 K RMSE** | SAU-FNO | <u>0.703 K RMSE</u> |
+| **S3** | S2 + 材料热导率 | **Therm-FM** | **0.716 K RMSE** | U-FNO | <u>0.802 K RMSE</u> |
+| **S4** | S3 + 环境温度与散热条件 | **Therm-FM** | **0.933 K RMSE** | SAU-FNO | <u>1.216 K RMSE</u> |
+| **S5 · zero-shot** | 五个 case-disjoint 芯粒系统 | **Therm-FM** | **15.51 K RMSE** | U-Net | <u>19.10 K RMSE</u> |
+| **S5 · 10-shot** | 每个未见案例使用十个标签 | **Therm-FM** | **2.73 K RMSE** | U-FNO | <u>3.59 K RMSE</u> |
 
-¹ S1 包含十一个来源任务，因此论文给出各任务组的 MAE 范围，而不是混合后的单一分数。² S1 的次佳方法会随任务和分辨率变化，因此不合并为单一第二名。完整说明见[实验结果](docs/RESULTS.md)。S2–S5 统一使用 IC-ThermBench 协议。最佳结果以粗体表示，次佳结果以下划线表示。
+¹ S1 包含十一个来源任务，因此论文给出各任务组的 MAE 范围，而不是混合后的单一分数。² S1 的次佳方法会随任务和分辨率变化，因此不合并为单一第二名。排名时将 Therm-FM T/B/L 视为同一个模型家族，并在每条轨道取其中最优的结果。完整说明见[实验结果](docs/RESULTS.md)。S2–S5 统一使用 IC-ThermBench 协议。最佳结果以粗体表示，次佳结果以下划线表示。
 
 随着域内可变物理维度增加，最佳 RMSE 从 S2 的 0.443 K 逐步升至 S3 的 0.716 K 和 S4 的 0.933 K；到了 case-disjoint 的 S5，最佳 RMSE 增至约 16.6 倍，模型排名也会变化。少量目标域标签能够显著缩小这一差距，但少样本适配与真正的 zero-shot 结构泛化仍应分开报告。
 
@@ -73,9 +73,9 @@ IC-ThermBench 使用 **Scope** 而不是 “level”：这组 Scope 描述部署
 
 当前可执行版本包含由生成器支持的 **S2–S5** 数据及完整代码路径。S1 数据集已单独发布并与 S2–S5 保持独立，统一的 S1 评测入口仍在准备中。
 
-### 八个 baseline，一套协议
+### 六种方法，一套协议
 
-| 模型家族 | Baseline |
+| 架构家族 | 方法 / 配置 |
 |---|---|
 | 卷积神经网络 | U-Net |
 | 神经算子 | FNO、U-FNO、SAU-FNO、DeepOHeat |
@@ -124,7 +124,7 @@ python run.py --model UFNO --data level2 --task test
 # 使用冻结的 S4 checkpoint 进行 S5 结构 OOD 测试
 python run.py --model ThermFM-T --data level5 --task test
 
-# 评测 8 个 baseline × S2–S5，并生成汇总表
+# 评测 8 套配置 × S2–S5，并生成汇总表
 bash script/test_all.sh
 ```
 

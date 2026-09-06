@@ -48,7 +48,7 @@ All reported Therm-FM results use the released configuration B: one GPU, trainin
 
 ### Source-suite anchor — fixed-design prediction is already highly accurate
 
-Across S1's eleven steady, transient, and industrial source tasks, Therm-FM L records the strongest grouped results, with MAE ranging from 0.012–0.049 K on HS steady tasks, 0.004–0.030 K on HS transient tasks, and 0.008 K on the industrial group. S1 therefore anchors what is attainable when the physical design remains fixed; it is not pooled with the controlled S2–S5 comparison.
+Across S1's eleven steady, transient, and industrial source tasks, Therm-FM records the strongest grouped results, with MAE ranging from 0.012–0.049 K on HS steady tasks, 0.004–0.030 K on HS transient tasks, and 0.008 K on the industrial group. S1 therefore anchors what is attainable when the physical design remains fixed; it is not pooled with the controlled S2–S5 comparison.
 
 ### Finding 1 — added in-support physics is difficult but learnable
 
@@ -56,11 +56,11 @@ The best RMSE rises from 0.443 K on S2 to 0.716 K on S3 and 0.933 K on S4. Expli
 
 ### Finding 2 — model ranking depends on physical support
 
-Therm-FM L leads all six S2 metrics, while Therm-FM B leads all six S3 metrics and the S4 global-field errors. Therm-FM L retains the best S4 hotspot-oriented errors. Among operator baselines, SAU-FNO is strongest on S2 and S4 while U-FNO is strongest on S3. Model size therefore does not translate monotonically into accuracy once material and boundary inputs are introduced.
+Therm-FM is the leading method family throughout S2–S4. Within that family, L supplies the S2 scores, B leads all six S3 metrics and the S4 global-field errors, and L retains the best S4 hotspot-oriented errors. Among the remaining baselines, SAU-FNO ranks second on S2 and S4 while U-FNO ranks second on S3. Model size therefore does not translate monotonically into accuracy once material and boundary inputs are introduced.
 
 ### Finding 3 — structural OOD is a different failure mode
 
-With the same seven-channel schema, the best RMSE jumps from 0.933 K on S4 to 15.51 K on S5, an approximately 16.6× increase. Therm-FM T becomes the strongest frozen S5 model even though B and L lead within-family evaluation. Diverse observed layouts, materials, and cooling conditions do not establish transfer to an unseen chiplet system.
+With the same seven-channel schema, the best RMSE jumps from 0.933 K on S4 to 15.51 K on S5, an approximately 16.6× increase. Therm-FM remains the strongest method family, but its T variant supplies the best frozen S5 score while B and L supply the leading within-family scores. Diverse observed layouts, materials, and cooling conditions do not establish transfer to an unseen chiplet system.
 
 ### Finding 4 — limited target labels are a practical recovery path
 

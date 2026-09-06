@@ -41,15 +41,34 @@ def pick(d, suffix):
     return None
 
 
-def rank_marks(values, higher_is_better):
-    """Return markers for the best and second-best distinct finite values."""
-    ranked = sorted({value for value in values if math.isfinite(value)},
-                    reverse=higher_is_better)
+def model_family(model):
+    """Treat Therm-FM scale variants as one model family for leaderboard rank."""
+    return "ThermFM" if model.startswith("ThermFM-") else model
+
+
+def rank_marks(model_values, higher_is_better):
+    """Mark the leading two method families, using each family's best variant."""
+    family_best = {}
+    for model, value in model_values:
+        if value is None or not math.isfinite(value):
+            continue
+        family = model_family(model)
+        incumbent = family_best.get(family)
+        if incumbent is None or ((value > incumbent) if higher_is_better
+                                 else (value < incumbent)):
+            family_best[family] = value
+
+    ranked = sorted(set(family_best.values()), reverse=higher_is_better)
     marks = {}
-    if ranked:
-        marks[ranked[0]] = "*"
-    if len(ranked) > 1:
-        marks[ranked[1]] = "+"
+    for model, value in model_values:
+        if value is None or not math.isfinite(value):
+            continue
+        if value != family_best[model_family(model)]:
+            continue
+        if ranked and value == ranked[0]:
+            marks[model] = "*"
+        elif len(ranked) > 1 and value == ranked[1]:
+            marks[model] = "+"
     return marks
 
 
@@ -78,10 +97,8 @@ def main():
         models += [m for m in sorted(rows[level]) if m not in ORDER]
         marks = {}
         for _, key, hi in COLS:
-            vals = [pick(rows[level][m], key) for m in models]
-            vals = [v for v in vals if v is not None]
-            if vals:
-                marks[key] = rank_marks(vals, hi)
+            model_values = [(m, pick(rows[level][m], key)) for m in models]
+            marks[key] = rank_marks(model_values, hi)
         for m in models:
             line = f"{m:<{w}}"
             for _, key, _ in COLS:
@@ -89,10 +106,11 @@ def main():
                 if v is None:
                     line += f"{'-':>13}"
                 else:
-                    mark = marks.get(key, {}).get(v, " ")
+                    mark = marks.get(key, {}).get(m, " ")
                     line += f"{v:>12.4f}{mark}"
             print(line)
-    print("\n* = best in column; + = second-best distinct value")
+    print("\n* = best method family; + = second-best method family "
+          "(ThermFM-T/B/L count once)")
 
 
 if __name__ == "__main__":

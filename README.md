@@ -24,7 +24,7 @@ An open benchmark for reproducible, generalizable 2.5D/3D-IC thermal learning.
 
 ![IC-ThermBench: five progressive generalization scopes](assets/ic-thermbench-overview.svg)
 
-Thermal prediction papers often differ in data, simulators, splits, preprocessing, and metrics, making model-to-model comparison surprisingly fragile. Moreover, most existing datasets and implementations are not publicly available, and the community still lacks a unified evaluation standard. IC-ThermBench fixes that evaluation contract. It provides progressive physical support, immutable splits, eight baselines from three model families, and one interface for training, inference, adaptation, and reporting.
+Thermal prediction papers often differ in data, simulators, splits, preprocessing, and metrics, making model-to-model comparison surprisingly fragile. Moreover, most existing datasets and implementations are not publicly available, and the community still lacks a unified evaluation standard. IC-ThermBench fixes that evaluation contract. It provides progressive physical support, immutable splits, six methods represented by eight configurations across three architecture families, and one interface for training, inference, adaptation, and reporting.
 
 Developed and maintained by the IC-ThermBench research team at the **University of Technology Sydney (UTS)**.
 
@@ -42,14 +42,14 @@ Recent methods study geometry, material, cooling, and unseen systems. The remain
 
 | Track | Physical support | Best method | Result ↓ | Second-best method | Result ↓ |
 |---|---|---|---:|---|---:|
-| **S1** | fixed-design source tasks | **Therm-FM L** | **0.004–0.049 K MAE**¹ | — | —² |
-| **S2** | represented layouts and configurations | **Therm-FM L** | **0.443 K RMSE** | Therm-FM B | <u>0.587 K RMSE</u> |
-| **S3** | S2 + material conductivity | **Therm-FM B** | **0.716 K RMSE** | Therm-FM L | <u>0.796 K RMSE</u> |
-| **S4** | S3 + ambient and cooling conditions | **Therm-FM B** | **0.933 K RMSE** | Therm-FM L | <u>0.959 K RMSE</u> |
-| **S5 · zero-shot** | five case-disjoint chiplet systems | **Therm-FM T** | **15.51 K RMSE** | Therm-FM B | <u>17.23 K RMSE</u> |
-| **S5 · 10-shot** | ten labeled samples per unseen case | **Therm-FM L** | **2.73 K RMSE** | Therm-FM B | <u>2.76 K RMSE</u> |
+| **S1** | fixed-design source tasks | **Therm-FM** | **0.004–0.049 K MAE**¹ | — | —² |
+| **S2** | represented layouts and configurations | **Therm-FM** | **0.443 K RMSE** | SAU-FNO | <u>0.703 K RMSE</u> |
+| **S3** | S2 + material conductivity | **Therm-FM** | **0.716 K RMSE** | U-FNO | <u>0.802 K RMSE</u> |
+| **S4** | S3 + ambient and cooling conditions | **Therm-FM** | **0.933 K RMSE** | SAU-FNO | <u>1.216 K RMSE</u> |
+| **S5 · zero-shot** | five case-disjoint chiplet systems | **Therm-FM** | **15.51 K RMSE** | U-Net | <u>19.10 K RMSE</u> |
+| **S5 · 10-shot** | ten labeled samples per unseen case | **Therm-FM** | **2.73 K RMSE** | U-FNO | <u>3.59 K RMSE</u> |
 
-¹ S1 contains eleven source tasks, so the paper reports task-group MAE ranges rather than one pooled score. ² Its second-best method varies by task and resolution, so no single runner-up is reported. The [selected benchmark results](docs/RESULTS.md) include the S1 source-suite summary, compact S2–S4 comparisons, and the main S5 zero-shot and few-shot findings. S2–S5 use the controlled IC-ThermBench protocol. Best results are bold; second-best results are underlined.
+¹ S1 contains eleven source tasks, so the paper reports task-group MAE ranges rather than one pooled score. ² Its second-best method varies by task and resolution, so no single runner-up is reported. Therm-FM T/B/L are ranked as one method family, using the best variant score on each track. The [selected benchmark results](docs/RESULTS.md) include the S1 source-suite summary, compact S2–S4 comparisons, and the main S5 zero-shot and few-shot findings. S2–S5 use the controlled IC-ThermBench protocol. Best results are bold; second-best results are underlined.
 
 The best in-support RMSE rises from 0.443 K on S2 to 0.716 K on S3 and 0.933 K on S4 as observed physical dimensions are added. The case-disjoint S5 shift is qualitatively different: the best RMSE grows by about 16.6×, model rankings change, and a small amount of target supervision recovers much of the gap. See the [paper preview](docs/PAPER_PREVIEW.md) for interpretation and the [reproduction guide](docs/REPRODUCE.md) for the exact protocol.
 
@@ -73,9 +73,9 @@ IC-ThermBench uses **Scope** rather than “level”: the sequence describes the
 
 The current executable release contains the generator-backed **S2–S5** data and code path. The S1 datasets are released separately and kept distinct from S2–S5; a unified S1 evaluator is on the way.
 
-### Eight baselines, one protocol
+### Six methods, one protocol
 
-| Family | Baselines |
+| Architecture family | Methods / configurations |
 |---|---|
 | Convolutional networks | U-Net |
 | Neural operators | FNO, U-FNO, SAU-FNO, DeepOHeat |
@@ -124,7 +124,7 @@ python run.py --model UFNO --data level2 --task test
 # Frozen S4 checkpoint on structural-OOD S5
 python run.py --model ThermFM-T --data level5 --task test
 
-# All 8 baselines × S2–S5, followed by one summary table
+# All 8 evaluated configurations × S2–S5, followed by one summary table
 bash script/test_all.sh
 ```
 
