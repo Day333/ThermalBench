@@ -40,16 +40,16 @@
 
 ![IC-ThermBench 部分结果：支持域内逐步退化、结构 OOD 差距与少样本恢复](assets/generalization-gap.svg)
 
-| 评测轨道 | 物理变量覆盖 | 最佳方法 | 代表性结果 ↓ |
-|---|---|---|---:|
-| **S1** | 固定设计的来源任务 | **Therm-FM L** | **0.004–0.049 K MAE**¹ |
-| **S2** | 训练分布支持的布局与配置 | **Therm-FM L** | **0.443 K RMSE** |
-| **S3** | S2 + 材料热导率 | **Therm-FM B** | **0.716 K RMSE** |
-| **S4** | S3 + 环境温度与散热条件 | **Therm-FM B** | **0.933 K RMSE** |
-| **S5 · zero-shot** | 五个 case-disjoint 芯粒系统 | **Therm-FM T** | **15.51 K RMSE** |
-| **S5 · 10-shot** | 每个未见案例使用十个标签 | **Therm-FM L** | **2.73 K RMSE** |
+| 评测轨道 | 物理变量覆盖 | 最佳方法 | 结果 ↓ | 次佳方法 | 结果 ↓ |
+|---|---|---|---:|---|---:|
+| **S1** | 固定设计的来源任务 | **Therm-FM L** | **0.004–0.049 K MAE**¹ | — | —² |
+| **S2** | 训练分布支持的布局与配置 | **Therm-FM L** | **0.443 K RMSE** | Therm-FM B | <u>0.587 K RMSE</u> |
+| **S3** | S2 + 材料热导率 | **Therm-FM B** | **0.716 K RMSE** | Therm-FM L | <u>0.796 K RMSE</u> |
+| **S4** | S3 + 环境温度与散热条件 | **Therm-FM B** | **0.933 K RMSE** | Therm-FM L | <u>0.959 K RMSE</u> |
+| **S5 · zero-shot** | 五个 case-disjoint 芯粒系统 | **Therm-FM T** | **15.51 K RMSE** | Therm-FM B | <u>17.23 K RMSE</u> |
+| **S5 · 10-shot** | 每个未见案例使用十个标签 | **Therm-FM L** | **2.73 K RMSE** | Therm-FM B | <u>2.76 K RMSE</u> |
 
-¹ S1 包含十一个来源任务，因此论文给出各任务组的 MAE 范围，而不是混合后的单一分数。完整说明见[实验结果](docs/RESULTS.md)。S2–S5 统一使用 IC-ThermBench 协议。
+¹ S1 包含十一个来源任务，因此论文给出各任务组的 MAE 范围，而不是混合后的单一分数。² S1 的次佳方法会随任务和分辨率变化，因此不合并为单一第二名。完整说明见[实验结果](docs/RESULTS.md)。S2–S5 统一使用 IC-ThermBench 协议。最佳结果以粗体表示，次佳结果以下划线表示。
 
 随着域内可变物理维度增加，最佳 RMSE 从 S2 的 0.443 K 逐步升至 S3 的 0.716 K 和 S4 的 0.933 K；到了 case-disjoint 的 S5，最佳 RMSE 增至约 16.6 倍，模型排名也会变化。少量目标域标签能够显著缩小这一差距，但少样本适配与真正的 zero-shot 结构泛化仍应分开报告。
 

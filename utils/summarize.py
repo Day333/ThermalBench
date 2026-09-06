@@ -12,6 +12,7 @@ so lookups match on the key **suffix** instead of a hardcoded prefix.
 """
 import glob
 import json
+import math
 import os
 import sys
 
@@ -40,6 +41,18 @@ def pick(d, suffix):
     return None
 
 
+def rank_marks(values, higher_is_better):
+    """Return markers for the best and second-best distinct finite values."""
+    ranked = sorted({value for value in values if math.isfinite(value)},
+                    reverse=higher_is_better)
+    marks = {}
+    if ranked:
+        marks[ranked[0]] = "*"
+    if len(ranked) > 1:
+        marks[ranked[1]] = "+"
+    return marks
+
+
 def main():
     wanted = sys.argv[1:]
     rows = {}
@@ -63,12 +76,12 @@ def main():
         print("-" * (w + 13 * len(COLS)))
         models = [m for m in ORDER if m in rows[level]]
         models += [m for m in sorted(rows[level]) if m not in ORDER]
-        best = {}
+        marks = {}
         for _, key, hi in COLS:
             vals = [pick(rows[level][m], key) for m in models]
             vals = [v for v in vals if v is not None]
             if vals:
-                best[key] = max(vals) if hi else min(vals)
+                marks[key] = rank_marks(vals, hi)
         for m in models:
             line = f"{m:<{w}}"
             for _, key, _ in COLS:
@@ -76,10 +89,10 @@ def main():
                 if v is None:
                     line += f"{'-':>13}"
                 else:
-                    mark = "*" if v == best.get(key) else " "
+                    mark = marks.get(key, {}).get(v, " ")
                     line += f"{v:>12.4f}{mark}"
             print(line)
-    print("\n* = best in column")
+    print("\n* = best in column; + = second-best distinct value")
 
 
 if __name__ == "__main__":
