@@ -40,16 +40,16 @@ Recent methods study geometry, material, cooling, and unseen systems. The remain
 
 ![Selected IC-ThermBench results: gradual in-support degradation followed by a structural-OOD gap and few-shot recovery](assets/generalization-gap.svg)
 
-| Track | Physical support | Best method | Representative result ↓ |
-|---|---|---|---:|
-| **S1** | fixed-design source tasks | **Therm-FM L** | **0.004–0.049 K MAE**¹ |
-| **S2** | represented layouts and configurations | **Therm-FM L** | **0.443 K RMSE** |
-| **S3** | S2 + material conductivity | **Therm-FM B** | **0.716 K RMSE** |
-| **S4** | S3 + ambient and cooling conditions | **Therm-FM B** | **0.933 K RMSE** |
-| **S5 · zero-shot** | five case-disjoint chiplet systems | **Therm-FM T** | **15.51 K RMSE** |
-| **S5 · 10-shot** | ten labeled samples per unseen case | **Therm-FM L** | **2.73 K RMSE** |
+| Track | Physical support | Best method | Result ↓ | Second-best method | Result ↓ |
+|---|---|---|---:|---|---:|
+| **S1** | fixed-design source tasks | **Therm-FM L** | **0.004–0.049 K MAE**¹ | — | —² |
+| **S2** | represented layouts and configurations | **Therm-FM L** | **0.443 K RMSE** | Therm-FM B | <u>0.587 K RMSE</u> |
+| **S3** | S2 + material conductivity | **Therm-FM B** | **0.716 K RMSE** | Therm-FM L | <u>0.796 K RMSE</u> |
+| **S4** | S3 + ambient and cooling conditions | **Therm-FM B** | **0.933 K RMSE** | Therm-FM L | <u>0.959 K RMSE</u> |
+| **S5 · zero-shot** | five case-disjoint chiplet systems | **Therm-FM T** | **15.51 K RMSE** | Therm-FM B | <u>17.23 K RMSE</u> |
+| **S5 · 10-shot** | ten labeled samples per unseen case | **Therm-FM L** | **2.73 K RMSE** | Therm-FM B | <u>2.76 K RMSE</u> |
 
-¹ S1 contains eleven source tasks, so the paper reports task-group MAE ranges rather than one pooled score. The [selected benchmark results](docs/RESULTS.md) include the S1 source-suite summary, compact S2–S4 comparisons, and the main S5 zero-shot and few-shot findings. S2–S5 use the controlled IC-ThermBench protocol.
+¹ S1 contains eleven source tasks, so the paper reports task-group MAE ranges rather than one pooled score. ² Its second-best method varies by task and resolution, so no single runner-up is reported. The [selected benchmark results](docs/RESULTS.md) include the S1 source-suite summary, compact S2–S4 comparisons, and the main S5 zero-shot and few-shot findings. S2–S5 use the controlled IC-ThermBench protocol. Best results are bold; second-best results are underlined.
 
 The best in-support RMSE rises from 0.443 K on S2 to 0.716 K on S3 and 0.933 K on S4 as observed physical dimensions are added. The case-disjoint S5 shift is qualitatively different: the best RMSE grows by about 16.6×, model rankings change, and a small amount of target supervision recovers much of the gap. See the [paper preview](docs/PAPER_PREVIEW.md) for interpretation and the [reproduction guide](docs/REPRODUCE.md) for the exact protocol.
 

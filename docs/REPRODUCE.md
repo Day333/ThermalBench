@@ -82,14 +82,16 @@ The released Therm-FM recipe is deliberately single-GPU: training uses learning 
 
 These paper-preview values record the strongest method in each track:
 
-| Track | Best method | Representative result ↓ | Interpretation |
-|---|---|---:|---|
-| S1 | Therm-FM L | 0.004–0.049 K MAE | task-group source results; not pooled |
-| S2 | Therm-FM L | 0.443 K RMSE | layout/configuration diversity is learnable in support |
-| S3 | Therm-FM B | 0.716 K RMSE | adding material variation causes moderate degradation |
-| S4 | Therm-FM B | 0.933 K RMSE | multi-physics variation remains tractable in support |
-| S5 zero-shot | Therm-FM T | 15.51 K RMSE | unseen system structure causes a qualitative failure |
-| S5 10-shot | Therm-FM L | 2.73 K RMSE | 50 target labels total recover much of the gap |
+| Track | Best method | Result ↓ | Second-best method | Result ↓ | Interpretation |
+|---|---|---:|---|---:|---|
+| S1 | **Therm-FM L** | **0.004–0.049 K MAE** | — | —¹ | task-group source results; not pooled |
+| S2 | **Therm-FM L** | **0.443 K RMSE** | Therm-FM B | <u>0.587 K RMSE</u> | layout/configuration diversity is learnable in support |
+| S3 | **Therm-FM B** | **0.716 K RMSE** | Therm-FM L | <u>0.796 K RMSE</u> | adding material variation causes moderate degradation |
+| S4 | **Therm-FM B** | **0.933 K RMSE** | Therm-FM L | <u>0.959 K RMSE</u> | multi-physics variation remains tractable in support |
+| S5 zero-shot | **Therm-FM T** | **15.51 K RMSE** | Therm-FM B | <u>17.23 K RMSE</u> | unseen system structure causes a qualitative failure |
+| S5 10-shot | **Therm-FM L** | **2.73 K RMSE** | Therm-FM B | <u>2.76 K RMSE</u> | 50 target labels total recover much of the gap |
+
+¹ S1's second-best method varies by task and resolution, so no single runner-up is reported. Best results are bold; second-best results are underlined.
 
 S1 preserves eleven source protocols; see [RESULTS.md](RESULTS.md) for the source-suite summary, expanded S2–S5 results, and the Therm-FM optimization-setting comparison. Small last-digit differences in S2–S5 can arise from GPU kernels and execution environments. A valid reproduction should preserve the split, model recipe, normalization mode, and metric implementation before attributing differences to a method.
 
