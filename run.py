@@ -56,7 +56,8 @@ def parse_args():
                    help="cap the train+val size, -1 = all; does not affect the test split")
     p.add_argument("--device", default="cuda")
     p.add_argument("--gpus", default="0",
-                   help="CUDA_VISIBLE_DEVICES for Therm-FM; single-GPU default: 0")
+                   help="CUDA_VISIBLE_DEVICES for Therm-FM; training requires one GPU "
+                        "to preserve the released effective batch size (default: 0)")
     p.add_argument("--port", type=int, default=29815,
                    help="accelerate main-process port; stagger it when running several "
                         "Therm-FM jobs at once")

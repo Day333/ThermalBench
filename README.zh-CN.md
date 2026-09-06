@@ -40,18 +40,18 @@
 
 ![IC-ThermBench 部分结果：支持域内逐步退化、结构 OOD 差距与少样本恢复](assets/generalization-gap.svg)
 
-| 评测轨道 | 物理变量覆盖 | 最佳方法 | 最佳 RMSE ↓ |
+| 评测轨道 | 物理变量覆盖 | 最佳方法 | 代表性结果 ↓ |
 |---|---|---|---:|
-| **S1** | 固定设计的来源任务 | **Therm-FM L** | **0.009–0.076 K**¹ |
-| **S2** | 训练分布支持的布局与配置 | **SAU-FNO** | **0.703 K** |
-| **S3** | S2 + 材料热导率 | **U-FNO** | **0.802 K** |
-| **S4** | S3 + 环境温度与散热条件 | **SAU-FNO** | **1.216 K** |
-| **S5 · zero-shot** | 五个 case-disjoint 芯粒系统 | **Therm-FM T** | **15.99 K** |
-| **S5 · 10-shot** | 每个未见案例使用十个标签 | **Therm-FM B** | **3.19 K** |
+| **S1** | 固定设计的来源任务 | **Therm-FM L** | **0.004–0.049 K MAE**¹ |
+| **S2** | 训练分布支持的布局与配置 | **Therm-FM L** | **0.443 K RMSE** |
+| **S3** | S2 + 材料热导率 | **Therm-FM B** | **0.716 K RMSE** |
+| **S4** | S3 + 环境温度与散热条件 | **Therm-FM B** | **0.933 K RMSE** |
+| **S5 · zero-shot** | 五个 case-disjoint 芯粒系统 | **Therm-FM T** | **15.51 K RMSE** |
+| **S5 · 10-shot** | 每个未见案例使用十个标签 | **Therm-FM L** | **2.73 K RMSE** |
 
-¹ S1 收集了八个来源任务，因此这里给出各任务的结果范围，而不是混合后的单一分数。完整说明见[实验结果](docs/RESULTS.md)。S2–S5 统一使用 IC-ThermBench 协议。
+¹ S1 包含十一个来源任务，因此论文给出各任务组的 MAE 范围，而不是混合后的单一分数。完整说明见[实验结果](docs/RESULTS.md)。S2–S5 统一使用 IC-ThermBench 协议。
 
-随着域内可变物理维度增加，模型误差逐步上升；到了 case-disjoint 的 S5，误差会出现数量级增长，模型排名也会变化。少量目标域标签能够显著缩小这一差距，但少样本适配与真正的 zero-shot 结构泛化仍应分开报告。
+随着域内可变物理维度增加，最佳 RMSE 从 S2 的 0.443 K 逐步升至 S3 的 0.716 K 和 S4 的 0.933 K；到了 case-disjoint 的 S5，最佳 RMSE 增至约 16.6 倍，模型排名也会变化。少量目标域标签能够显著缩小这一差距，但少样本适配与真正的 zero-shot 结构泛化仍应分开报告。
 
 ## Benchmark 概览
 
@@ -90,8 +90,8 @@ IC-ThermBench 使用 **Scope** 而不是 “level”：这组 Scope 描述部署
 ### 1. 安装
 
 ```bash
-git clone https://github.com/Day333/IC-ThermBench.git
-cd IC-ThermBench
+git clone https://github.com/Day333/ThermalBench.git
+cd ThermalBench
 conda env create -f environment.yml
 conda activate ic-thermbench
 python script/smoke_test.py
@@ -197,7 +197,7 @@ output  (B, X, Y, Z)       其中 X = Y = 64，Z = 1
 @article{icthermbench2026,
   title   = {IC-ThermBench: An Open, Progressive Benchmark for Generalizable
              2.5D/3D-IC Thermal Learning},
-  author  = {David Huang and Wenkai Yang and Kuiye Ding and Haiyang Xin},
+  author  = {David Hang and Wenkai Yang and Kuiye Ding and Haiyang Xin and Jacky Wei},
   journal = {arXiv preprint arXiv:2608.23977},
   year    = {2026},
   url     = {https://arxiv.org/abs/2608.23977}

@@ -18,9 +18,8 @@ old weights for reproduction checks.
 `prefix` is the key prefix of the metrics dict; it must match the original or RMSE and
 friends cannot be read back out.
 `finetune_lr` is the default learning rate for level5 few-shot fine-tuning -- **one tenth
-of each model's own training lr**, not one shared value. Therm-FM trains at only 5e-5;
-giving it the FNO family's 1e-4 diverges immediately (measured RMSE 16.01 -> 31.34 after
-a single epoch).
+of each model's own training lr**, not one shared value. Therm-FM trains at 1.5e-4;
+its registered adaptation rate is therefore 1.5e-5 rather than the FNO family's 1e-4.
 """
 MODEL_ZOO = {
     "FNO": dict(

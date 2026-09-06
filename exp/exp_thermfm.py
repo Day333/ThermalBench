@@ -110,7 +110,14 @@ def train(args):
     size = args.model.split("-")[1]
     name = f"{args.data}_steady_{size}"
     env = _env(args)
-    n_gpu = len(args.gpus.split(","))
+    gpu_ids = [gpu.strip() for gpu in args.gpus.split(",") if gpu.strip()]
+    if len(gpu_ids) != 1:
+        raise ValueError(
+            "The released Therm-FM recipe uses exactly one GPU with batch size 40. "
+            "Multi-GPU data parallelism changes the effective global batch size and "
+            "does not reproduce the published checkpoints."
+        )
+    n_gpu = 1
     ckpt_root = os.path.join(args.checkpoints, "thermfm")
     log_dir = os.path.join(ROOT, "logs")
     os.makedirs(log_dir, exist_ok=True)
@@ -122,12 +129,7 @@ def train(args):
                  f"pretrained/.")
 
     t0 = time.time()
-    launch = ["accelerate", "launch"]
-    if n_gpu > 1:
-        launch += ["--multi_gpu", f"--num_processes={n_gpu}",
-                   "--main_process_port", str(args.port)]
-    else:
-        launch += ["--num_processes=1"]
+    launch = ["accelerate", "launch", "--num_processes=1"]
     train_cmd = launch + [
           os.path.join("model", "scOT", "train.py"),
           "--config", _config_path(args),
