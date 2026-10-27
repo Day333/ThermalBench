@@ -13,10 +13,10 @@ An open benchmark for reproducible, generalizable 2.5D/3D-IC thermal learning.
 [![Data: CC BY 4.0](https://img.shields.io/badge/Data-CC%20BY%204.0-f97316.svg)](LICENSE-DATA)
 [![Python 3.10](https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white)](environment.yml)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0.1-EE4C2C?logo=pytorch&logoColor=white)](docs/INSTALL.md)
-[![S2–S5 Data](https://img.shields.io/badge/S2--S5%20data-released-16a34a.svg)](https://drive.google.com/file/d/15Do8Raf070VseV9cn44j1hdVpD3Rz-Un/view?usp=sharing)
+[![S2–S5 Data](https://img.shields.io/badge/S2--S5%20data-released-16a34a.svg)](https://drive.google.com/file/d/1subkjTHCq-0aMEPBsUiakxYweIMQYG8g/view?usp=sharing)
 [![S1 Data](https://img.shields.io/badge/S1%20data-released-16a34a.svg)](https://drive.google.com/drive/folders/1WzjpOAgeua03F3iLodHlVbTsRhXn1lMA)
 [![S1 Pipeline](https://img.shields.io/badge/S1%20pipeline-on%20the%20way-f59e0b.svg)](docs/RESULTS.md)
-[![Checkpoints](https://img.shields.io/badge/Checkpoints-released-16a34a.svg)](https://drive.google.com/file/d/1UE4bOYff7flo1IDXXL8tmyW6WL0jcLVa/view?usp=sharing)
+[![Checkpoints](https://img.shields.io/badge/Checkpoints-coming%20soon-f59e0b.svg)](docs/DATASETS.md)
 
 [**Paper**](https://arxiv.org/abs/2608.23977) · [**Quick start**](#quick-start) · [**Datasets**](docs/DATASETS.md) · [**Results**](docs/RESULTS.md) · [**Reproduce**](docs/REPRODUCE.md) · [**Add a model**](docs/ADD_A_MODEL.md) · [**Paper preview**](docs/PAPER_PREVIEW.md)
 
@@ -43,15 +43,15 @@ Recent methods study geometry, material, cooling, and unseen systems. The remain
 | Track | Physical support | Best method | Result ↓ | Second-best method | Result ↓ |
 |---|---|---|---:|---|---:|
 | **S1** | fixed-design source tasks | **Therm-FM** | **0.004–0.049 K MAE**¹ | — | —² |
-| **S2** | represented layouts and configurations | **Therm-FM** | **0.443 K RMSE** | SAU-FNO | <u>0.703 K RMSE</u> |
-| **S3** | S2 + material conductivity | **Therm-FM** | **0.716 K RMSE** | U-FNO | <u>0.802 K RMSE</u> |
-| **S4** | S3 + ambient and cooling conditions | **Therm-FM** | **0.933 K RMSE** | SAU-FNO | <u>1.216 K RMSE</u> |
-| **S5 · zero-shot** | five case-disjoint chiplet systems | **Therm-FM** | **15.51 K RMSE** | U-Net | <u>19.10 K RMSE</u> |
-| **S5 · 10-shot** | ten labeled samples per unseen case | **Therm-FM** | **2.73 K RMSE** | U-FNO | <u>3.59 K RMSE</u> |
+| **S2** | represented layouts and configurations | **Therm-FM** | **0.354 K RMSE** | U-FNO | <u>0.444 K RMSE</u> |
+| **S3** | S2 + material conductivity | **U-FNO** | **0.670 K RMSE** | SAU-FNO | <u>0.708 K RMSE</u> |
+| **S4** | S3 + ambient and cooling conditions | **Therm-FM** | **0.811 K RMSE** | U-FNO | <u>0.939 K RMSE</u> |
+| **S5 · zero-shot** | five case-disjoint chiplet systems | **Therm-FM** | **8.67 K RMSE** | U-Net | <u>18.85 K RMSE</u> |
+| **S5 · 10-shot** | ten labeled samples per unseen case | **Therm-FM** | **2.09 K RMSE** | U-Net | <u>2.26 K RMSE</u> |
 
 ¹ S1 contains eleven source tasks, so the paper reports task-group MAE ranges rather than one pooled score. ² Its second-best method varies by task and resolution, so no single runner-up is reported. Therm-FM T/B/L are ranked as one method family, using the best variant score on each track. The [selected benchmark results](docs/RESULTS.md) include the S1 source-suite summary, compact S2–S4 comparisons, and the main S5 zero-shot and few-shot findings. S2–S5 use the controlled IC-ThermBench protocol. Best results are bold; second-best results are underlined.
 
-The best in-support RMSE rises from 0.443 K on S2 to 0.716 K on S3 and 0.933 K on S4 as observed physical dimensions are added. The case-disjoint S5 shift is qualitatively different: the best RMSE grows by about 16.6×, model rankings change, and a small amount of target supervision recovers much of the gap. See the [paper preview](docs/PAPER_PREVIEW.md) for interpretation and the [reproduction guide](docs/REPRODUCE.md) for the exact protocol.
+The best in-support RMSE rises from 0.354 K on S2 to 0.670 K on S3 and 0.811 K on S4 as observed physical dimensions are added. The case-disjoint S5 shift is qualitatively different: the best RMSE grows by about 10.7×, model rankings change, and a small amount of target supervision recovers much of the gap. See the [paper preview](docs/PAPER_PREVIEW.md) for interpretation and the [reproduction guide](docs/REPRODUCE.md) for the exact protocol.
 
 ## Benchmark at a glance
 
@@ -97,11 +97,11 @@ conda activate ic-thermbench
 python script/smoke_test.py
 ```
 
-The frozen environment matches the released checkpoints. Therm-FM is version-sensitive; read the [installation notes](docs/INSTALL.md) before changing PyTorch, Transformers, or Accelerate.
+The frozen environment matches the benchmark checkpoints. Therm-FM is version-sensitive; read the [installation notes](docs/INSTALL.md) before changing PyTorch, Transformers, or Accelerate.
 
 ### 2. Place data and checkpoints
 
-Download the [datasets (~4.6 GB)](https://drive.google.com/file/d/15Do8Raf070VseV9cn44j1hdVpD3Rz-Un/view?usp=sharing) and [released checkpoints (~44 GB)](https://drive.google.com/file/d/1UE4bOYff7flo1IDXXL8tmyW6WL0jcLVa/view?usp=sharing), then unpack them at the repository root:
+Download the [datasets (~4.8 GB unpacked)](https://drive.google.com/file/d/1subkjTHCq-0aMEPBsUiakxYweIMQYG8g/view?usp=sharing) and unpack them at the repository root; released checkpoints are coming soon and unpack into `checkpoints/`:
 
 ```text
 IC-ThermBench/
@@ -166,7 +166,7 @@ Register the constructor and training recipe once, then the existing scripts pro
 - **Labels:** supervised reference-temperature fields for every baseline.
 - **Metrics:** one implementation for RMSE, MAE, R², MaxAE, peak-temperature error, and Top-50 MAE.
 - **Recipes:** architecture-specific optimization is recorded, not retroactively homogenized.
-- **Artifacts:** released checkpoints and JSON outputs can be audited without retraining.
+- **Artifacts:** JSON outputs, and the checkpoints once released, can be audited without retraining.
 
 The release is designed to be easy to reproduce **and** easy to extend: data conversion, model execution, evaluation, aggregation, and OOD adaptation all use the same repository-level interface.
 

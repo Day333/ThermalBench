@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="390" viewBox="0 0 1280 390" role="img" aria-labelledby="title desc">
   <title id="title">IC-ThermBench selected RMSE results</title>
-  <desc id="desc">Best RMSE rises gradually from 0.443 kelvin in Scope 2 to 0.933 kelvin in Scope 4, jumps to 15.51 kelvin for zero-shot cross-package out-of-distribution evaluation, then falls to 2.73 kelvin after ten labeled samples per unseen case.</desc>
+  <desc id="desc">Best RMSE rises gradually from 0.354 kelvin in Scope 2 to 0.811 kelvin in Scope 4, jumps to 8.67 kelvin for zero-shot cross-package out-of-distribution evaluation, then falls to 2.09 kelvin after ten labeled samples per unseen case.</desc>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#f8fafc"/>
@@ -27,22 +27,22 @@
 
   <line x1="74" y1="302" x2="1206" y2="302" stroke="#cbd5e1" stroke-width="2"/>
   <line x1="74" y1="137" x2="1206" y2="137" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="5 6"/>
-  <text x="74" y="128" fill="#94a3b8" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="13">16 K</text>
+  <text x="74" y="128" fill="#94a3b8" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="13">10 K</text>
 
   <g filter="url(#shadow)">
-    <rect x="142" y="297" width="130" height="5" rx="3" fill="url(#barID)"/>
-    <rect x="347" y="295" width="130" height="7" rx="4" fill="url(#barID)"/>
-    <rect x="552" y="292" width="130" height="10" rx="5" fill="url(#barID)"/>
-    <rect x="795" y="142" width="150" height="160" rx="12" fill="url(#barOOD)"/>
-    <rect x="1037" y="274" width="150" height="28" rx="10" fill="#8b5cf6" opacity="0.83"/>
+    <rect x="142" y="296" width="130" height="6" rx="3" fill="url(#barID)"/>
+    <rect x="347" y="291" width="130" height="11" rx="5" fill="url(#barID)"/>
+    <rect x="552" y="289" width="130" height="13" rx="6" fill="url(#barID)"/>
+    <rect x="795" y="159" width="150" height="143" rx="12" fill="url(#barOOD)"/>
+    <rect x="1037" y="268" width="150" height="34" rx="10" fill="#8b5cf6" opacity="0.83"/>
   </g>
 
   <g font-family="Inter,Segoe UI,Arial,sans-serif" text-anchor="middle">
-    <text x="207" y="281" fill="#0369a1" font-size="20" font-weight="700">0.443 K</text>
-    <text x="412" y="278" fill="#0369a1" font-size="20" font-weight="700">0.716 K</text>
-    <text x="617" y="274" fill="#0369a1" font-size="20" font-weight="700">0.933 K</text>
-    <text x="870" y="126" fill="#6d28d9" font-size="25" font-weight="800">15.51 K</text>
-    <text x="1112" y="258" fill="#6d28d9" font-size="22" font-weight="800">2.73 K</text>
+    <text x="207" y="280" fill="#0369a1" font-size="20" font-weight="700">0.354 K</text>
+    <text x="412" y="275" fill="#0369a1" font-size="20" font-weight="700">0.670 K</text>
+    <text x="617" y="272" fill="#0369a1" font-size="20" font-weight="700">0.811 K</text>
+    <text x="870" y="143" fill="#6d28d9" font-size="25" font-weight="800">8.67 K</text>
+    <text x="1112" y="252" fill="#6d28d9" font-size="22" font-weight="800">2.09 K</text>
 
     <text x="207" y="333" fill="#0f172a" font-size="17" font-weight="700">S2</text>
     <text x="207" y="356" fill="#64748b" font-size="14">layout</text>
@@ -56,11 +56,11 @@
     <text x="1112" y="356" fill="#64748b" font-size="14">per unseen case</text>
   </g>
 
-  <path d="M701 252C746 212 758 182 794 165" fill="none" stroke="#7c3aed" stroke-width="3" marker-end="url(#arrow)"/>
-  <rect x="655" y="189" width="135" height="48" rx="13" fill="#ffffff" stroke="#ddd6fe"/>
-  <text x="722" y="210" text-anchor="middle" fill="#6d28d9" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="15" font-weight="700">≈16.6× jump</text>
-  <text x="722" y="228" text-anchor="middle" fill="#7c3aed" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12">same input schema</text>
+  <path d="M701 262C746 226 760 196 794 178" fill="none" stroke="#7c3aed" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="655" y="204" width="135" height="48" rx="13" fill="#ffffff" stroke="#ddd6fe"/>
+  <text x="722" y="225" text-anchor="middle" fill="#6d28d9" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="15" font-weight="700">≈10.7× jump</text>
+  <text x="722" y="243" text-anchor="middle" fill="#7c3aed" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12">same input schema</text>
 
-  <path d="M950 168C1001 180 1025 219 1052 253" fill="none" stroke="#7c3aed" stroke-width="3" stroke-dasharray="6 5" marker-end="url(#arrow)"/>
-  <text x="1010" y="153" text-anchor="middle" fill="#6d28d9" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="14" font-weight="700">50 labels total</text>
+  <path d="M950 184C1001 194 1025 220 1052 246" fill="none" stroke="#7c3aed" stroke-width="3" stroke-dasharray="6 5" marker-end="url(#arrow)"/>
+  <text x="1010" y="172" text-anchor="middle" fill="#6d28d9" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="14" font-weight="700">50 labels total</text>
 </svg>

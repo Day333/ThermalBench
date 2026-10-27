@@ -44,7 +44,7 @@ S5 preserves the S4 physical schema but replaces the represented systems with fi
 
 ![IC-ThermBench selected generalization results](../assets/generalization-gap.svg)
 
-All reported Therm-FM results use the released configuration B: one GPU, training learning rate `1.5e-4`, embedding/recovery learning rate `1.5e-3`, batch size 40, and validation-best checkpoint selection. The earlier four-GPU configuration is retained only as an optimization-sensitivity comparison in the paper and [result record](RESULTS.md).
+All reported Therm-FM results use the released single-GPU configuration: training learning rate `1.5e-4`, embedding/recovery learning rate `1.5e-3`, batch size 40, and validation-best checkpoint selection.
 
 ### Source-suite anchor — fixed-design prediction is already highly accurate
 
@@ -52,29 +52,29 @@ Across S1's eleven steady, transient, and industrial source tasks, Therm-FM reco
 
 ### Finding 1 — added in-support physics is difficult but learnable
 
-The best RMSE rises from 0.443 K on S2 to 0.716 K on S3 and 0.933 K on S4. Explicit material and boundary channels increase the learning burden, but the degradation remains gradual when the relevant case families and parameter support appear in training.
+The best RMSE rises from 0.354 K on S2 to 0.670 K on S3 and 0.811 K on S4. Explicit material and boundary channels increase the learning burden, but the degradation remains gradual when the relevant case families and parameter support appear in training.
 
 ### Finding 2 — model ranking depends on physical support
 
-Therm-FM is the leading method family throughout S2–S4. Within that family, L supplies the S2 scores, B leads all six S3 metrics and the S4 global-field errors, and L retains the best S4 hotspot-oriented errors. Among the remaining baselines, SAU-FNO ranks second on S2 and S4 while U-FNO ranks second on S3. Model size therefore does not translate monotonically into accuracy once material and boundary inputs are introduced.
+Therm-FM leads S2 and S4, with L supplying the best scores on both, whereas U-FNO leads all six S3 metrics, ahead of SAU-FNO and every Therm-FM variant. U-FNO is also the runner-up method family on S2 and S4. Model size therefore does not translate monotonically into accuracy once material and boundary inputs are introduced.
 
 ### Finding 3 — structural OOD is a different failure mode
 
-With the same seven-channel schema, the best RMSE jumps from 0.933 K on S4 to 15.51 K on S5, an approximately 16.6× increase. Therm-FM remains the strongest method family, but its T variant supplies the best frozen S5 score while B and L supply the leading within-family scores. Diverse observed layouts, materials, and cooling conditions do not establish transfer to an unseen chiplet system.
+With the same seven-channel schema, the best RMSE jumps from 0.811 K on S4 to 8.67 K on S5, an approximately 10.7× increase. Therm-FM remains the strongest method family, but its T variant supplies the best frozen S5 score while L supplies its best S2 and S4 scores. Diverse observed layouts, materials, and cooling conditions do not establish transfer to an unseen chiplet system.
 
 ### Finding 4 — limited target labels are a practical recovery path
 
-Ten labels per OOD case—50 labels total—reduce the best S5 RMSE to 2.73 K and the best MAE to 2.25 K. The first labels recover most of the zero-shot gap, followed by diminishing returns. Zero-shot robustness, low-label adaptation, and high-budget target accuracy should therefore be reported as distinct capabilities.
+Ten labels per OOD case—50 labels total—reduce the best S5 RMSE to 2.09 K and the best MAE to 1.71 K. The first labels recover most of the zero-shot gap, followed by diminishing returns. Zero-shot robustness, low-label adaptation, and high-budget target accuracy should therefore be reported as distinct capabilities.
 
 
 ## What is public now
 
 - the [complete S1–S5 benchmark result record](RESULTS.md), with the S1 datasets released and the unified S1 evaluator on the way;
 - S2–S5 data tensors and the S5 case manifest;
-- 112 baseline checkpoints spanning the 11 S1 source tasks and S2/S3/S4;
+- baseline checkpoints (coming soon);
 - eight baseline configurations across three model families;
 - zero-shot and few-shot execution paths;
 - one shared metric implementation and summary command; and
 - a citable Zenodo software release.
 
-The arXiv manuscript contains the full related-work comparison, complete baseline tables, per-case S5 analysis, optimization-sensitivity study, and formal citation.
+The arXiv manuscript contains the full related-work comparison, complete baseline tables, per-case S5 analysis, and formal citation.
