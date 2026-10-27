@@ -84,14 +84,14 @@ These paper-preview values record the strongest method in each track:
 
 | Track | Best method | Result ↓ | Second-best method | Result ↓ | Interpretation |
 |---|---|---:|---|---:|---|
-| S1 | **Therm-FM** | **0.004–0.049 K MAE** | — | —¹ | task-group source results; not pooled |
+| S1 | **Therm-FM** | **0.004–0.049 K MAE** | U-FNO / SAU-FNO (task-dependent) | <u>0.011–0.144 / 0.013–0.162 K MAE</u>¹ | task-group source results; not pooled |
 | S2 | **Therm-FM** | **0.354 K RMSE** | U-FNO | <u>0.444 K RMSE</u> | layout/configuration diversity is learnable in support |
 | S3 | **U-FNO** | **0.670 K RMSE** | SAU-FNO | <u>0.708 K RMSE</u> | adding material variation causes moderate degradation |
 | S4 | **Therm-FM** | **0.811 K RMSE** | U-FNO | <u>0.939 K RMSE</u> | multi-physics variation remains tractable in support |
 | S5 zero-shot | **Therm-FM** | **8.67 K RMSE** | U-Net | <u>18.85 K RMSE</u> | unseen system structure causes a qualitative failure |
 | S5 10-shot | **Therm-FM** | **2.09 K RMSE** | U-Net | <u>2.26 K RMSE</u> | 50 target labels total recover much of the gap |
 
-¹ S1's second-best method varies by task and resolution, so no single runner-up is reported. Therm-FM T/B/L count as one method family, represented by their best score on each track. Best results are bold; second-best results are underlined.
+¹ The S1 runner-up varies by task between U-FNO and SAU-FNO; their MAE ranges are listed in that order. Therm-FM T/B/L count as one method family, represented by their best score on each track. Best results are bold; second-best results are underlined.
 
 S1 preserves eleven source protocols; see [RESULTS.md](RESULTS.md) for the source-suite summary and expanded S2–S5 results. Small last-digit differences in S2–S5 can arise from GPU kernels and execution environments. A valid reproduction should preserve the split, model recipe, normalization mode, and metric implementation before attributing differences to a method.
 
