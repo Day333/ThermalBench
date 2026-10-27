@@ -13,10 +13,10 @@
 [![Data: CC BY 4.0](https://img.shields.io/badge/Data-CC%20BY%204.0-f97316.svg)](LICENSE-DATA)
 [![Python 3.10](https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white)](environment.yml)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0.1-EE4C2C?logo=pytorch&logoColor=white)](docs/INSTALL.md)
-[![S2–S5 Data](https://img.shields.io/badge/S2--S5%20data-released-16a34a.svg)](https://drive.google.com/file/d/15Do8Raf070VseV9cn44j1hdVpD3Rz-Un/view?usp=sharing)
+[![S2–S5 Data](https://img.shields.io/badge/S2--S5%20data-released-16a34a.svg)](https://drive.google.com/file/d/1subkjTHCq-0aMEPBsUiakxYweIMQYG8g/view?usp=sharing)
 [![S1 Data](https://img.shields.io/badge/S1%20data-released-16a34a.svg)](https://drive.google.com/drive/folders/1WzjpOAgeua03F3iLodHlVbTsRhXn1lMA)
 [![S1 Pipeline](https://img.shields.io/badge/S1%20pipeline-on%20the%20way-f59e0b.svg)](docs/RESULTS.md)
-[![Checkpoints](https://img.shields.io/badge/Checkpoints-released-16a34a.svg)](https://drive.google.com/file/d/1UE4bOYff7flo1IDXXL8tmyW6WL0jcLVa/view?usp=sharing)
+[![Checkpoints](https://img.shields.io/badge/Checkpoints-coming%20soon-f59e0b.svg)](docs/DATASETS.md)
 
 [**论文**](https://arxiv.org/abs/2608.23977) · [**快速开始**](#快速开始) · [**数据集**](docs/DATASETS.md) · [**实验结果**](docs/RESULTS.md) · [**复现实验**](docs/REPRODUCE.md) · [**接入新模型**](docs/ADD_A_MODEL.md) · [**论文预览**](docs/PAPER_PREVIEW.md)
 
@@ -43,15 +43,15 @@
 | 评测轨道 | 物理变量覆盖 | 最佳方法 | 结果 ↓ | 次佳方法 | 结果 ↓ |
 |---|---|---|---:|---|---:|
 | **S1** | 固定设计的来源任务 | **Therm-FM** | **0.004–0.049 K MAE**¹ | — | —² |
-| **S2** | 训练分布支持的布局与配置 | **Therm-FM** | **0.443 K RMSE** | SAU-FNO | <u>0.703 K RMSE</u> |
-| **S3** | S2 + 材料热导率 | **Therm-FM** | **0.716 K RMSE** | U-FNO | <u>0.802 K RMSE</u> |
-| **S4** | S3 + 环境温度与散热条件 | **Therm-FM** | **0.933 K RMSE** | SAU-FNO | <u>1.216 K RMSE</u> |
-| **S5 · zero-shot** | 五个 case-disjoint 芯粒系统 | **Therm-FM** | **15.51 K RMSE** | U-Net | <u>19.10 K RMSE</u> |
-| **S5 · 10-shot** | 每个未见案例使用十个标签 | **Therm-FM** | **2.73 K RMSE** | U-FNO | <u>3.59 K RMSE</u> |
+| **S2** | 训练分布支持的布局与配置 | **Therm-FM** | **0.354 K RMSE** | U-FNO | <u>0.444 K RMSE</u> |
+| **S3** | S2 + 材料热导率 | **U-FNO** | **0.670 K RMSE** | SAU-FNO | <u>0.708 K RMSE</u> |
+| **S4** | S3 + 环境温度与散热条件 | **Therm-FM** | **0.811 K RMSE** | U-FNO | <u>0.939 K RMSE</u> |
+| **S5 · zero-shot** | 五个 case-disjoint 芯粒系统 | **Therm-FM** | **8.67 K RMSE** | U-Net | <u>18.85 K RMSE</u> |
+| **S5 · 10-shot** | 每个未见案例使用十个标签 | **Therm-FM** | **2.09 K RMSE** | U-Net | <u>2.26 K RMSE</u> |
 
 ¹ S1 包含十一个来源任务，因此论文给出各任务组的 MAE 范围，而不是混合后的单一分数。² S1 的次佳方法会随任务和分辨率变化，因此不合并为单一第二名。排名时将 Therm-FM T/B/L 视为同一个模型家族，并在每条轨道取其中最优的结果。完整说明见[实验结果](docs/RESULTS.md)。S2–S5 统一使用 IC-ThermBench 协议。最佳结果以粗体表示，次佳结果以下划线表示。
 
-随着域内可变物理维度增加，最佳 RMSE 从 S2 的 0.443 K 逐步升至 S3 的 0.716 K 和 S4 的 0.933 K；到了 case-disjoint 的 S5，最佳 RMSE 增至约 16.6 倍，模型排名也会变化。少量目标域标签能够显著缩小这一差距，但少样本适配与真正的 zero-shot 结构泛化仍应分开报告。
+随着域内可变物理维度增加，最佳 RMSE 从 S2 的 0.354 K 逐步升至 S3 的 0.670 K 和 S4 的 0.811 K；到了 case-disjoint 的 S5，最佳 RMSE 增至约 10.7 倍，模型排名也会变化。少量目标域标签能够显著缩小这一差距，但少样本适配与真正的 zero-shot 结构泛化仍应分开报告。
 
 ## Benchmark 概览
 
@@ -97,11 +97,11 @@ conda activate ic-thermbench
 python script/smoke_test.py
 ```
 
-冻结环境与已发布 checkpoint 保持一致。Therm-FM 对版本较敏感，修改 PyTorch、Transformers 或 Accelerate 前请阅读[安装说明](docs/INSTALL.md)。
+冻结环境与基准 checkpoint 保持一致。Therm-FM 对版本较敏感，修改 PyTorch、Transformers 或 Accelerate 前请阅读[安装说明](docs/INSTALL.md)。
 
 ### 2. 放置数据和模型权重
 
-下载[数据集（约 4.6 GB）](https://drive.google.com/file/d/15Do8Raf070VseV9cn44j1hdVpD3Rz-Un/view?usp=sharing)和[模型权重（约 44 GB）](https://drive.google.com/file/d/1UE4bOYff7flo1IDXXL8tmyW6WL0jcLVa/view?usp=sharing)，解压至仓库根目录：
+下载[数据集（解压后约 4.8 GB）](https://drive.google.com/file/d/1subkjTHCq-0aMEPBsUiakxYweIMQYG8g/view?usp=sharing)并解压至仓库根目录；模型权重即将发布（coming soon），届时解压到 `checkpoints/`：
 
 ```text
 IC-ThermBench/
@@ -166,7 +166,7 @@ output  (B, X, Y, Z)       其中 X = Y = 64，Z = 1
 - **标签：** 所有 baseline 均使用参考温度场监督。
 - **指标：** 统一实现 RMSE、MAE、R²、MaxAE、最高温度误差和 Top-50 MAE。
 - **训练配方：** 记录各架构自己的优化设置，而不是强行使用相同优化器。
-- **产物：** 可直接检查已发布 checkpoint 与 JSON 输出，无需重新训练。
+- **产物：** 可直接检查 JSON 输出（checkpoint 发布后亦可），无需重新训练。
 
 ## 文档
 

@@ -16,10 +16,10 @@ The `level*` tokens are retained for backward compatibility with released archiv
 
 - [S1–S5 benchmark results and provenance](RESULTS.md) — unified S1 evaluation code on the way
 - [S1 datasets: 11 source tasks (Google Drive folder)](https://drive.google.com/drive/folders/1WzjpOAgeua03F3iLodHlVbTsRhXn1lMA)
-- [S2–S5 datasets (~4.6 GB)](https://drive.google.com/file/d/15Do8Raf070VseV9cn44j1hdVpD3Rz-Un/view?usp=sharing)
-- [112 checkpoints: 8 evaluated configurations × (11 S1 source tasks + S2/S3/S4) (~44 GB)](https://drive.google.com/file/d/1UE4bOYff7flo1IDXXL8tmyW6WL0jcLVa/view?usp=sharing)
+- [S2–S5 datasets (~4.8 GB unpacked)](https://drive.google.com/file/d/1subkjTHCq-0aMEPBsUiakxYweIMQYG8g/view?usp=sharing)
+- Checkpoints — coming soon
 
-Unpack both archives at the repository root. No preprocessing is required for the released `.mat` files.
+Unpack the S2–S5 archive at the repository root; released checkpoints will unpack there as well. No preprocessing is required for the released `.mat` files.
 
 ## Provenance
 
