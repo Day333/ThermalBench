@@ -8,14 +8,14 @@ This page presents a compact subset of the S1–S5 results. It is intended to sh
 
 | Track | Evaluation support | Best method | Result ↓ | Second-best method | Result ↓ |
 |---|---|---|---:|---|---:|
-| S1 | fixed-design source tasks | **Therm-FM** | **0.004–0.049 K MAE**¹ | — | —² |
+| S1 | fixed-design source tasks | **Therm-FM** | **0.004–0.049 K MAE**¹ | U-FNO / SAU-FNO (task-dependent) | <u>0.011–0.144 / 0.013–0.162 K MAE</u>² |
 | S2 | represented layouts/configurations | **Therm-FM** | **0.354 K RMSE** | U-FNO | <u>0.444 K RMSE</u> |
 | S3 | S2 + material conductivity | **U-FNO** | **0.670 K RMSE** | SAU-FNO | <u>0.708 K RMSE</u> |
 | S4 | S3 + ambient/cooling conditions | **Therm-FM** | **0.811 K RMSE** | U-FNO | <u>0.939 K RMSE</u> |
 | S5 zero-shot | five case-disjoint systems | **Therm-FM** | **8.67 K RMSE** | U-Net | <u>18.85 K RMSE</u> |
 | S5 10-shot | ten labels per unseen case | **Therm-FM** | **2.09 K RMSE** | U-Net | <u>2.26 K RMSE</u> |
 
-¹ S1 contains eleven task-specific source protocols and therefore has no single pooled score; the paper reports MAE ranges by task group. ² Its second-best method varies by task and resolution, so no single runner-up is reported. Therm-FM T/B/L count as one method family, represented by their best score on each track. Best results are bold; second-best results are underlined.
+¹ S1 contains eleven task-specific source protocols and therefore has no single pooled score; the paper reports MAE ranges by task group. ² The S1 runner-up varies by task between U-FNO and SAU-FNO; their MAE ranges are listed in that order. Therm-FM T/B/L count as one method family, represented by their best score on each track. Best results are bold; second-best results are underlined.
 
 The best matched-support RMSE worsens gradually from 0.354 K on S2 to 0.811 K on S4. S5 is qualitatively different: changing the underlying chiplet system increases the best RMSE by about 10.7× relative to S4. This is the benchmark's main distinction between learning broader observed physics and extrapolating to unseen structure.
 
