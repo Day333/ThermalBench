@@ -64,15 +64,15 @@ S2–S4 contain 1,500 samples per represented case. S5 contains 1,000 samples pe
 The HDF5-backed MATLAB files use:
 
 ```text
-input.mat   ["data"]  (B, P, Z, Y, X)  float32
-output.mat  ["data"]  (B,    Z, Y, X)  float32, temperature in K
+input.mat   ["data"]  (B, P, Z, X, Y)  float32
+output.mat  ["data"]  (B,    Z, X, Y)  float32, temperature in K
 ```
 
 The loader transposes them to the repository-wide model interface:
 
 ```text
-input   (B, X, Y, Z, P)
-target  (B, X, Y, Z)
+input   (B, Y, X, Z, P)
+target  (B, Y, X, Z)
 ```
 
 For this release, `X = Y = 64` and `Z = 1`. A new model must not hard-code `P`: it is 3, 4, or 7 depending on the scope.

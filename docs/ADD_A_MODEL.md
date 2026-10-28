@@ -7,8 +7,8 @@ IC-ThermBench is intended to make a new thermal predictor easy to compare with p
 Create `model/MyNet.py`. The repository-level contract is:
 
 ```text
-input   (B, X, Y, Z, P)
-output  (B, X, Y, Z)
+input   (B, Y, X, Z, P)
+output  (B, Y, X, Z)
 ```
 
 For the current release, `X = Y = 64`, `Z = 1`, and `P ∈ {3, 4, 7}`. Do not hard-code the input-channel count.
@@ -27,12 +27,12 @@ class MyNet(nn.Module):
         )
 
     def forward(self, x):
-        # (B, X, Y, Z, P) -> (B, P, X, Y)
-        b, nx, ny, nz, p = x.shape
+        # (B, Y, X, Z, P) -> (B, P, Y, X)
+        b, ny, nx, nz, p = x.shape
         if nz != 1:
             raise ValueError("this 2D example expects Z=1")
         h = x.squeeze(3).permute(0, 3, 1, 2)
-        # (B, 1, X, Y) -> (B, X, Y, Z=1)
+        # (B, 1, Y, X) -> (B, Y, X, Z=1)
         return self.net(h).permute(0, 2, 3, 1)
 ```
 

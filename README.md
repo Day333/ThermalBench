@@ -153,8 +153,8 @@ python utils/summarize.py level2 level3 level4 level5
 A new predictor only needs to satisfy one tensor contract:
 
 ```text
-input   (B, X, Y, Z, P)
-output  (B, X, Y, Z)       where X = Y = 64 and Z = 1
+input   (B, Y, X, Z, P)
+output  (B, Y, X, Z)       where X = Y = 64 and Z = 1
 ```
 
 Register the constructor and training recipe once, then the existing scripts provide matched S2–S5 training, zero-shot evaluation, few-shot adaptation, and the shared metrics. The complete three-step example is in [docs/ADD_A_MODEL.md](docs/ADD_A_MODEL.md).
