@@ -71,7 +71,7 @@ Ten labels per OOD case—50 labels total—reduce the best S5 RMSE to 2.09 K an
 
 - the [complete S1–S5 benchmark result record](RESULTS.md), with the S1 datasets released and the unified S1 evaluator on the way;
 - S2–S5 data tensors and the S5 case manifest;
-- baseline checkpoints (coming soon);
+- [S2–S5 baseline checkpoints](https://drive.google.com/file/d/1dXtFyhiSo68NFZ-HwW6a3gmjdBfaJ_1-/view?usp=sharing), including the S5 few-shot adapted models;
 - eight baseline configurations across three model families;
 - zero-shot and few-shot execution paths;
 - one shared metric implementation and summary command; and

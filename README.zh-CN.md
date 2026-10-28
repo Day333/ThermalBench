@@ -16,7 +16,7 @@
 [![S2–S5 Data](https://img.shields.io/badge/S2--S5%20data-released-16a34a.svg)](https://drive.google.com/file/d/1subkjTHCq-0aMEPBsUiakxYweIMQYG8g/view?usp=sharing)
 [![S1 Data](https://img.shields.io/badge/S1%20data-released-16a34a.svg)](https://drive.google.com/drive/folders/1WzjpOAgeua03F3iLodHlVbTsRhXn1lMA)
 [![S1 Pipeline](https://img.shields.io/badge/S1%20pipeline-on%20the%20way-f59e0b.svg)](docs/RESULTS.md)
-[![Checkpoints](https://img.shields.io/badge/Checkpoints-coming%20soon-f59e0b.svg)](docs/DATASETS.md)
+[![S2–S5 Checkpoints](https://img.shields.io/badge/S2--S5%20checkpoints-released-16a34a.svg)](https://drive.google.com/file/d/1dXtFyhiSo68NFZ-HwW6a3gmjdBfaJ_1-/view?usp=sharing)
 
 [**论文**](https://arxiv.org/abs/2608.23977) · [**快速开始**](#快速开始) · [**数据集**](docs/DATASETS.md) · [**实验结果**](docs/RESULTS.md) · [**复现实验**](docs/REPRODUCE.md) · [**接入新模型**](docs/ADD_A_MODEL.md) · [**论文预览**](docs/PAPER_PREVIEW.md)
 
@@ -101,7 +101,7 @@ python script/smoke_test.py
 
 ### 2. 放置数据和模型权重
 
-下载[数据集（解压后约 4.8 GB）](https://drive.google.com/file/d/1subkjTHCq-0aMEPBsUiakxYweIMQYG8g/view?usp=sharing)并解压至仓库根目录；模型权重即将发布（coming soon），届时解压到 `checkpoints/`：
+下载[数据集（解压后约 4.8 GB）](https://drive.google.com/file/d/1subkjTHCq-0aMEPBsUiakxYweIMQYG8g/view?usp=sharing)和 [S2–S5 模型权重（约 27.5 GB）](https://drive.google.com/file/d/1dXtFyhiSo68NFZ-HwW6a3gmjdBfaJ_1-/view?usp=sharing)，均解压至仓库根目录；权重压缩包会解压出 `checkpoints/` 与 `results/`：
 
 ```text
 IC-ThermBench/
@@ -110,7 +110,8 @@ IC-ThermBench/
 │   ├── level3_steady/
 │   ├── level4_steady/
 │   └── level5_steady/
-└── checkpoints/
+├── checkpoints/
+└── results/
 ```
 
 为保持 checkpoint 兼容性，命令行参数仍使用 `level2`–`level5`，分别对应论文中的 S2–S5。
@@ -166,7 +167,7 @@ output  (B, Y, X, Z)       其中 X = Y = 64，Z = 1
 - **标签：** 所有 baseline 均使用参考温度场监督。
 - **指标：** 统一实现 RMSE、MAE、R²、MaxAE、最高温度误差和 Top-50 MAE。
 - **训练配方：** 记录各架构自己的优化设置，而不是强行使用相同优化器。
-- **产物：** 可直接检查 JSON 输出（checkpoint 发布后亦可），无需重新训练。
+- **产物：** 可直接检查 JSON 输出和已发布的 checkpoint，无需重新训练。
 
 ## 文档
 
