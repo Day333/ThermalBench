@@ -10,8 +10,8 @@ case-interleaved (c1s1, c2s1, ..., c10s1, c1s2, ...) is precisely so that all th
 segments stay case-balanced. If the .mat were stacked by case instead, train would
 contain no Case10 at all while test would be entirely Case10.
 
-Tensor convention: the .mat files hold (B,P,Z,Y,X) / (B,Z,Y,X); after loading they are
-transposed to (B,X,Y,Z,P) / (B,X,Y,Z).
+Tensor convention: the .mat files hold (B,P,Z,X,Y) / (B,Z,X,Y); after loading they are
+transposed to (B,Y,X,Z,P) / (B,Y,X,Z).
 """
 import os
 import h5py
@@ -48,9 +48,9 @@ def load_mat_pair(folder_path):
         output_np = f_out["data"][()]
 
     if input_np.ndim != 5:
-        raise ValueError(f"input should be 5-D [B,P,Z,Y,X], got {input_np.shape}")
+        raise ValueError(f"input should be 5-D [B,P,Z,X,Y], got {input_np.shape}")
     if output_np.ndim != 4:
-        raise ValueError(f"output should be 4-D [B,Z,Y,X], got {output_np.shape}")
+        raise ValueError(f"output should be 4-D [B,Z,X,Y], got {output_np.shape}")
     if input_np.shape[0] != output_np.shape[0]:
         raise ValueError(
             f"input/output batch size mismatch: {input_np.shape[0]} vs {output_np.shape[0]}"
@@ -58,12 +58,12 @@ def load_mat_pair(folder_path):
     if tuple(input_np.shape[2:]) != tuple(output_np.shape[1:]):
         raise ValueError(
             "input/output spatial sizes disagree: "
-            f"input[Z,Y,X]={input_np.shape[2:]}, output[Z,Y,X]={output_np.shape[1:]}"
+            f"input[Z,X,Y]={input_np.shape[2:]}, output[Z,X,Y]={output_np.shape[1:]}"
         )
 
-    # [B, P, Z, Y, X] -> [B, X, Y, Z, P]
+    # [B, P, Z, X, Y] -> [B, Y, X, Z, P]
     input_np = np.transpose(input_np, (0, 4, 3, 2, 1))
-    # [B, Z, Y, X] -> [B, X, Y, Z]
+    # [B, Z, X, Y] -> [B, Y, X, Z]
     output_np = np.transpose(output_np, (0, 3, 2, 1))
 
     x_all = torch.tensor(input_np, dtype=torch.float32)

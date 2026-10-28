@@ -153,8 +153,8 @@ python utils/summarize.py level2 level3 level4 level5
 新模型只需满足统一张量接口：
 
 ```text
-input   (B, X, Y, Z, P)
-output  (B, X, Y, Z)       其中 X = Y = 64，Z = 1
+input   (B, Y, X, Z, P)
+output  (B, Y, X, Z)       其中 X = Y = 64，Z = 1
 ```
 
 注册模型构造函数与训练配方后，现有脚本即可提供一致的 S2–S5 训练、zero-shot 评测、few-shot 适配与指标计算。完整示例见[接入新模型](docs/ADD_A_MODEL.md)。
