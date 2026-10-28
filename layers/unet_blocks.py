@@ -38,7 +38,7 @@ def _up(in_channels, out_channels):
 
 
 class U_net(nn.Module):
-    """The U-FNO companion U-Net: (B, C, X, Y, Z) -> (B, C, X, Y, Z).
+    """The U-FNO companion U-Net: (B, C, Y, X, Z) -> (B, C, Y, X, Z).
 
     Encoder: full resolution -> 1/2 -> 1/4 -> 1/8, with an extra stride-1 conv at the
     two deepest levels. Decoder: three transposed convs, each fused with the matching

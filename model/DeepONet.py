@@ -3,7 +3,7 @@
 Only two things differ from the original: the supervision signal is MSE against the
 HotSpot temperature field rather than a PDE residual, and the query points are fixed to
 the 64x64 grid (so the trunk is evaluated once per batch).
-The interface is wrapped as (B,X,Y,Z,P) -> (B,X,Y,Z) to match U-FNO/UNet. Class body
+The interface is wrapped as (B,Y,X,Z,P) -> (B,Y,X,Z) to match U-FNO/UNet. Class body
 copied verbatim from deeponet.py.
 """
 import operator
@@ -33,7 +33,7 @@ class DeepONetSup(nn.Module):
         self.register_buffer("coords", torch.stack([gx, gy], -1).reshape(-1, 2))  # (G²,2)
 
     def forward(self, x):
-        """x: (B, X, Y, Z, P), Z=1  ->  (B, X, Y, Z)"""
+        """x: (B, Y, X, Z, P), Z=1  ->  (B, Y, X, Z)"""
         B = x.shape[0]
         u = x.squeeze(-2).reshape(B, -1)                              # (B, G²·P)
         ff = torch.matmul(self.coords, self.fourier_features)         # (G², H/2)

@@ -28,7 +28,7 @@ from model.UFNO import Net3d, SimpleBlock3d
 class PaperAttentionBlock(nn.Module):
     """The DAC'25 SAU-FNO self-attention block: 1x1-conv Q/K/V, single head, softmax
     attention over the spatial positions of each z-plane, output replaces the input.
-    Input/output: (B, C, X, Y, Z)."""
+    Input/output: (B, C, Y, X, Z)."""
 
     def __init__(self, channels):
         super().__init__()
@@ -37,19 +37,19 @@ class PaperAttentionBlock(nn.Module):
         self.h = nn.Conv3d(channels, channels, 1)   # W_h, the paper's A_c branch
 
     def forward(self, x):
-        B, C, X, Y, Z = x.shape
+        B, C, Y, X, Z = x.shape
         q, k, v = self.q(x), self.k(x), self.h(x)
 
         def planes(t):
-            # (B, C, X, Y, Z) -> (B*Z, 1, X*Y, C): one single-head attention problem
+            # (B, C, Y, X, Z) -> (B*Z, 1, Y*X, C): one single-head attention problem
             # per z-plane. The explicit head axis is required: with 3-D inputs SDPA
             # silently falls back to the math kernel, which materializes the full
-            # (X*Y)x(X*Y) attention matrix -- ~10 GiB per batch at 64x64 with Z=8 --
+            # (Y*X)x(Y*X) attention matrix -- ~10 GiB per batch at 64x64 with Z=8 --
             # while the 4-D layout dispatches to the memory-efficient kernel.
-            return t.permute(0, 4, 2, 3, 1).reshape(B * Z, 1, X * Y, C)
+            return t.permute(0, 4, 2, 3, 1).reshape(B * Z, 1, Y * X, C)
 
         out = F.scaled_dot_product_attention(planes(q), planes(k), planes(v))
-        return out.reshape(B, Z, X, Y, C).permute(0, 4, 2, 3, 1)
+        return out.reshape(B, Z, Y, X, C).permute(0, 4, 2, 3, 1)
 
 
 class SAUSimpleBlock3d(SimpleBlock3d):

@@ -14,12 +14,12 @@ import numpy as np
 
 
 def thermal_combined_loss(out, y, x, loss_type="base", lam=None):
-    """Thermal combined loss on NORMALIZED outputs of shape (B, X, Y, Z), Z=1.
+    """Thermal combined loss on NORMALIZED outputs of shape (B, Y, X, Z), Z=1.
     Mirrors Therm-FM p=5/p=6 (scOT/model.py).
       base    = MSE(out, y)
       thermal = base + grad*lg + hotspot(top-k%)*lh + peak*lp
       boundary= thermal + boundary(block-edge mask from input power)*lb
-    `x` is the input (B, X, Y, Z, P); power is its last-dim channel 0.
+    `x` is the input (B, Y, X, Z, P); power is its last-dim channel 0.
     """
     base = F.mse_loss(out, y)
     if loss_type in (None, "base", ""):
@@ -30,12 +30,12 @@ def thermal_combined_loss(out, y, x, loss_type="base", lam=None):
     lp = float(lam.get("peak", 0.1))
     alpha = float(lam.get("alpha", 0.9))
 
-    # gradient loss along X (dim=1) and Y (dim=2)
-    gx = out[:, 1:, :, :] - out[:, :-1, :, :]
-    gy = out[:, :, 1:, :] - out[:, :, :-1, :]
-    gx_gt = y[:, 1:, :, :] - y[:, :-1, :, :]
-    gy_gt = y[:, :, 1:, :] - y[:, :, :-1, :]
-    grad_loss = F.mse_loss(gx, gx_gt) + F.mse_loss(gy, gy_gt)
+    # gradient loss along Y (dim=1) and X (dim=2)
+    gy = out[:, 1:, :, :] - out[:, :-1, :, :]
+    gx = out[:, :, 1:, :] - out[:, :, :-1, :]
+    gy_gt = y[:, 1:, :, :] - y[:, :-1, :, :]
+    gx_gt = y[:, :, 1:, :] - y[:, :, :-1, :]
+    grad_loss = F.mse_loss(gy, gy_gt) + F.mse_loss(gx, gx_gt)
 
     # hotspot loss: MSE over the hottest (1-alpha) TRUE pixels, per sample
     B = out.shape[0]
@@ -54,15 +54,15 @@ def thermal_combined_loss(out, y, x, loss_type="base", lam=None):
     if loss_type == "boundary":
         lb = float(lam.get("boundary", 0.1))
         dk = int(lam.get("dilate", 3))
-        power = x[..., 0].squeeze(-1)  # P=0 power channel, drop Z=1 -> (B, X, Y)
-        pdx = (power[:, 1:, :] - power[:, :-1, :]).abs()
-        pdy = (power[:, :, 1:] - power[:, :, :-1]).abs()
-        pdx = F.pad(pdx, (0, 0, 0, 1))   # (B, X-1, Y) -> (B, X, Y)
-        pdy = F.pad(pdy, (0, 1, 0, 0))   # (B, X, Y-1) -> (B, X, Y)
-        edge = (pdx + pdy > 1e-6).to(out.dtype)  # (B, X, Y)
+        power = x[..., 0].squeeze(-1)  # P=0 power channel, drop Z=1 -> (B, Y, X)
+        pdy = (power[:, 1:, :] - power[:, :-1, :]).abs()
+        pdx = (power[:, :, 1:] - power[:, :, :-1]).abs()
+        pdy = F.pad(pdy, (0, 0, 0, 1))   # (B, Y-1, X) -> (B, Y, X)
+        pdx = F.pad(pdx, (0, 1, 0, 0))   # (B, Y, X-1) -> (B, Y, X)
+        edge = (pdy + pdx > 1e-6).to(out.dtype)  # (B, Y, X)
         if dk > 1:
             edge = F.max_pool2d(edge.unsqueeze(1), kernel_size=dk, stride=1, padding=dk // 2).squeeze(1)
-        m = edge.unsqueeze(-1)  # (B, X, Y, 1) broadcast over Z
+        m = edge.unsqueeze(-1)  # (B, Y, X, 1) broadcast over Z
         bdiff = (out - y) ** 2
         cnt = m.sum() * out.shape[-1]
         boundary_loss = (bdiff * m).sum() / cnt.clamp_min(1.0)
