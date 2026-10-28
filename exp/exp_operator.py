@@ -45,34 +45,34 @@ EVAL_BATCH = 20     # matches the original scripts; affects batching only, not v
 # Tensor layout: UNet is 2D channel-first, everything else is 5D channel-last
 # --------------------------------------------------------------------------
 def _to_model(x, name):
-    """(B,X,Y,Z,P) -> model input."""
+    """(B,Y,X,Z,P) -> model input."""
     if name == "UNet":
-        return x.squeeze(-2).permute(0, 3, 1, 2)        # (B,P,X,Y)
+        return x.squeeze(-2).permute(0, 3, 1, 2)        # (B,P,Y,X)
     return x
 
 
 def _to_model_y(y, name):
-    """(B,X,Y,Z) -> training target."""
+    """(B,Y,X,Z) -> training target."""
     if name == "UNet":
-        return y.squeeze(-1)                            # (B,X,Y)
+        return y.squeeze(-1)                            # (B,Y,X)
     return y
 
 
 def _from_model(p, name):
-    """model output -> (B,X,Y,Z)."""
+    """model output -> (B,Y,X,Z)."""
     if name == "UNet":
-        return p.permute(0, 2, 3, 1)                    # (B,C=1,X,Y) -> (B,X,Y,1)
+        return p.permute(0, 2, 3, 1)                    # (B,C=1,Y,X) -> (B,Y,X,1)
     return p
 
 
 def _model_out_for_loss(p, name):
     if name == "UNet":
-        return p.squeeze(1)                             # (B,1,X,Y) -> (B,X,Y)
+        return p.squeeze(1)                             # (B,1,Y,X) -> (B,Y,X)
     return p
 
 
 def forward_norm(model, name, xb):
-    """One forward pass in normalized space: (B,X,Y,Z,P) -> (B,X,Y,Z).
+    """One forward pass in normalized space: (B,Y,X,Z,P) -> (B,Y,X,Z).
 
     The training loop and few-shot fine-tuning share this function so the shape
     handling cannot silently drift apart between the two. FNO running in float64 is
@@ -88,7 +88,7 @@ def forward_norm(model, name, xb):
 # Evaluation
 # --------------------------------------------------------------------------
 def _predict(model, x_norm, y_norm, x_test, name, device):
-    """Generic deterministic prediction, returns a (B,X,Y,Z) tensor in Kelvin."""
+    """Generic deterministic prediction, returns a (B,Y,X,Z) tensor in Kelvin."""
     model.eval()
     preds = []
     with torch.no_grad():
@@ -125,7 +125,7 @@ def _predict_fno(model, x_norm, y_norm, x_test, device):
 def evaluate(model, x_norm, y_norm, x_test, y_test, name, device="cuda"):
     out = (_predict_fno(model, x_norm, y_norm, x_test, device) if name == "FNO"
            else _predict(model, x_norm, y_norm, x_test, name, device))
-    pred = out.permute(0, 3, 1, 2).numpy().astype(np.float64)      # (B,Z,X,Y)
+    pred = out.permute(0, 3, 1, 2).numpy().astype(np.float64)      # (B,Z,Y,X)
     label = y_test.permute(0, 3, 1, 2).numpy().astype(np.float64)
     return _compute_additional_test_metrics(
         pred, label, prefix=MODEL_ZOO[name]["prefix"], topk=50)

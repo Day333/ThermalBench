@@ -16,9 +16,9 @@ import torch.nn as nn
 
 
 class SpectralConv3d(nn.Module):
-    """Fourier layer for (B, C, X, Y, Z) feature maps.
+    """Fourier layer for (B, C, Y, X, Z) feature maps.
 
-    Keeps modes1 x modes2 x modes3 modes in each of the four (+-kx, +-ky) corners at
+    Keeps modes1 x modes2 x modes3 modes in each of the four (+-ky, +-kx) corners at
     non-negative kz (the z axis is rFFT-halved), applies one complex channel-mixing
     weight tensor per corner, and returns to physical space.
     """
@@ -31,7 +31,7 @@ class SpectralConv3d(nn.Module):
         self.modes2 = modes2
         self.modes3 = modes3
         self.scale = 1 / (in_channels * out_channels)
-        # One weight tensor per (+-kx, +-ky) corner, created in index order so seeded
+        # One weight tensor per (+-ky, +-kx) corner, created in index order so seeded
         # initialization draws the same random stream as the released checkpoints.
         for i in (1, 2, 3, 4):
             setattr(self, f"weights{i}", nn.Parameter(
@@ -52,9 +52,9 @@ class SpectralConv3d(nn.Module):
         out_ft = torch.zeros(x.shape[0], self.out_channels,
                              x.size(-3), x.size(-2), x.size(-1) // 2 + 1,
                              dtype=torch.cfloat, device=x.device)
-        for w, sx, sy in self._corners():
-            out_ft[:, :, sx, sy, :m3] = torch.einsum(
-                "bixyz,ioxyz->boxyz", x_ft[:, :, sx, sy, :m3], w)
+        for w, sy, sx in self._corners():
+            out_ft[:, :, sy, sx, :m3] = torch.einsum(
+                "biyxz,ioyxz->boyxz", x_ft[:, :, sy, sx, :m3], w)
         return torch.fft.irfftn(out_ft, s=(x.size(-3), x.size(-2), x.size(-1)))
 
 

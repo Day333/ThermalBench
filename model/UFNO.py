@@ -35,8 +35,8 @@ UNET_FROM = 3     # layers UNET_FROM..N_LAYERS-1 carry the U-Net branch
 class SimpleBlock3d(nn.Module):
     """Lift -> N_LAYERS (U-)Fourier layers -> project.
 
-    input  (B, X, Y, Z, in_channels)
-    output (B, X, Y, Z, 1)
+    input  (B, Y, X, Z, in_channels)
+    output (B, Y, X, Z, 1)
     """
 
     def __init__(self, modes1, modes2, modes3, width, in_channels=12):
@@ -59,17 +59,17 @@ class SimpleBlock3d(nn.Module):
         self.fc2 = nn.Linear(128, 1)
 
     def _lift(self, x):
-        """(B, X, Y, Z, P) -> channel-first features (B, width, X, Y, Z)."""
+        """(B, Y, X, Z, P) -> channel-first features (B, width, Y, X, Z)."""
         return self.fc0(x).permute(0, 4, 1, 2, 3)
 
     def _layers(self, v):
-        """Run the six (U-)Fourier layers on (B, width, X, Y, Z)."""
+        """Run the six (U-)Fourier layers on (B, width, Y, X, Z)."""
         b, w = v.shape[0], self.width
-        sx, sy, sz = v.shape[2], v.shape[3], v.shape[4]
+        sy, sx, sz = v.shape[2], v.shape[3], v.shape[4]
         for i in range(N_LAYERS):
             spectral = getattr(self, f"conv{i}")(v)
             pointwise = getattr(self, f"w{i}")(
-                v.reshape(b, w, -1)).reshape(b, w, sx, sy, sz)
+                v.reshape(b, w, -1)).reshape(b, w, sy, sx, sz)
             out = spectral + pointwise
             if i >= UNET_FROM:
                 # The paper's U-Fourier layer feeds the *layer input* v_l to the
@@ -80,7 +80,7 @@ class SimpleBlock3d(nn.Module):
         return v
 
     def _project(self, v):
-        """(B, width, X, Y, Z) -> (B, X, Y, Z, 1)."""
+        """(B, width, Y, X, Z) -> (B, Y, X, Z, 1)."""
         v = v.permute(0, 2, 3, 4, 1)
         return self.fc2(F.relu(self.fc1(v)))
 
@@ -89,8 +89,8 @@ class SimpleBlock3d(nn.Module):
 
 
 class Net3d(nn.Module):
-    """Pads X/Y/Z up to multiples of 8 (the U-Net has three stride-2 levels), runs
-    SimpleBlock3d, and crops back. Y/Z are replicate-padded, X zero-padded."""
+    """Pads Y/X/Z up to multiples of 8 (the U-Net has three stride-2 levels), runs
+    SimpleBlock3d, and crops back. X/Z are replicate-padded, Y zero-padded."""
 
     def __init__(self, modes1, modes2, modes3, width, in_channels=12):
         super().__init__()
@@ -98,14 +98,14 @@ class Net3d(nn.Module):
                                    in_channels=in_channels)
 
     def forward(self, x):
-        b, sx, sy, sz = x.shape[0], x.shape[1], x.shape[2], x.shape[3]
-        px, py, pz = (-sx) % 8, (-sy) % 8, (-sz) % 8
-        x = F.pad(x, (0, 0, 0, pz, 0, py), "replicate")
-        if px:
-            x = F.pad(x, (0, 0, 0, 0, 0, 0, 0, px), "constant", 0)
+        b, sy, sx, sz = x.shape[0], x.shape[1], x.shape[2], x.shape[3]
+        py, px, pz = (-sy) % 8, (-sx) % 8, (-sz) % 8
+        x = F.pad(x, (0, 0, 0, pz, 0, px), "replicate")
+        if py:
+            x = F.pad(x, (0, 0, 0, 0, 0, 0, 0, py), "constant", 0)
         x = self.conv1(x)
-        x = x.view(b, sx + px, sy + py, sz + pz, 1)
-        return x[:, :sx, :sy, :sz, :].squeeze(-1)
+        x = x.view(b, sy + py, sx + px, sz + pz, 1)
+        return x[:, :sy, :sx, :sz, :].squeeze(-1)
 
     def count_params(self):
         return sum(p.numel() for p in self.parameters())

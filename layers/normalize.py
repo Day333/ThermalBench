@@ -30,8 +30,8 @@ class normalize(nn.Module):
 class per_channel_normalize(nn.Module):
     """Per-channel mean/std.
 
-    For x of shape (B, X, Y, Z, P) the statistics are taken over every dimension but
-    the last; targets of shape (B, X, Y, Z) have no channel dimension and fall back to
+    For x of shape (B, Y, X, Z, P) the statistics are taken over every dimension but
+    the last; targets of shape (B, Y, X, Z) have no channel dimension and fall back to
     a global scalar, matching `normalize`.
 
     Why: `normalize` is a single global scalar, which for multi-channel inputs spanning
