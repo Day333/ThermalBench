@@ -17,9 +17,9 @@ The `level*` tokens are retained for backward compatibility with released archiv
 - [S1–S5 benchmark results and provenance](RESULTS.md) — unified S1 evaluation code on the way
 - [S1 datasets: 11 source tasks (Google Drive folder)](https://drive.google.com/drive/folders/1WzjpOAgeua03F3iLodHlVbTsRhXn1lMA)
 - [S2–S5 datasets (~4.8 GB unpacked)](https://drive.google.com/file/d/1subkjTHCq-0aMEPBsUiakxYweIMQYG8g/view?usp=sharing)
-- Checkpoints — coming soon
+- [S2–S5 checkpoints (~27.5 GB)](https://drive.google.com/file/d/1dXtFyhiSo68NFZ-HwW6a3gmjdBfaJ_1-/view?usp=sharing)
 
-Unpack the S2–S5 archive at the repository root; released checkpoints will unpack there as well. No preprocessing is required for the released `.mat` files.
+Unpack the S2–S5 data archive at the repository root; the checkpoint archive unpacks there as well, into `checkpoints/` and `results/`. No preprocessing is required for the released `.mat` files.
 
 ## Provenance
 
@@ -112,6 +112,8 @@ Thus `--shots 10` uses 10 samples from each of five unseen systems—50 labels t
 
 ## Checkpoints
 
+The released archive contains the S2–S4 models of all eight baselines, the S5 few-shot adapted models for K = 10, 50, 100, 250, and 500, their adaptation curves, and the S5 zero-shot and per-case evaluation JSON:
+
 ```text
 checkpoints/
 ├── level2_UFNO/model.pt
@@ -121,7 +123,11 @@ checkpoints/
 │   ├── config.json
 │   └── pytorch_model.bin
 └── fewshot/
-    └── level5_UFNO_k10.json
+    ├── level5_UFNO_k10.json
+    └── level5_UFNO_k10/model.pt
+results/
+├── level5_UFNO.json
+└── percase_UFNO.json
 ```
 
 Operator-family checkpoints contain the model state and normalization state. Therm-FM checkpoints use the scOT/Hugging Face directory layout. `run.py` resolves both formats automatically.

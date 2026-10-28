@@ -16,7 +16,7 @@ An open benchmark for reproducible, generalizable 2.5D/3D-IC thermal learning.
 [![S2–S5 Data](https://img.shields.io/badge/S2--S5%20data-released-16a34a.svg)](https://drive.google.com/file/d/1subkjTHCq-0aMEPBsUiakxYweIMQYG8g/view?usp=sharing)
 [![S1 Data](https://img.shields.io/badge/S1%20data-released-16a34a.svg)](https://drive.google.com/drive/folders/1WzjpOAgeua03F3iLodHlVbTsRhXn1lMA)
 [![S1 Pipeline](https://img.shields.io/badge/S1%20pipeline-on%20the%20way-f59e0b.svg)](docs/RESULTS.md)
-[![Checkpoints](https://img.shields.io/badge/Checkpoints-coming%20soon-f59e0b.svg)](docs/DATASETS.md)
+[![S2–S5 Checkpoints](https://img.shields.io/badge/S2--S5%20checkpoints-released-16a34a.svg)](https://drive.google.com/file/d/1dXtFyhiSo68NFZ-HwW6a3gmjdBfaJ_1-/view?usp=sharing)
 
 [**Paper**](https://arxiv.org/abs/2608.23977) · [**Quick start**](#quick-start) · [**Datasets**](docs/DATASETS.md) · [**Results**](docs/RESULTS.md) · [**Reproduce**](docs/REPRODUCE.md) · [**Add a model**](docs/ADD_A_MODEL.md) · [**Paper preview**](docs/PAPER_PREVIEW.md)
 
@@ -101,7 +101,7 @@ The frozen environment matches the benchmark checkpoints. Therm-FM is version-se
 
 ### 2. Place data and checkpoints
 
-Download the [datasets (~4.8 GB unpacked)](https://drive.google.com/file/d/1subkjTHCq-0aMEPBsUiakxYweIMQYG8g/view?usp=sharing) and unpack them at the repository root; released checkpoints are coming soon and unpack into `checkpoints/`:
+Download the [datasets (~4.8 GB unpacked)](https://drive.google.com/file/d/1subkjTHCq-0aMEPBsUiakxYweIMQYG8g/view?usp=sharing) and the [S2–S5 checkpoints (~27.5 GB)](https://drive.google.com/file/d/1dXtFyhiSo68NFZ-HwW6a3gmjdBfaJ_1-/view?usp=sharing), and unpack both at the repository root; the checkpoint archive unpacks into `checkpoints/` and `results/`:
 
 ```text
 IC-ThermBench/
@@ -110,7 +110,8 @@ IC-ThermBench/
 │   ├── level3_steady/
 │   ├── level4_steady/
 │   └── level5_steady/
-└── checkpoints/
+├── checkpoints/
+└── results/
 ```
 
 The public command tokens remain `level2`–`level5` for checkpoint compatibility; they correspond to paper Scopes S2–S5.
@@ -166,7 +167,7 @@ Register the constructor and training recipe once, then the existing scripts pro
 - **Labels:** supervised reference-temperature fields for every baseline.
 - **Metrics:** one implementation for RMSE, MAE, R², MaxAE, peak-temperature error, and Top-50 MAE.
 - **Recipes:** architecture-specific optimization is recorded, not retroactively homogenized.
-- **Artifacts:** JSON outputs, and the checkpoints once released, can be audited without retraining.
+- **Artifacts:** JSON outputs and the released checkpoints can be audited without retraining.
 
 The release is designed to be easy to reproduce **and** easy to extend: data conversion, model execution, evaluation, aggregation, and OOD adaptation all use the same repository-level interface.
 
